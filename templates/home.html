@@ -1,7 +1,20 @@
 {% extends "_base.html" %} 
+{% load static %}
 
-{% block title %}Home{% endblock title %} 
+{% block title %}Ferreplus{% endblock title %} 
+<head>
+    {% block custom_styles %}
+        <link rel="stylesheet" href="{% static 'styles/home/home.css' %}">
+    {% endblock custom_styles %}
+</head>
 
 {% block content %}
-<h1>Hello Word! Esta es nuestra Homepage.</h1>
+    <div>
+        <div class="home-container">
+            <h1>Hello Word! Esta es nuestra Homepage.</h1>
+        </div>
+        <div class="second-page">
+            <h1>Productos</h1>
+        </div>
+    </div>
 {% endblock content %}

@@ -6,25 +6,36 @@
     <meta charset="utf-8" />
     <title>{% block title %}Ferreplus{% endblock title %}</title>
     <link rel="stylesheet" href="{% static 'styles/layout/layout.css' %}">
+    {% block custom_styles %} {% endblock custom_styles %}
   </head>
   <body>
-    <header class="navbar">
-      <div class="img-container">
-        <img src="{% static 'img/logo-min.png' %}" />
+    <header class="navbar-container">
+      <div class="navbar-inner-container">
+        <div class="img-container">
+          <a href="/">
+            <img src="{% static 'img/logo-min.png' %}" />
+          </a>
+        </div>
+        <nav class="navbar-nav"> 
+          <ul class="nav-list">
+            <li class="nav-item">
+              <a href="/">
+                Nosotros
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/">
+                Contacto
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/">
+                Login
+              </a>
+            </li>
+          </ul>
+        </nav>
       </div>
-      <nav class="navbar-nav"> 
-        <ul class="nav-list">
-          <li class="nav-item">
-            Nosotros
-          </li>
-          <li class="nav-item">
-            Contacto
-          </li>
-          <li class="nav-item">
-            Login
-          </li>
-        </ul>
-      </nav>
     </header>
     <div class="container">
       {% block content %}
