@@ -1,0 +1,45 @@
+:root {
+    padding: 0;
+    margin: 0; 
+}
+
+html {
+    padding: 0;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    background-color: #FAFAFA;
+    font-family: 'Open Sans', serif;
+}
+.navbar {
+    min-width: 100vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ebf1f8;
+    padding: 1em 4em 1em 4em;
+    box-shadow:rgba(0, 0, 0, 0.1) 0px 3px 8px;;
+}
+
+.navbar-nav {
+    border: 1px red solid;
+
+}
+
+.nav-list {
+    display: flex;
+    flex-direction: row;
+}
+
+.img-container {
+    max-width: 180px;
+
+    height: auto;
+}
+
+.img-container img {
+    width: 100%;
+}
