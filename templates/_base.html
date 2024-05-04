@@ -5,6 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <title>{% block title %}Ferreplus{% endblock title %}</title>
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
     <link rel="stylesheet" href="{% static 'styles/layout/layout.css' %}">
     {% block custom_styles %} {% endblock custom_styles %}
   </head>
@@ -40,6 +41,21 @@
     <div class="container">
       {% block content %}
       {% endblock content %}
+    </div>
+    <div class="base-footer">
+      <div class="base-footer-inner-container">
+        <div class="footer-item">
+          <h2>Ferreplus</h2>
+        </div>
+        <div class="footer-item">
+          <p style="font-size:small">
+            2024 Ferreplus © todos los derechos reservados
+          </p>
+        </div>
+        <div class="footer-item">
+          <p style="font-size:small;letter-spacing:0.2px">Hecho por <span style="font-weight:bold">Codecrafters</span></p>
+        </div>
+      </div>
     </div>
   </body>
 </html>
