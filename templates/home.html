@@ -1,15 +1,22 @@
-{% extends "_base.html" %}
+{% extends "_base.html" %} 
+{% load static %}
+
+{% block title %}Ferreplus{% endblock title %} 
+<head>
+    {% block custom_styles %}
+        <link rel="stylesheet" href="{% static 'styles/home/home.css' %}">
+    {% endblock custom_styles %}
+</head>
 
 {% block title %}Home{% endblock title %}
  
 {% block content %}
-    <h1>This is our home page.</h1>
-    {% if user.is_authenticated %}
-        <p>Hi {{ user.email }}!</p>
-        <p><a href="{% url 'logout' %}">Log Out</a></p>
-    {% else %}
-        <p>You are not logged in</p>
-        <a href="{% url 'login' %}">Log In</a>
-        <a href="{% url 'signup' %}">Sign Up</a>
-    {% endif %}
+    <div>
+        <div class="home-container">
+            <h1>Hello Word! Esta es nuestra Homepage.</h1>
+        </div>
+        <div class="second-page">
+            <h1>Productos</h1>
+        </div>
+    </div>
 {% endblock content %}
