@@ -7,6 +7,10 @@
     <title>{% block title %}Ferreplus{% endblock title %}</title>
     <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
     <link rel="stylesheet" href="{% static 'styles/layout/layout.css' %}">
+    {% comment %}
+      Dejo este bloque 'custom_styles' para hacerle override en cada página
+      y poner un link a sus estilos propios.
+    {% endcomment %}
     {% block custom_styles %} {% endblock custom_styles %}
   </head>
   <body>
@@ -40,6 +44,10 @@
     </header>
     <div class="container">
       {% block content %}
+      {% comment %}
+        Bloque para hacer override en subtemplates y escribir el contenido
+        de cada página
+      {% endcomment %}
       {% endblock content %}
     </div>
     <div class="base-footer">
