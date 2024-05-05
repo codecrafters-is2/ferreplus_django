@@ -40,8 +40,10 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sites",
     # Third-party
-    "allauth",  # new
-    "allauth.account",  # new
+    "crispy_forms",  
+    "crispy_bootstrap5",  
+    "allauth",  
+    "allauth.account",  
     # Local
     "accounts.apps.AccountsConfig",
     "pages.apps.PagesConfig",
@@ -77,6 +79,12 @@ TEMPLATES = [
         "DIRS": [BASE_DIR / "templates"],
     },
 ]
+
+
+# django-crispy-forms
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+
 
 WSGI_APPLICATION = 'ferreplus.wsgi.application'
 
@@ -143,11 +151,16 @@ AUTH_USER_MODEL = "accounts.CustomUser"
 LOGIN_REDIRECT_URL = "home"
 ACCOUNT_LOGOUT_REDIRECT = "home"
 
+ACCOUNT_FORMS = {
+   "signup": "accounts.forms.CustomUserCreationForm",
+}
+
 
 # django-allauth config
 SITE_ID = 1
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
-    "allauth.account.auth_backends.AuthenticationBackend", # new
+    "allauth.account.auth_backends.AuthenticationBackend",
 )
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend" # new
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+ACCOUNT_UNIQUE_EMAIL = True
