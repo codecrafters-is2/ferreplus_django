@@ -34,9 +34,16 @@
               </a>
             </li>
             <li class="nav-item">
-              <a href="/">
-                Login
-              </a>
+              {% block authentication %}
+                {% if user.is_authenticated %}
+                  <p>Hi {{ user.email }}!</p>
+                  <p><a href="{% url 'logout' %}">Log Out</a></p>
+                {% else %}
+                  <p>You are not logged in</p>
+                  <a href="{% url 'login' %}">Log In</a>
+                  <a href="{% url 'signup' %}">Sign Up</a>
+                {% endif %}
+               {% endblock authentication %}
             </li>
           </ul>
         </nav>
