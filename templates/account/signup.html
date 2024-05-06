@@ -4,9 +4,10 @@
 {% block title %}Sign Up{% endblock title %}
 {% block content %}
     <h2>Sign Up</h2>
+    <p>FALTA ARREGLAR QUE EL DNI SEA ÚNICO, QUE TODOS LOS CAMPOS SEAN OBLIGATORIOS Y LAS CONDICIONES DEL PASSWORD !!!</p>
     <form method="post">
         {% csrf_token %}
-        {{ form | crispy }}
+        {{ form.as_p }}
         <button class="btn btn-success" type="submit">Sign Up</button>
     </form>
 {% endblock content %}
