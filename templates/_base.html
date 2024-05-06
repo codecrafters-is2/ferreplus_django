@@ -1,11 +1,69 @@
 <!-- templates/_base.html-->
 <!DOCTYPE html>
+{% load static %}
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>{% block title %}Bookstore{% endblock title %}</title>
+    <title>{% block title %}Ferreplus{% endblock title %}</title>
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+    <link rel="stylesheet" href="{% static 'styles/layout/layout.css' %}">
+    {% comment %}
+      Dejo este bloque 'custom_styles' para hacerle override en cada página
+      y poner un link a sus estilos propios.
+    {% endcomment %}
+    {% block custom_styles %} {% endblock custom_styles %}
   </head>
   <body>
-    <div class="container"> {% block content %} {% endblock content %}</div> 
+    <header class="navbar-container">
+      <div class="navbar-inner-container"> 
+        <div class="img-container">
+          <a href="/">
+            <img src="{% static 'img/logo-min.png' %}" />
+          </a>
+        </div>
+        <nav class="navbar-nav"> 
+          <ul class="nav-list">
+            <li class="nav-item">
+              <a href="/">
+                Nosotros
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/">
+                Contacto
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/">
+                Login
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <div class="container">
+      {% block content %}
+      {% comment %}
+        Bloque para hacer override en subtemplates y escribir el contenido
+        de cada página
+      {% endcomment %}
+      {% endblock content %}
+    </div>
+    <div class="base-footer">
+      <div class="base-footer-inner-container">
+        <div class="footer-item">
+          <h2>Ferreplus</h2>
+        </div>
+        <div class="footer-item">
+          <p style="font-size:small">
+            2024 Ferreplus © todos los derechos reservados
+          </p>
+        </div>
+        <div class="footer-item">
+          <p style="font-size:small;letter-spacing:0.2px">Hecho por <span style="font-weight:bold">Codecrafters</span></p>
+        </div>
+      </div>
+    </div> 
   </body>
 </html>
