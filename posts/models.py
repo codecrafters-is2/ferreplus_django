@@ -34,20 +34,21 @@ class Post(models.Model):
     
     title = models.CharField(max_length=50)
     #author = models.ForeignKey( #Muchos a uno, un usuario puede ser autor de muchas publicaciones
-    #    "auth.User", #Acá tengo que referenciar al user posta
+    #    "auth.User" --> settings.AUTH_USER_MODEL,#Acá tengo que referenciar al user posta
     #    on_delete=models.CASCADE,
     #)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE) #Actualizar con lo de arriba cuando este la parte de usuarios lista
     body = models.TextField(blank=True, null=True) #Chequear
-    image = models.ImageField(upload_to="post_images", null=True) #Para una imagen sola
+    image = models.ImageField(upload_to="post_images") #Para una imagen sola
     category = models.CharField(max_length=22, choices=CHOICES)
     #branch = models.ForeignKey("Sucursal" , on_delete=models.CASCADE) #Sucursal
     #barter = models.ForeignKey("Trueque" , on_delete=models.CASCADE) #Trueque
-    #La pregunta se tiene que hacer desde su modelo
+    #La "pregunta" se tiene que hacer desde su modelo
     related_posts = models.ManyToManyField('self', blank=True, related_name='related_by', editable=False)
     new = models.BooleanField(blank=True, null=True)
-    brand = models.CharField(max_length=30,blank=True, null=True)
+    brand = models.CharField(max_length=30,blank=True, null=True) #marca
     status = models.CharField(max_length=20, choices=POST_STATUS_CHOICES, default=POST_STATUS_AVAILABLE, editable=False)
+    manufacturing_date = models.DateField(blank=True, null=True)  
 
     def __str__(self):
         return self.title
@@ -60,6 +61,7 @@ class ImagePost(models.Model):#
     image = models.ImageField(upload_to='post_images')
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='images')#related_name es el nombre que tiene la otra entidad para llamarla
     #Falta la limitacion de 1 a 4 imágenes
+    
     def __str__(self):
         return f"Imagen de {self.post.title}"
 

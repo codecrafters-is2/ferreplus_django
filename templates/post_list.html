@@ -1,0 +1,36 @@
+<!-- templates/article_list.html -->
+{% extends "_base.html" %}
+{% load static %}
+
+{% block title %}Publicaciones{% endblock title %}
+{% block content %}
+<h1> aglo</h1>
+<h1> aglo</h1>
+{% for post in post_list %}
+    <div class="card">
+        <div class="card-header">
+        <span class="font-weight-bold"><a href="{% url 'post_detail' post.pk %}">{{ post.title | capfirst}}</span> &middot; {#Primera con mayuscula#}
+        <span class="text-muted">por {{ post.author }} |
+        {{ post.title.date }}</span>
+        <h2></h2>
+        <h2><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h2> 
+        <h2>{{ post.body }}</h2>
+    </div>
+    <div class="card-body">
+        {{ post.body }}
+    </div>
+        <div class="card-footer text-center text-muted">
+            <a href="#">Editar</a> | <a href="#">Eliminar</a>
+        </div>
+    </div>
+    <br />
+    
+{% endfor %}
+{% comment %}
+<div class="card-footer text-center text-muted">
+    <a href="{% url 'post_edit' post.pk %}">Editar</a> |
+    <a href="{% url 'post_delete' post.pk %}">Eliminar</a>
+</div>
+{% endcomment %}
+
+{% endblock content %}

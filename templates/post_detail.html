@@ -1,11 +1,24 @@
 <!-- templates/post_detail.html -->
 {% extends "_base.html" %}
+{% load static %} {#Si es que va#}
 
 {% block content %}
 <div class="post-entry">
+    <h1> aglo</h1>
+    <h1> aglo</h1>
     <h2>{{ post.title }}</h2>
     <p>{{ post.body }}</p>
     <p>{{ post.author }}</p>
     <p>{{ post.category }}</p>
+    <p>{{ post.new }}</p>
+    <p>{{ post.brand }}</p>
+    <p>{{ post.status }}</p>
+    <p>{{ post.manufacturing_date }}</p>
 </div>
+
+
+
+<a href="{% url 'post_edit' post.pk %}">+ Editar publicación</a>
+<p><a href="{% url 'post_delete' post.pk %}">+ Eliminar publicación</a></p>
+<p> <a href="{% url 'post_list' %}">Todas las publicaciones</a>.</p>
 {% endblock content %}
