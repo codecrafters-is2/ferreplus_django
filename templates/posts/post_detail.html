@@ -6,14 +6,15 @@
 <div class="post-entry">
     <h1> aglo</h1>
     <h1> aglo</h1>
+    <h1>Detalle de la publicación</h1>
     <h2>{{ post.title }}</h2>
-    <p>{{ post.body }}</p>
-    <p>{{ post.author }}</p>
-    <p>{{ post.category }}</p>
-    <p>{{ post.new }}</p>
-    <p>{{ post.brand }}</p>
-    <p>{{ post.status }}</p>
-    <p>{{ post.manufacturing_date }}</p>
+    <p>Cuerpo: {{ post.body }}</p>
+    <p>Autor: {{ post.author }}</p>
+    <p>Categoría: {{ post.get_category_display }}</p>
+    <p>Nuevo: {{ post.new|yesno:"Sí,No" }}</p>
+    <p>Marca: {{ post.brand }}</p>
+    <img src="{{ post.image.url}}" alt="Imagen de la publicación">
+    <p>Fecha de creación: {{ post.manufacturing_date }}</p>
 </div>
 
 
@@ -22,3 +23,4 @@
 <p><a href="{% url 'post_delete' post.pk %}">+ Eliminar publicación</a></p>
 <p> <a href="{% url 'post_list' %}">Todas las publicaciones</a>.</p>
 {% endblock content %}
+

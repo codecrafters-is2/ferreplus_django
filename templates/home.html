@@ -14,7 +14,7 @@
             <h1>Hello Word! Esta es nuestra Homepage.</h1>
         </div>
         <div class="second-page">
-            <h1>Productos</h1> {% comment %} Probando esto  ACOMODAR {% endcomment %}
+            <h1>Productos</h1> 
             <div class="post-product">
                 <a href="{% url 'post_new' %}">+ Publicar producto</a>
             </div>
@@ -22,7 +22,7 @@
                 {% for post in post_list %}
                 <div class="detail"/>
                     <h2><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h2> 
-                    <h2>{{ post.body }}</h2>
+                    <img src="{{post.image.url}}" alt="post image">
                 </div>
                 {% endfor %}
             </div>

@@ -56,19 +56,11 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse("post_detail", kwargs={"pk": self.pk})
 
-
+#Para cuando podamos cargar mas imagenes
 class ImagePost(models.Model):#
     image = models.ImageField(upload_to='post_images')
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='images')#related_name es el nombre que tiene la otra entidad para llamarla
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='images', max_length=4)#related_name es el nombre que tiene la otra entidad para llamarla
     #Falta la limitacion de 1 a 4 imágenes
     
     def __str__(self):
         return f"Imagen de {self.post.title}"
-
-#    class Meta:
-#        validators = [
-#            # Asegura que cada publicación tenga al menos una imagen
-#            MinValueValidator(1, "Cada publicación debe tener al menos una imagen."),
-#            # Asegura que cada publicación tenga como máximo cuatro imágenes
-#            MaxValueValidator(4, "Cada publicación puede tener como máximo cuatro imágenes.")
-#        ]

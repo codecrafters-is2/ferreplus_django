@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "posts.apps.PostsConfig",
 ]
 
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
