@@ -42,6 +42,9 @@ INSTALLED_APPS = [
     "accounts.apps.AccountsConfig",
     "pages.apps.PagesConfig",
     "posts.apps.PostsConfig",
+    "branches.apps.BranchesConfig",
+    "adminpanel.apps.AdminpanelConfig",
+    
 ]
 
 
@@ -60,7 +63,7 @@ ROOT_URLCONF = 'ferreplus.urls'
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "templates"], 
+        "DIRS": [], 
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -70,7 +73,8 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
             ],
         },
-        "DIRS": [BASE_DIR / "templates"],
+        "DIRS": [BASE_DIR / "templates",
+                BASE_DIR / 'adminpanel' / 'templates',]
     },
 ]
 

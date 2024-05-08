@@ -24,6 +24,7 @@ urlpatterns = [
     path("admin/", admin.site.urls), 
     path("", include("pages.urls")),
     path("posts/", include("posts.urls")),
+    path("adminpanel/", include("adminpanel.urls")),
 ]
 
 if settings.DEBUG: #Solo proyecto en desarrollo, falta para producción

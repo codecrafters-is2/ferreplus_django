@@ -2,6 +2,7 @@ from django.db import models
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator, MaxValueValidator
+from branches.models import Branch
 
 User = get_user_model()
 #Sucursal = get_sucursales()
@@ -41,7 +42,7 @@ class Post(models.Model):
     body = models.TextField(blank=True, null=True) #Chequear
     image = models.ImageField(upload_to="post_images") #Para una imagen sola
     category = models.CharField(max_length=22, choices=CHOICES)
-    #branch = models.ForeignKey("Sucursal" , on_delete=models.CASCADE) #Sucursal
+    branch = models.ForeignKey(Branch, on_delete=models.CASCADE) #Sucursal
     #barter = models.ForeignKey("Trueque" , on_delete=models.CASCADE) #Trueque
     #La "pregunta" se tiene que hacer desde su modelo
     related_posts = models.ManyToManyField('self', blank=True, related_name='related_by', editable=False)

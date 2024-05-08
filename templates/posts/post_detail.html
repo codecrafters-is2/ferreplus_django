@@ -10,6 +10,7 @@
     <h2>{{ post.title }}</h2>
     <p>Cuerpo: {{ post.body }}</p>
     <p>Autor: {{ post.author }}</p>
+    <p>Sucursal de preferencia: {{ post.branch }}</p>
     <p>Categoría: {{ post.get_category_display }}</p>
     <p>Nuevo: {{ post.new|yesno:"Sí,No" }}</p>
     <p>Marca: {{ post.brand }}</p>

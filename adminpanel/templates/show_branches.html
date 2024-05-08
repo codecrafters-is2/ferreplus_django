@@ -1,0 +1,18 @@
+{% extends '_base.html' %}
+
+{% block title %}Listado de sucursales{% endblock %}
+<div class="container">
+{% block content %}
+
+    <h1>Sucursales</h1>
+
+    <ul>
+        {% for branch in branches %}
+            <li>{{ branch.city }} - {{ branch.address }}  <a href="{% url 'edit_branch' branch.id %}">Editar</a> - <a href="{% url 'delete_branch' branch.id %}">Eliminar</a></li>
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'register_new_branch' %}"><button>Agregar sucursales</button></a>
+
+{% endblock %}
+</div>

@@ -54,7 +54,7 @@ class PostForm(forms.ModelForm):
 
     class Meta:
         model = Post
-        fields = ["title","body","image","category","new","brand","manufacturing_date",
+        fields = ["title","body","image","category","branch","new","brand","manufacturing_date",
                     "author", #Este, tiene que desaparecer despues
                 ] #Campos que va a completar el usuario
         widgets = {
@@ -75,6 +75,7 @@ class PostForm(forms.ModelForm):
         self.fields["brand"].label = "Marca"
         self.fields["manufacturing_date"].label = "Fecha de creación"
         self.fields["image"].label = "Imagen del producto"
+        self.fields["branch"].label= "Sucursal de preferencia"
     
     #def clean_images(self):
     #    images = self.cleaned_data.get('images')
