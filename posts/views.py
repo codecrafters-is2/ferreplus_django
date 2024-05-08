@@ -1,8 +1,9 @@
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+from django.forms import inlineformset_factory
 
-from .models import Post
+from .models import Post, ImagePost
 from .forms import PostForm
 
 class PostListView(ListView): 
@@ -20,10 +21,37 @@ class PostCreateView(CreateView): #Creación de la publicación
     model = Post
     template_name = "posts/post_new.html"
     form_class = PostForm
-    #fields = ["title", "author", "body","category","new","brand","manufacturing_date"]#,"image"]
-    #def form_valid(self, form): # Para que ponga el usuario que es, debo de borrar author arriba
-        #form.instance.author = self.request.user
-        #return super().form_valid(form)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        ImageFormSet = inlineformset_factory(Post, ImagePost, fields=('image',), extra=4)
+        if self.request.POST:
+            context['image_formset'] = ImageFormSet(self.request.POST, self.request.FILES)
+        else:
+            context['image_formset'] = ImageFormSet()
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        image_formset = context['image_formset']
+        if image_formset.is_valid():
+            self.object = form.save()
+            image_formset.instance = self.object
+            image_formset.save()
+            uploaded_images = self.request.FILES.getlist('photo')
+            for image in uploaded_images:
+                # Crea una nueva instancia de ImagePost
+                image_post = ImagePost(post=self.object, image=image)
+                # Guarda la instancia en la base de datos
+                image_post.save()
+            return super().form_valid(form)
+        else:
+            return self.form_invalid(form)
+        
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.request = self.request  # Agregar el objeto request al formulario
+        return form
     
 class PostUpdateView(UpdateView): #Edición de la publicación
     model = Post
