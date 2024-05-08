@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     # Local
     "accounts.apps.AccountsConfig",
     "pages.apps.PagesConfig",
+    "branches.apps.BranchesConfig",
+    "adminpanel.apps.AdminpanelConfig",
+    
 ]
 
 MIDDLEWARE = [
@@ -67,7 +70,8 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
             ],
         },
-        "DIRS": [BASE_DIR / "templates"],
+        "DIRS": [BASE_DIR / "templates",
+                 BASE_DIR / 'adminpanel' / 'templates',]
     },
 ]
 

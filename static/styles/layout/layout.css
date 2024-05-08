@@ -101,3 +101,8 @@ body {
     justify-content: center;
     color: #ebf1f8;
 }
+
+.container {
+    margin-top: 100px;
+    margin-left: 50px;
+  }
