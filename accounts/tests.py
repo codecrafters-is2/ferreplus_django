@@ -6,13 +6,14 @@ class CustomUserTests(TestCase):
     def test_create_user(self):
         User = get_user_model()
         user = User.objects.create_user(
-            username="will", email="will@email.com", password="testpass123"
+            username="will", email="will@email.com", password="testpass123", dni=39150417
         )
         self.assertEqual(user.username, "will")
         self.assertEqual(user.email, "will@email.com")
         self.assertTrue(user.is_active)
         self.assertFalse(user.is_staff)
         self.assertFalse(user.is_superuser)
+        self.assertEqual(user.dni, 39150417)
 
     def test_create_superuser(self):
         User = get_user_model()
@@ -43,7 +44,7 @@ class SignupPageTests(TestCase): # new
         self.assertEqual(get_user_model().objects.all()[0].username, self.username)
         self.assertEqual(get_user_model().objects.all()[0].email, self.email)
 
-#class SignUpPageTests(TestCase):
+# class SignUpPageTests(TestCase):
 #    def setUp(self):
 #        url = reverse("signup")
 #        self.response = self.client.get(url)
@@ -52,7 +53,7 @@ class SignupPageTests(TestCase): # new
 #        self.assertTemplateUsed(self.response, "registration/signup.html")
 #        self.assertContains(self.response, "Sign Up")
 #        self.assertNotContains(self.response, "Hi there! I should not be on the page.")
-#    def test_signup_form(self): 
+#    def test_signup_form(self):
 #        form = self.response.context.get("form")
 #        self.assertIsInstance(form, CustomUserCreationForm)
 #        self.assertContains(self.response, "csrfmiddlewaretoken")
