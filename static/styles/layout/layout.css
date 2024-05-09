@@ -162,7 +162,7 @@ body {
     .navbar-nav {
         display: flex;
         justify-content: center;
-        align-items: center;
+        align-items: end;
     }
 
     .nav-list {
