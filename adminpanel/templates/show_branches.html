@@ -8,7 +8,14 @@
 
     <ul>
         {% for branch in branches %}
-            <li>{{ branch.city }} - {{ branch.address }}  <a href="{% url 'edit_branch' branch.id %}">Editar</a> - <a href="{% url 'delete_branch' branch.id %}">Eliminar</a></li>
+            <li>{{ branch.city }} - {{ branch.address }}  
+                <a href="{% url 'edit_branch' branch.id %}">Editar</a> - 
+                {% if branches|length > 1 %}
+                    <a href="{% url 'delete_branch' branch.id %}">Eliminar</a>
+                {% else %}
+                    <button type="button" disabled>Eliminar</button>
+                {% endif %}
+            </li>
         {% endfor %}
     </ul>
 

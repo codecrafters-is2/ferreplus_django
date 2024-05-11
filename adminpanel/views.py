@@ -1,5 +1,6 @@
 from django.views.generic import ListView, CreateView
 from django.views.generic.edit import UpdateView, DeleteView
+from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from branches.models import Branch
 from posts.models import Post
@@ -27,14 +28,3 @@ class BranchDeleteView(DeleteView):
     template_name = 'confirm_branch_removal.html'
     success_url = reverse_lazy('show_branches')
     
-    #def post(self, request, *args, **kwargs):
-    #    # Lógica para eliminar el Branch y cambiar el estado del Post
-    #    branch = self.get_object()
-    #    branch.delete()  # Elimina el Branch
-#
-    #    # Actualiza el estado de los Posts relacionados
-    #    posts = Post.objects.filter(branch=branch)
-    #    for post in posts:
-    #        post.cambiarEstadoDelPost()
-#
-    #    return super().post(request, *args, **kwargs)
