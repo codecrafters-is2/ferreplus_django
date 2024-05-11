@@ -1,5 +1,11 @@
+# Entornos virtuales
 .venv/
 .venv
 venv
+# Variables de entorno
+.env
+.env.production
+# Python
 **/__pycache__/
+# Django
 db.sqlite3
