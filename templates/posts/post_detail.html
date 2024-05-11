@@ -4,8 +4,6 @@
 
 {% block content %}
 <div class="post-entry">
-    <h1> aglo</h1>
-    <h1> aglo</h1>
     <h1>Detalle de la publicación</h1>
     <h2>{{ post.title }}</h2>
     <p>Cuerpo: {{ post.body }}</p>
@@ -15,7 +13,7 @@
     <p>Nuevo: {{ post.new|yesno:"Sí,No" }}</p>
     <p>Marca: {{ post.brand }}</p>
     <img src="{{ post.image.url}}" alt="Imagen de la publicación">
-    <p>Fecha de creación: {{ post.manufacturing_date }}</p>
+    {#<p>Fecha de creación: {{ post.manufacturing_date }}</p>#}
 </div>
 
 

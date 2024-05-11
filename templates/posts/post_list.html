@@ -2,17 +2,8 @@
 {% extends "_base.html" %}
 {% load static %}
 
-
-
-<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;height:100vh">
-<h1>ESPACIO</h1>
-<h1>ESPACIO</h1>
 {% block title %}Publicaciones{% endblock title %}
-<h2>ESPACIO2</h2>
-<h2>ESPACIO2</h2>
 {% block content %}
-<h2>ESPACIO3</h2>
-<h2>ESPACIO3</h2>
     {% for post in post_list %}
     <div class="card">
         <div class="card-header">
@@ -34,5 +25,4 @@
     <br />
     
 {% endfor %}
-</div>
 {% endblock content %}

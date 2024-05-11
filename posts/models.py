@@ -7,15 +7,16 @@ from branches.models import Branch
 User = get_user_model()
 #Sucursal = get_sucursales()
 
-
 class Post(models.Model):
     POST_STATUS_AVAILABLE = 'available'
     POST_STATUS_RESERVED = 'reserved'
     POST_STATUS_COMPLETED = 'completed'
+    POST_STATUS_PAUSED = "paused"
     POST_STATUS_CHOICES = (
         (POST_STATUS_AVAILABLE, 'Disponible'),
         (POST_STATUS_RESERVED, 'Reservado'),
         (POST_STATUS_COMPLETED, 'Finalizado'),
+        (POST_STATUS_PAUSED, "Pausado")
     )
 
     HERRAMIENTAS = "tools" #En la BD su campo se denomina con el String 
@@ -49,7 +50,7 @@ class Post(models.Model):
     new = models.BooleanField(blank=True, null=True)
     brand = models.CharField(max_length=30,blank=True, null=True) #marca
     status = models.CharField(max_length=20, choices=POST_STATUS_CHOICES, default=POST_STATUS_AVAILABLE, editable=False)
-    manufacturing_date = models.DateField(blank=True, null=True)  
+    #manufacturing_date = models.DateField(blank=True, null=True)  --> Se fleta
 
     def __str__(self):
         return self.title

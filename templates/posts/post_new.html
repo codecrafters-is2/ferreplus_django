@@ -2,8 +2,6 @@
 {% extends "_base.html" %}
 
 {% block content %}
-<br></br>
-<br></br>
 <h1>Nueva publicación</h1>
 <form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
     {{ form.as_p }}
