@@ -38,10 +38,7 @@
             <li class="nav-item">
               {% block authentication %}
                 {% if user.is_authenticated %}
-                  <p>Hi {{ user.email }}!</p>
-                  <p>Nombre {{user.username }}</p>
-                  <p>DNI {{user.dni}}</p>
-                  <p>Fecha de nacimiento {{user.birthdate}}</p>
+                  <p>Hi {{ user.username }}!</p>
                   <p><a href="{% url 'account_logout' %}">Log Out</a></p>
                 {% else %}
                   <p>You are not logged in</p>

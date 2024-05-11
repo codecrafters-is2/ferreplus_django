@@ -4,7 +4,6 @@
 {% block title %}Sign Up{% endblock title %}
 {% block content %}
     <h2>Sign Up</h2>
-    <p>FALTA ARREGLAR QUE EL DNI SEA ÚNICO Y LAS CONDICIONES DEL PASSWORD (actualmente las condiciones no se están aplicando)!!!</p>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
