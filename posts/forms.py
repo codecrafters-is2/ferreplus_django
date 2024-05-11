@@ -73,7 +73,6 @@ class PostForm(forms.ModelForm):
         self.fields["category"].label = "Categoría del producto"
         self.fields["new"].label = "Nuevo"
         self.fields["brand"].label = "Marca"
-        #self.fields["manufacturing_date"].label = "Fecha de creación"
         self.fields["image"].label = "Imagen del producto"
         self.fields["branch"].label= "Sucursal de preferencia"
     

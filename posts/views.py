@@ -32,6 +32,9 @@ class PostCreateView(CreateView): #Creación de la publicación
         return context
 
     def form_valid(self, form):
+        # Agrega el campo original_branch_id antes de guardar el formulario
+        form.instance.original_branch_id = form.instance.branch.id
+
         context = self.get_context_data()
         image_formset = context['image_formset']
         if image_formset.is_valid():
@@ -58,6 +61,14 @@ class PostUpdateView(UpdateView): #Edición de la publicación
     template_name = "posts/post_edit.html"
     #fields = ["title", "body","category","new","brand"]
     form_class = PostForm
+    
+    def form_valid(self, form):
+        # Agrega el campo original_branch_id antes de guardar el formulario
+        form.instance.original_branch_id = form.instance.branch.id
+        # Actualiza el estado de la publicación
+        form.instance.status=Post.POST_STATUS_AVAILABLE
+        return super().form_valid(form)
+    
     
 class PostDeleteView(DeleteView): #Eliminación de la publicación
     model = Post
