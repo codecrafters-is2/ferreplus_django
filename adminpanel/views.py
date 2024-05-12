@@ -1,9 +1,8 @@
 from django.views.generic import ListView, CreateView
 from django.views.generic.edit import UpdateView, DeleteView
-from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from branches.models import Branch
-from posts.models import Post
+#from posts.models import Post
 from .forms import BranchForm
 
 class BranchListView(ListView):
@@ -22,6 +21,13 @@ class BranchUpdateView(UpdateView):
     form_class = BranchForm
     template_name = 'edit_branch.html'
     success_url = reverse_lazy('show_branches')
+
+    def get_form_class(self):
+            return RestrictedBranchForm 
+
+class RestrictedBranchForm(BranchForm):
+    class Meta(BranchForm.Meta):
+        exclude = ['city', 'postal_code'] 
 
 class BranchDeleteView(DeleteView):
     model = Branch
