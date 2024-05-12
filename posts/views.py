@@ -11,8 +11,7 @@ class PostListView(ListView):
     template_name = "posts/post_list.html"
     #Por defecto -> queryset = Model.objects.all()
     queryset = Post.objects.filter(status = "available") 
-    #queryset = Post.objects.filter(new = True) #Solo se muestran los nuevos
-    
+
 class PostDetailView(DetailView): # Visualización de la publicación
     model = Post
     template_name = "posts/post_detail.html"
@@ -68,8 +67,7 @@ class PostUpdateView(UpdateView): #Edición de la publicación
         # Actualiza el estado de la publicación
         form.instance.status=Post.POST_STATUS_AVAILABLE
         return super().form_valid(form)
-    
-    
+
 class PostDeleteView(DeleteView): #Eliminación de la publicación
     model = Post
     template_name = "posts/post_delete.html"

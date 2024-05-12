@@ -134,7 +134,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgb(248, 192, 192);
+    background-color: black;
 }
 
 .base-footer-inner-container {
