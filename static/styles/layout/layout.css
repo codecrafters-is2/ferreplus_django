@@ -151,6 +151,15 @@ body {
     color: #ebf1f8;
 }
 
+.container {
+    min-width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 @media (min-width: 640px) {
     .navbar-inner-container {
         padding-top: 1em;

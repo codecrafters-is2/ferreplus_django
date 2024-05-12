@@ -55,7 +55,6 @@ INSTALLED_APPS = [
     "branches.apps.BranchesConfig",
     "adminpanel.apps.AdminpanelConfig",
 
-]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -183,7 +182,7 @@ EMAIL_HOST_USER = env("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
 
-
+ACCOUNT_EMAIL_SUBJECT_PREFIX="Ferreplus "
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR,"media")
