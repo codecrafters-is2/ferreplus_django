@@ -1,0 +1,25 @@
+<!-- templates/post_detail.html -->
+{% extends "_base.html" %}
+{% load static %} {#Si es que va#}
+
+{% block content %}
+<div class="post-entry">
+    <h1>Detalle de la publicación</h1>
+    <h2>{{ post.title }}</h2>
+    <p>Cuerpo: {{ post.body }}</p>
+    <p>Autor: {{ post.author }}</p>
+    <p>Sucursal de preferencia: {{ post.branch }}</p>
+    <p>Categoría: {{ post.get_category_display }}</p>
+    <p>Nuevo: {{ post.new|yesno:"Sí,No" }}</p>
+    <p>Marca: {{ post.brand }}</p>
+    <img src="{{ post.image.url}}" alt="Imagen de la publicación">
+    {#<p>Fecha de creación: {{ post.manufacturing_date }}</p>#}
+</div>
+
+
+
+<a href="{% url 'post_edit' post.pk %}">+ Editar publicación</a>
+<p><a href="{% url 'post_delete' post.pk %}">+ Eliminar publicación</a></p>
+<p> <a href="{% url 'post_list' %}">Todas las publicaciones</a>.</p>
+{% endblock content %}
+

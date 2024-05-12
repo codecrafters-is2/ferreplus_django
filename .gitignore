@@ -5,7 +5,11 @@ venv
 # Variables de entorno
 .env
 .env.production
+.env.mio
+.env.mailtrap
 # Python
 **/__pycache__/
 # Django
 db.sqlite3
+media/post_images/*
+

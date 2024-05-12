@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-
+import os
 from pathlib import Path
 from environs import Env
 
@@ -44,15 +44,18 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sites",
     # Third-party
-    "crispy_forms",  
-    "crispy_bootstrap5",  
-    "allauth",  
-    "allauth.account",  
+    "crispy_forms",
+    "crispy_bootstrap5",
+    "allauth",
+    "allauth.account",
     # Local
     "accounts.apps.AccountsConfig",
     "pages.apps.PagesConfig",
-]
+    "posts.apps.PostsConfig",
+    "branches.apps.BranchesConfig",
+    "adminpanel.apps.AdminpanelConfig",
 
+]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -80,7 +83,8 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
             ],
         },
-        "DIRS": [BASE_DIR / "templates"],
+        "DIRS": [BASE_DIR / "templates",
+                BASE_DIR / 'adminpanel' / 'templates',]
     },
 ]
 
@@ -126,7 +130,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = "es"
+LANGUAGE_CODE = 'es'
 
 TIME_ZONE = 'UTC'
 
@@ -178,3 +182,8 @@ EMAIL_USE_TLS = env("EMAIL_USE_TLS")
 EMAIL_HOST_USER = env("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
+
+
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR,"media")
