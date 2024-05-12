@@ -42,19 +42,26 @@
               </a>
             </li>
             <li class="nav-item">
-              {% block authentication %}
-                {% if user.is_authenticated %}
-                  <p>Hi {{ user.email }}!</p>
-                  <p>Nombre {{user.username }}</p>
-                  <p>DNI {{user.dni}}</p>
-                  <p>Fecha de nacimiento {{user.birthdate}}</p>
-                  <p><a href="{% url 'account_logout' %}">Log Out</a></p>
-                {% else %}
-                  <p>You are not logged in</p>
-                  <a href="{% url 'account_login' %}">Log In</a>
-                  <a href="{% url 'account_signup' %}">Sign Up</a>
-                {% endif %}
-               {% endblock authentication %}
+              <div class="auth-info">
+                {% block authentication %}
+                  {% if user.is_authenticated %}
+                    <p>Hi {{ user.email }}!</p>
+                    <p>Nombre {{user.username }}</p>
+                    <p>DNI {{user.dni}}</p>
+                    <p>Fecha de nacimiento {{user.birthdate}}</p>
+                    <p><a href="{% url 'account_logout' %}">Log Out</a></p>
+                    
+                  {% else %}
+                    <div style="position:relative;display:flex;flex-direction:column;gap:1rem;align-items:center; width:100%;">
+                      <p style="font-size:9px; position:absolute;transform:translateY(-220%)">No has iniciado sesión</p>
+                      <div style="display:flex;flex-direction:row;gap:1rem">
+                        <a href="{% url 'account_login' %}">Iniciar sesión</a>
+                        <a href="{% url 'account_signup' %}">Registrarse</a>
+                      </div>
+                    </div>
+                  {% endif %}
+                {% endblock authentication %}
+               <div>
             </li>
           </ul>
         </nav>
