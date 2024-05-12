@@ -54,7 +54,7 @@ INSTALLED_APPS = [
     "posts.apps.PostsConfig",
     "branches.apps.BranchesConfig",
     "adminpanel.apps.AdminpanelConfig",
-
+]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
