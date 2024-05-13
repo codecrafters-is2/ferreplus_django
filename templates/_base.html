@@ -45,12 +45,18 @@
               <div class="auth-info">
                 {% block authentication %}
                   {% if user.is_authenticated %}
-                    <p>Hi {{ user.email }}!</p>
-                    <p>Nombre {{user.username }}</p>
-                    <p>DNI {{user.dni}}</p>
-                    <p>Fecha de nacimiento {{user.birthdate}}</p>
-                    <p><a href="{% url 'account_logout' %}">Log Out</a></p>
-                    
+                    <div style="position:relative; display:flex; flex-direction:row; gap: 1rem; align-items:center; width:100%;">
+                      <p style="font-size:14px;">{{ user.username }}</p>
+                      <button id="user-button" class="logged-user-button">
+                        <img src="{% static '/img/icons/user-icon.png' %}" alt="mi-cuenta" style="width: 30px;" />
+                      </button>
+                      <div class="user-menu">
+                        <p><a href="{% url 'home' %}">Mis publicaciones</a></p>
+                        <p><a href="{% url 'account_email' %}">Editar perfil</a></p>
+                        <p><a href="{% url 'account_change_password' %}">Cambiar contraseña</a></p>
+                        <p><a href="{% url 'account_logout' %}">Log Out</a></p>
+                      </div>
+                    </div>
                   {% else %}
                     <div style="position:relative;display:flex;flex-direction:column;gap:1rem;align-items:center; width:100%;">
                       <p style="font-size:9px; position:absolute;transform:translateY(-220%)">No has iniciado sesión</p>
