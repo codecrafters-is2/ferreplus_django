@@ -53,8 +53,8 @@ class PostForm(forms.ModelForm):
 
     class Meta:
         model = Post
-        fields = ["title","body","image","category","branch","new","brand",#"manufacturing_date",
-                    "author", #Este, tiene que desaparecer despues
+        fields = ["title","body","image","category","branch","new","brand",
+                    #"author", #Este, tiene que desaparecer despues
                 ] #Campos que va a completar el usuario
         widgets = {
             "title" : forms.TextInput(
@@ -69,7 +69,7 @@ class PostForm(forms.ModelForm):
         super().__init__(*args,**kwargs)
         self.fields["title"].label = "Nombre del producto"
         self.fields["body"].label = "Descripción del producto"
-        self.fields["author"].label = "Autor del producto"
+        #self.fields["author"].label = "Autor del producto"
         self.fields["category"].label = "Categoría del producto"
         self.fields["new"].label = "Nuevo"
         self.fields["brand"].label = "Marca"

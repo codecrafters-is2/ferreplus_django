@@ -5,7 +5,6 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from branches.models import Branch
 
 User = get_user_model()
-#Sucursal = get_sucursales()
 
 class Post(models.Model):
     POST_STATUS_AVAILABLE = 'available'
@@ -50,11 +49,7 @@ class Post(models.Model):
     related_posts = models.ManyToManyField('self', blank=True, related_name='related_by', editable=False)
     new = models.BooleanField(blank=True, null=True)
     brand = models.CharField(max_length=30,blank=True, null=True) #marca
-    status = models.CharField(max_length=20, choices=POST_STATUS_CHOICES, default=POST_STATUS_AVAILABLE,) #editable=False)
-
-    #def cambiarEstadoDelPost(self):
-    #    self.status = self.POST_STATUS_PAUSED
-    #    self.save()
+    status = models.CharField(max_length=20, choices=POST_STATUS_CHOICES, default=POST_STATUS_AVAILABLE,) 
 
     def __str__(self):
         return self.title

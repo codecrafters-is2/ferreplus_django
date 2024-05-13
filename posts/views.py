@@ -2,6 +2,7 @@ from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.forms import inlineformset_factory
+from django.http import Http404
 
 from .models import Post, ImagePost
 from .forms import PostForm
@@ -9,8 +10,24 @@ from .forms import PostForm
 class PostListView(ListView): 
     model = Post
     template_name = "posts/post_list.html"
-    #Por defecto -> queryset = Model.objects.all()
-    queryset = Post.objects.filter(status = "available") 
+    
+    def get_queryset(self):
+        # Obtener todas las publicaciones
+        queryset = super().get_queryset()
+        # Aplicar filtro para obtener solo las publicaciones disponibles
+        queryset = queryset.filter(status="available") #Por defecto -> queryset = Model.objects.all()
+        # Excluir las publicaciones del usuario actual
+        queryset = queryset.exclude(author=self.request.user)
+        return queryset
+
+class MyPostListView(ListView): 
+    model = Post
+    template_name = "posts/my_post_list.html"
+    context_object_name = "post_list"  # Cambia el nombre del contexto para que coincida con la plantilla
+    
+    def get_queryset(self):
+        # Filtrar las publicaciones por el autor que coincide con el usuario actual
+        return Post.objects.filter(author=self.request.user)
 
 class PostDetailView(DetailView): # Visualización de la publicación
     model = Post
@@ -33,7 +50,9 @@ class PostCreateView(CreateView): #Creación de la publicación
     def form_valid(self, form):
         # Agrega el campo original_branch_id antes de guardar el formulario
         form.instance.original_branch_id = form.instance.branch.id
-
+        # Asigna el autor actualmente autenticado
+        form.instance.author = self.request.user  
+        
         context = self.get_context_data()
         image_formset = context['image_formset']
         if image_formset.is_valid():
@@ -67,8 +86,18 @@ class PostUpdateView(UpdateView): #Edición de la publicación
         # Actualiza el estado de la publicación
         form.instance.status=Post.POST_STATUS_AVAILABLE
         return super().form_valid(form)
+    
+    def dispatch(self, request, *args, **kwargs):
+        if self.get_object().author != request.user:
+            raise Http404("No tienes permiso para editar esta publicación.")
+        return super().dispatch(request, *args, **kwargs)
 
 class PostDeleteView(DeleteView): #Eliminación de la publicación
     model = Post
     template_name = "posts/post_delete.html"
     success_url = reverse_lazy("post_list") #Redirección cuando termina la acción
+    
+    def dispatch(self, request, *args, **kwargs):
+        if self.get_object().author != request.user:
+            raise Http404("No tienes permiso para eliminar esta publicación.")
+        return super().dispatch(request, *args, **kwargs)

@@ -17,15 +17,8 @@
             <div class="post-product">
                 <a href="{% url 'post_new' %}">+ Publicar producto</a>
             </div>
-            <div class="posts-list">
-                {% for post in post_list %}
-                <div class="detail"/>
-                    <h2><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h2> 
-                    <img src="{{post.image.url}}" alt="post image">
-                </div>
-                {% endfor %}
-            </div>
             <p> <a href="{% url 'post_list' %}">Todas las publicaciones</a>.</p>
+            <p> <a href="{% url 'my_post_list' %}">Listar mis productos</a>.</p>
         </div>
     </div>
 {% endblock content %}

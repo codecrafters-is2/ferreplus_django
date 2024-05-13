@@ -13,15 +13,15 @@ class CustomUserCreationForm(SignupForm):
                 "type": "number",
             }
         ),
-     )
+    )
     birthdate = forms.DateField(
-       label="Fecha de Nacimiento",
-       widget=forms.DateInput(
-           attrs={
-               "placeholder": ("Fecha de Nacimiento"),
-               "type": "date",
-           }
-       ),
+        label="Fecha de Nacimiento",
+        widget=forms.DateInput(
+            attrs={
+                "placeholder": ("Fecha de Nacimiento"),
+                "type": "date",
+            }
+        ),
     )
 
     def clean(self):
@@ -41,10 +41,10 @@ class CustomUserCreationForm(SignupForm):
         actual_year = datetime.now().year
         birthdate_value = cleaned_data.get("birthdate")
         if (actual_year - birthdate_value.year) < 18:
-           self.add_error(
-               "birthdate",
-               ("Para registrarte como usuario debes ser mayor de 18 años!"),
-           )
+            self.add_error(
+                "birthdate",
+                ("Para registrarte como usuario debes ser mayor de 18 años!"),
+            )
 
         return self.cleaned_data
 
