@@ -2,6 +2,7 @@ from allauth.account.forms import SignupForm
 from django import forms
 from .models import CustomUser
 from datetime import datetime
+from django.contrib.auth.models import Group
 
 
 class CustomUserCreationForm(SignupForm):
@@ -53,5 +54,7 @@ class CustomUserCreationForm(SignupForm):
         user.dni = self.cleaned_data["dni"]
         user.birthdate = self.cleaned_data["birthdate"]
         user.save()
+        grupo = Group.objects.get(name='client')
+        user.groups.add(grupo)
         return user
 

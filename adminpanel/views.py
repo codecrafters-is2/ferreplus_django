@@ -2,7 +2,6 @@ from django.views.generic import ListView, CreateView
 from django.views.generic.edit import UpdateView, DeleteView
 from django.urls import reverse_lazy
 from branches.models import Branch
-#from posts.models import Post
 from .forms import BranchForm
 
 class BranchListView(ListView):
