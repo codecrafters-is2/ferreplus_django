@@ -1,9 +1,12 @@
-from django.views.generic import ListView, CreateView
+from django.views.generic import ListView, CreateView, TemplateView
 from django.views.generic.edit import UpdateView, DeleteView
 from django.urls import reverse_lazy
 from branches.models import Branch
 from .forms import BranchForm
 from accounts.mixins import AdminRequiredMixin
+
+class AdminPanelView(AdminRequiredMixin, TemplateView):
+    template_name = 'adminpanel.html'
 
 class BranchListView(AdminRequiredMixin, ListView):
     model = Branch

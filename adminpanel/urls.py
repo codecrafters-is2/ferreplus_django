@@ -1,7 +1,8 @@
 from django.urls import path
-from .views import BranchListView, BranchCreateView, BranchUpdateView, BranchDeleteView
+from .views import BranchListView, BranchCreateView, BranchUpdateView, BranchDeleteView, AdminPanelView
 
 urlpatterns = [
+    path("", AdminPanelView.as_view(), name='adminpanel'),
     path('branches/', BranchListView.as_view(), name='show_branches'),
     path('branches/add/', BranchCreateView.as_view(), name='register_new_branch'),
     path('branches/edit/<int:pk>/', BranchUpdateView.as_view(), name='edit_branch'),
