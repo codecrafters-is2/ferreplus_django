@@ -3,11 +3,12 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.forms import inlineformset_factory
 from django.http import Http404
+from accounts.mixins import ClientRequiredMixin
 
 from .models import Post, ImagePost
 from .forms import PostForm
 
-class PostListView(ListView): 
+class PostListView(ClientRequiredMixin,ListView): 
     model = Post
     template_name = "posts/post_list.html"
     
@@ -20,7 +21,7 @@ class PostListView(ListView):
         queryset = queryset.exclude(author=self.request.user)
         return queryset
 
-class MyPostListView(ListView): 
+class MyPostListView(ClientRequiredMixin,ListView): 
     model = Post
     template_name = "posts/my_post_list.html"
     context_object_name = "post_list"  # Cambia el nombre del contexto para que coincida con la plantilla
@@ -29,11 +30,11 @@ class MyPostListView(ListView):
         # Filtrar las publicaciones por el autor que coincide con el usuario actual
         return Post.objects.filter(author=self.request.user)
 
-class PostDetailView(DetailView): # Visualización de la publicación
+class PostDetailView(ClientRequiredMixin,DetailView): # Visualización de la publicación
     model = Post
     template_name = "posts/post_detail.html"
     
-class PostCreateView(CreateView): #Creación de la publicación
+class PostCreateView(ClientRequiredMixin,CreateView): #Creación de la publicación
     model = Post
     template_name = "posts/post_new.html"
     form_class = PostForm
@@ -74,7 +75,7 @@ class PostCreateView(CreateView): #Creación de la publicación
         form.request = self.request  # Agregar el objeto request al formulario
         return form
     
-class PostUpdateView(UpdateView): #Edición de la publicación
+class PostUpdateView(ClientRequiredMixin,UpdateView): #Edición de la publicación
     model = Post
     template_name = "posts/post_edit.html"
     #fields = ["title", "body","category","new","brand"]
@@ -92,7 +93,7 @@ class PostUpdateView(UpdateView): #Edición de la publicación
             raise Http404("No tienes permiso para editar esta publicación.")
         return super().dispatch(request, *args, **kwargs)
 
-class PostDeleteView(DeleteView): #Eliminación de la publicación
+class PostDeleteView(ClientRequiredMixin,DeleteView): #Eliminación de la publicación
     model = Post
     template_name = "posts/post_delete.html"
     success_url = reverse_lazy("post_list") #Redirección cuando termina la acción
