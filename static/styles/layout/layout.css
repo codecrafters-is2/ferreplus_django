@@ -104,16 +104,20 @@ body {
     align-items: center;
     justify-content: center;
     white-space: nowrap;
+
 }
 
-.hamburguer-button {
-    display: flex;
-    width: 40px;
+button {
     border: none;
     outline: none;
     box-shadow: none;
     background: none;
     cursor: pointer;
+}
+
+.hamburguer-button {
+    display: flex;
+    width: 40px;
 }
 
 .hamburguer-button svg {
@@ -149,6 +153,29 @@ body {
     align-items: center;
     justify-content: center;
     color: #ebf1f8;
+}
+
+.logged-user-button {
+    transition: all 300ms ease;
+}
+
+.logged-user-button:hover {
+    transform: scale(1.05);
+}
+
+.user-menu {
+    width: 100%;
+    display: none;
+    background-color: #ebf1f8;
+    padding: 0.5rem 2rem;
+    box-shadow:rgba(0, 0, 0, 0.1) 0px 3px 8px;
+}
+
+.shown {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    align-items: center;
 }
 
 .container {
@@ -199,5 +226,13 @@ body {
 
     .hamburguer-button {
         display: none;
+    }
+
+    .shown {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        margin: auto;
     }
 }

@@ -12,4 +12,12 @@ function initialize() {
   window.addEventListener("resize", () => {
     window.innerWidth > 768 && cellphoneMenu.classList.remove("visible");
   })
+
+  const userButton = document.getElementById("user-button");
+  const userMenu = document.querySelector(".user-menu");
+
+  userButton.addEventListener('click', () => {
+    userMenu.classList.contains("shown") ? userMenu.classList.remove("shown") : userMenu.classList.add("shown");
+  })
+
 }
