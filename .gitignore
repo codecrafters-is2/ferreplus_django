@@ -3,3 +3,10 @@
 venv
 **/__pycache__/
 db.sqlite3
+accounts/__pycache__/
+adminpanel/__pycache__/
+branches/__pycache__/
+ferreplus/__pycache__/
+pages/__pycache__/
+posts/__pycache__/
+

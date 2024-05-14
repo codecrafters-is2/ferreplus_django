@@ -2,6 +2,11 @@ from allauth.account.forms import SignupForm
 from django import forms
 from .models import CustomUser
 from datetime import datetime
+from django.contrib.auth import password_validation
+from allauth.account.forms import PasswordField
+from allauth.account.adapter import get_adapter
+from ferreplus import settings
+from django.contrib.auth import get_user_model
 
 
 class CustomUserCreationForm(SignupForm):
@@ -24,8 +29,22 @@ class CustomUserCreationForm(SignupForm):
        ),
     )
 
+    def __init__(self, *args, **kwargs):
+        super(SignupForm, self).__init__(*args, **kwargs)
+        self.fields["password1"] = PasswordField(
+            label=("Password"),
+            autocomplete="new-password",
+            help_text=password_validation.password_validators_help_text_html(),
+        )
+        if settings.SIGNUP_PASSWORD_ENTER_TWICE:
+            self.fields["password2"] = PasswordField(
+                label=("Password (again)"), autocomplete="new-password"
+            )
+
     def clean(self):
         cleaned_data = super(SignupForm, self).clean()
+
+        # Clean DNI
         dni_value = cleaned_data.get("dni")
         if CustomUser.objects.filter(dni=dni_value).exists():
             self.add_error(
@@ -38,20 +57,49 @@ class CustomUserCreationForm(SignupForm):
                 ("¡Número de DNI inválido!"),
             )
 
+        # Clean birthdate
         actual_year = datetime.now().year
         birthdate_value = cleaned_data.get("birthdate")
         if (actual_year - birthdate_value.year) < 18:
-           self.add_error(
+            self.add_error(
                "birthdate",
                ("Para registrarte como usuario debes ser mayor de 18 años!"),
            )
 
+        # Clean Password
+        User = get_user_model()
+        dummy_user = User()
+
+        password = self.cleaned_data.get("password1")
+        if password:
+            try:
+                get_adapter().clean_password(password, user=dummy_user)
+            except forms.ValidationError as e:
+                self.add_error("password1", e)
+
+        if (
+            settings.SIGNUP_PASSWORD_ENTER_TWICE
+            and "password1" in self.cleaned_data
+            and "password2" in self.cleaned_data
+        ):
+            if self.cleaned_data["password1"] != self.cleaned_data["password2"]:
+                self.add_error(
+                    "password2",
+                    ("You must type the same password each time."),
+                )
+
         return self.cleaned_data
+
+    # def clean_password(self):
+    #    password = self.cleaned_data.get("password")
+    #    password_validation.validate_password(password, self.instance)
+    #    return password
 
     def save(self, request):
         user = super(CustomUserCreationForm, self).save(request)
         user.dni = self.cleaned_data["dni"]
         user.birthdate = self.cleaned_data["birthdate"]
+        user.password1 = self.cleaned_data["password1"]
+        user.password2 = self.cleaned_data["password2"]
         user.save()
         return user
-
