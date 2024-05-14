@@ -51,7 +51,6 @@
                         <img src="{% static '/img/icons/user-icon.png' %}" alt="mi-cuenta" style="width: 30px;" />
                       </button>
                       <div class="user-menu">
-                        <p>Hi {{ user.username }}!</p>
                         <p><a href="{% url 'my_post_list' %}">Mis publicaciones</a></p>
                         <p><a href="{% url 'account_email' %}">Editar perfil</a></p>
                         <p><a href="{% url 'account_change_password' %}">Cambiar contraseña</a></p>

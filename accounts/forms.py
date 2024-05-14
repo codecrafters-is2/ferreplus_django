@@ -103,28 +103,6 @@ class CustomUserCreationForm(SignupForm):
                     ("Las contraseñas ingresadas no coinciden."),
                 )
 
-        password: str = cleaned_data.get("password1")
-        password_repeat: str = cleaned_data.get("password2")
-        if  password != password_repeat:
-            self.add_error(
-                "password1",
-                ("Las contraseñas no coinciden"),
-            )
-        if not (any(caracter.isdigit() for caracter in password)):
-            self.add_error(
-                "password1",
-                ("La contraseña debe incluir algún caracter numérico"),
-            )
-        if not (any(caracter.isalpha() for caracter in password)):
-            self.add_error(
-                "password1",
-                ("La contraseña debe incluir alguna letra (a-z)"),
-            )
-        if  len(password) < 8:
-            self.add_error(
-                "password1",
-                ("La contraseña debe tener al menos 8 caracteres"),
-            )
         
         return self.cleaned_data
 
