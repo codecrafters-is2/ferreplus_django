@@ -21,6 +21,7 @@ class PostListView(ClientRequiredMixin,ListView):
         queryset = queryset.exclude(author=self.request.user)
         return queryset
 
+
 class MyPostListView(ClientRequiredMixin,ListView): 
     model = Post
     template_name = "posts/my_post_list.html"
@@ -30,10 +31,17 @@ class MyPostListView(ClientRequiredMixin,ListView):
         # Filtrar las publicaciones por el autor que coincide con el usuario actual
         return Post.objects.filter(author=self.request.user)
 
+
 class PostDetailView(ClientRequiredMixin,DetailView): # Visualización de la publicación
     model = Post
     template_name = "posts/post_detail.html"
-    
+
+
+class MyPostDetailView(ClientRequiredMixin,DetailView): #Visualización de la publicación propia
+    model = Post
+    template_name = "posts/my_post_detail.html"
+
+
 class PostCreateView(ClientRequiredMixin,CreateView): #Creación de la publicación
     model = Post
     template_name = "posts/post_new.html"
