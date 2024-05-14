@@ -6,12 +6,12 @@ from datetime import datetime
 
 
 def validate_age(value):
-   actual_year = datetime.now().year
-   if (actual_year - value.year) < 18:
-       raise ValidationError(
-           ("Para registrarte como usuario debes ser mayoy de 18 años!"),
-           params={"value": value},
-       )
+    actual_year = datetime.now().year
+    if (actual_year - value.year) < 18:
+        raise ValidationError(
+            ("Para registrarte como usuario debes ser mayoy de 18 años!"),
+            params={"value": value},
+        )
 
 
 class CustomUser(AbstractUser):

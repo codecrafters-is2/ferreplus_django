@@ -14,15 +14,21 @@
       y poner un link a sus estilos propios.
     {% endcomment %}
     {% block custom_styles %} {% endblock custom_styles %}
+    <script src="{% static 'styles/layout/layout.js' %}"></script>
   </head>
   <body>
     <header class="navbar-container">
-      <div class="navbar-inner-container">
+      <div class="navbar-inner-container"> 
         <div class="img-container">
           <a href="/">
             <img src="{% static 'img/logo-min.png' %}" />
           </a>
         </div>
+        <button class="hamburguer-button">
+          <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 50 50" width="50px" height="50px">
+            <path d="M 3 9 A 1.0001 1.0001 0 1 0 3 11 L 47 11 A 1.0001 1.0001 0 1 0 47 9 L 3 9 z M 3 24 A 1.0001 1.0001 0 1 0 3 26 L 47 26 A 1.0001 1.0001 0 1 0 47 24 L 3 24 z M 3 39 A 1.0001 1.0001 0 1 0 3 41 L 47 41 A 1.0001 1.0001 0 1 0 47 39 L 3 39 z"/>
+          </svg>
+        </button>
         <nav class="navbar-nav"> 
           <ul class="nav-list">
             <li class="nav-item">
@@ -36,16 +42,33 @@
               </a>
             </li>
             <li class="nav-item">
-              {% block authentication %}
-                {% if user.is_authenticated %}
-                  <p>Hi {{ user.username }}!</p>
-                  <p><a href="{% url 'account_logout' %}">Log Out</a></p>
-                {% else %}
-                  <p>You are not logged in</p>
-                  <a href="{% url 'account_login' %}">Log In</a>
-                  <a href="{% url 'account_signup' %}">Sign Up</a>
-                {% endif %}
-               {% endblock authentication %}
+              <div class="auth-info">
+                {% block authentication %}
+                  {% if user.is_authenticated %}
+                    <div style="position:relative; display:flex; flex-direction:row; gap: 1rem; align-items:center; width:100%;">
+                      <p style="font-size:14px;">{{ user.username }}</p>
+                      <button id="user-button" class="logged-user-button">
+                        <img src="{% static '/img/icons/user-icon.png' %}" alt="mi-cuenta" style="width: 30px;" />
+                      </button>
+                      <div class="user-menu">
+                        <p>Hi {{ user.username }}!</p>
+                        <p><a href="{% url 'my_post_list' %}">Mis publicaciones</a></p>
+                        <p><a href="{% url 'account_email' %}">Editar perfil</a></p>
+                        <p><a href="{% url 'account_change_password' %}">Cambiar contraseña</a></p>
+                        <p><a href="{% url 'account_logout' %}">Log Out</a></p>
+                      </div>
+                    </div>
+                  {% else %}
+                    <div style="position:relative;display:flex;flex-direction:column;gap:1rem;align-items:center; width:100%;">
+                      <p style="font-size:9px; position:absolute;transform:translateY(-220%)">No has iniciado sesión</p>
+                      <div style="display:flex;flex-direction:row;gap:1rem">
+                        <a href="{% url 'account_login' %}">Iniciar sesión</a>
+                        <a href="{% url 'account_signup' %}">Registrarse</a>
+                      </div>
+                    </div>
+                  {% endif %}
+                {% endblock authentication %}
+               <div>
             </li>
           </ul>
         </nav>
@@ -73,6 +96,6 @@
           <p style="font-size:small;letter-spacing:0.2px">Hecho por <span style="font-weight:bold">Codecrafters</span></p>
         </div>
       </div>
-    </div>
+    </div> 
   </body>
 </html>

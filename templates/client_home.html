@@ -1,0 +1,23 @@
+{% extends "_base.html" %} 
+{% load static %}
+
+{% block title %}Ferreplus{% endblock title %} 
+<head>
+    {% block custom_styles %}
+        <link rel="stylesheet" href="{% static 'styles/home/home.css' %}">
+    {% endblock custom_styles %}
+</head>
+{% block content %}
+    <div>
+        <div class="home-container">
+            <h1>Hello Word! Esta es nuestra Homepage.</h1>
+        </div>
+        <div class="second-page">
+            <h1>Productos</h1> 
+            <div class="post-product">
+                <a href="{% url 'post_new' %}">+ Publicar producto</a>
+            </div>
+            <p> <a href="{% url 'post_list' %}">Todas las publicaciones</a>.</p>
+        </div>
+    </div>
+{% endblock content %}

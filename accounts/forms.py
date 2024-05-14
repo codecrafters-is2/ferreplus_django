@@ -8,6 +8,7 @@ from allauth.account.forms import PasswordField
 from allauth.account.adapter import get_adapter
 from ferreplus import settings
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 
 
 class CustomUserCreationForm(SignupForm):
@@ -19,15 +20,15 @@ class CustomUserCreationForm(SignupForm):
                 "type": "number",
             }
         ),
-     )
+    )
     birthdate = forms.DateField(
-       label="Fecha de Nacimiento",
-       widget=forms.DateInput(
-           attrs={
-               "placeholder": ("Fecha de Nacimiento"),
-               "type": "date",
-           }
-       ),
+        label="Fecha de Nacimiento",
+        widget=forms.DateInput(
+            attrs={
+                "placeholder": ("Fecha de Nacimiento"),
+                "type": "date",
+            }
+        ),
     )
 
     def __init__(self, *args, **kwargs):
@@ -111,4 +112,6 @@ class CustomUserCreationForm(SignupForm):
         user.password1 = self.cleaned_data["password1"]
         user.password2 = self.cleaned_data["password2"]
         user.save()
+        grupo = Group.objects.get(name='client')
+        user.groups.add(grupo)
         return user

@@ -9,9 +9,13 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-
+import os
 from pathlib import Path
+from environs import Env
 
+# Environment variables
+env = Env()
+env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,15 +44,17 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sites",
     # Third-party
-    "crispy_forms",  
-    "crispy_bootstrap5",  
-    "allauth",  
-    "allauth.account",  
+    "crispy_forms",
+    "crispy_bootstrap5",
+    "allauth",
+    "allauth.account",
     # Local
     "accounts.apps.AccountsConfig",
     "pages.apps.PagesConfig",
+    "posts.apps.PostsConfig",
+    "branches.apps.BranchesConfig",
+    "adminpanel.apps.AdminpanelConfig",
 ]
-
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -76,7 +82,8 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
             ],
         },
-        "DIRS": [BASE_DIR / "templates"],
+        "DIRS": [BASE_DIR / "templates",
+                BASE_DIR / 'adminpanel' / 'templates',]
     },
 ]
 
@@ -116,7 +123,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = "es"
+LANGUAGE_CODE = 'es'
 
 TIME_ZONE = 'UTC'
 
@@ -146,7 +153,7 @@ LOGIN_REDIRECT_URL = "home"
 ACCOUNT_LOGOUT_REDIRECT = "home"
 
 ACCOUNT_FORMS = {
-   "signup": "accounts.forms.CustomUserCreationForm",
+    "signup": "accounts.forms.CustomUserCreationForm",
 }
 
 
@@ -156,9 +163,22 @@ AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
 )
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-ACCOUNT_UNIQUE_EMAIL = True
 
+ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_REQUIRED = True
 
 SIGNUP_PASSWORD_ENTER_TWICE = True
+# Email sending config
+EMAIL_BACKEND = env("EMAIL_BACKEND")
+EMAIL_HOST = env("EMAIL_HOST")
+EMAIL_PORT = env("EMAIL_PORT")
+EMAIL_USE_TLS = env("EMAIL_USE_TLS")
+EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
+
+ACCOUNT_EMAIL_SUBJECT_PREFIX="Ferreplus "
+ACCOUNT_CHANGE_EMAIL=True
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR,"media")
