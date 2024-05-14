@@ -4,20 +4,35 @@
 {% block title %}Ferreplus{% endblock title %} 
 <head>
     {% block custom_styles %}
-        <link rel="stylesheet" href="{% static 'styles/home/home.css' %}">
+        <link rel="stylesheet" href="{% static 'styles/home/client_home.css' %}">
     {% endblock custom_styles %}
 </head>
 {% block content %}
     <div>
         <div class="home-container">
-            <h1>Hello Word! Esta es nuestra Homepage.</h1>
-        </div>
-        <div class="second-page">
-            <h1>Productos</h1> 
-            <div class="post-product">
-                <a href="{% url 'post_new' %}">+ Publicar producto</a>
+            <div class="client-dashboard">
+                <div>
+                    <h1>Hola {{ request.user.username }}!</h1>
+                    <h2>Qué bueno verte de nuevo</h2>
+                </div>
+                <div class="productos-container">
+                    <h1>Productos</h1> 
+                    <div class="post-product">
+                        <a href="{% url 'post_new' %}">
+                            <button class="menu-button">
+                                <img src={% static 'img/icons/add_product.png' %} %} />
+                                Publicar producto
+                            </button>
+                        </a>
+                        <a href="{% url 'post_list' %}">
+                            <button class="menu-button">
+                                <img src={% static 'img/icons/add_product.png' %} %} />
+                                Todas las publicaciones
+                            </button>
+                        </a>
+                    </div>
+                </div>
             </div>
-            <p> <a href="{% url 'post_list' %}">Todas las publicaciones</a>.</p>
         </div>
     </div>
 {% endblock content %}
