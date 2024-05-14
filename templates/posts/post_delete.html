@@ -6,6 +6,6 @@
 <form action="" method="post">{% csrf_token %}
     <p>¿Está seguro que desea eliminar la publicación "{{ post.title }}"?</p> {#si pongo {object} también escribe lo mismo#}
     <button type="submit">Confirmar</button>
-    <input type="submit" value="Cancelar"> {#Acomodar#}
+    <p><a href="{% url 'go_back' %}" class="button">Volver</a></p>
 </form>
 {% endblock content %}

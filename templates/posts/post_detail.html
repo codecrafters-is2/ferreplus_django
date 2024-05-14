@@ -1,7 +1,7 @@
 <!-- templates/post_detail.html -->
 {% extends "_base.html" %}
 {% load static %} {#Si es que va#}
-
+<div class="container">
 {% block content %}
 <div class="post-entry">
     <h1>Detalle de la publicación</h1>
@@ -17,5 +17,6 @@
 </div>
 
 <p> <a href="{% url 'post_list' %}">Todas las publicaciones</a>.</p>
+<p><a href="{% url 'go_back' %}" class="button">Volver</a></p>
 {% endblock content %}
-
+</div>
