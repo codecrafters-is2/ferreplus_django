@@ -46,15 +46,17 @@ class PostCreateView(ClientRequiredMixin,CreateView): #Creaci처n de la publicaci
     model = Post
     template_name = "posts/post_new.html"
     form_class = PostForm
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        ImageFormSet = inlineformset_factory(Post, ImagePost, fields=('image',), extra=4)
-        if self.request.POST:
-            context['image_formset'] = ImageFormSet(self.request.POST, self.request.FILES)
-        else:
-            context['image_formset'] = ImageFormSet()
-        return context
+
+    def get_success_url(self):
+        return reverse_lazy('my_post_detail', kwargs={'pk': self.object.pk})
+    #def get_context_data(self, **kwargs):
+    #    context = super().get_context_data(**kwargs)
+    #    ImageFormSet = inlineformset_factory(Post, ImagePost, fields=('image',), extra=4)
+    #    if self.request.POST:
+    #        context['image_formset'] = ImageFormSet(self.request.POST, self.request.FILES)
+    #    else:
+    #        context['image_formset'] = ImageFormSet()
+    #    return context
 
     def form_valid(self, form):
         # Agrega el campo original_branch_id antes de guardar el formulario
@@ -62,26 +64,26 @@ class PostCreateView(ClientRequiredMixin,CreateView): #Creaci처n de la publicaci
         # Asigna el autor actualmente autenticado
         form.instance.author = self.request.user  
         
-        context = self.get_context_data()
-        image_formset = context['image_formset']
-        if image_formset.is_valid():
-            self.object = form.save()
-            image_formset.instance = self.object
-            image_formset.save()
-            uploaded_images = self.request.FILES.getlist('photo')
-            for image in uploaded_images:
+        #context = self.get_context_data()
+        #image_formset = context['image_formset']
+        #if image_formset.is_valid():
+        #    self.object = form.save()
+        #    image_formset.instance = self.object
+        #    image_formset.save()
+        #    uploaded_images = self.request.FILES.getlist('photo')
+        #    for image in uploaded_images:
                 # Crea una nueva instancia de ImagePost
-                image_post = ImagePost(post=self.object, image=image)
+        #        image_post = ImagePost(post=self.object, image=image)
                 # Guarda la instancia en la base de datos
-                image_post.save()
-            return super().form_valid(form)
-        else:
-            return self.form_invalid(form)
+        #        image_post.save()
+        return super().form_valid(form)
+        #else:
+        #    return self.form_invalid(form)
         
-    def get_form(self, form_class=None):
-        form = super().get_form(form_class)
-        form.request = self.request  # Agregar el objeto request al formulario
-        return form
+    #def get_form(self, form_class=None):
+    #    form = super().get_form(form_class)
+    #    form.request = self.request  # Agregar el objeto request al formulario
+    #    return form
     
 class PostUpdateView(ClientRequiredMixin,UpdateView): #Edici처n de la publicaci처n
     model = Post
@@ -96,6 +98,9 @@ class PostUpdateView(ClientRequiredMixin,UpdateView): #Edici처n de la publicaci�
         form.instance.status=Post.POST_STATUS_AVAILABLE
         return super().form_valid(form)
     
+    def get_success_url(self):
+        return reverse_lazy('my_post_detail', kwargs={'pk': self.object.pk})
+    
     def dispatch(self, request, *args, **kwargs):
         if self.get_object().author != request.user:
             raise Http404("No tienes permiso para editar esta publicaci처n.")
@@ -104,7 +109,7 @@ class PostUpdateView(ClientRequiredMixin,UpdateView): #Edici처n de la publicaci�
 class PostDeleteView(ClientRequiredMixin,DeleteView): #Eliminaci처n de la publicaci처n
     model = Post
     template_name = "posts/post_delete.html"
-    success_url = reverse_lazy("post_list") #Redirecci처n cuando termina la acci처n
+    success_url = reverse_lazy("my_post_list") #Redirecci처n cuando termina la acci처n
     
     def dispatch(self, request, *args, **kwargs):
         if self.get_object().author != request.user:
