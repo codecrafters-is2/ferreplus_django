@@ -2,6 +2,7 @@ from allauth.account.forms import SignupForm
 from django import forms
 from .models import CustomUser
 from datetime import datetime
+from datetime import date
 from django.contrib.auth import password_validation
 from allauth.account.forms import PasswordField
 from allauth.account.adapter import get_adapter
@@ -63,8 +64,21 @@ class CustomUserCreationForm(SignupForm):
         if (actual_year - birthdate_value.year) < 18:
             self.add_error(
                "birthdate",
-               ("Para registrarte como usuario debes ser mayor de 18 años!"),
+               ("Para registrarte como usuario debes ser mayor de 18 años."),
            )
+
+        if birthdate_value.year > actual_year:
+            self.add_error(
+                "birthdate",
+                (
+                    "¡La fecha de nacimiento ingresada es inválida!"
+                ),
+            )
+        if birthdate_value.year <= 1904:
+            self.add_error(
+                "birthdate",
+                ("¡La fecha de nacimiento ingresada es inválida!"),
+            )
 
         # Clean Password
         User = get_user_model()
@@ -85,15 +99,10 @@ class CustomUserCreationForm(SignupForm):
             if self.cleaned_data["password1"] != self.cleaned_data["password2"]:
                 self.add_error(
                     "password2",
-                    ("You must type the same password each time."),
+                    ("Las contraseñas ingresadas no coinciden."),
                 )
 
         return self.cleaned_data
-
-    # def clean_password(self):
-    #    password = self.cleaned_data.get("password")
-    #    password_validation.validate_password(password, self.instance)
-    #    return password
 
     def save(self, request):
         user = super(CustomUserCreationForm, self).save(request)
