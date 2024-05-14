@@ -4,6 +4,7 @@
 
 {% block title %}Mis publicaciones{% endblock title %}
 {% block content %}
+<div class="container">
 
     <h1>Mis publicaciones</h1>
 
@@ -25,7 +26,9 @@
             <a href="{% url 'post_edit' post.pk %}">Editar</a> | <a href="{% url 'post_delete' post.pk %}">Eliminar</a>
         </div>
     </div>
-    <br />
     
+    <br />
+    <p><a href="{% url 'go_back' %}" class="button">Volver</a></p>
+</div>
 {% endfor %}
 {% endblock content %}

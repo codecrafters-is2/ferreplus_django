@@ -10,6 +10,7 @@
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Guardar Cambios</button>
+        <a href="{% url 'go_back' %}" class="button">Volver</a>
     </form>
 
 {% endblock %}

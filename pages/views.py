@@ -1,9 +1,23 @@
 from django.shortcuts import redirect
 from django.shortcuts import render
 from django.views.generic import TemplateView
-from accounts.models import CustomUser
-from posts.models import Post
+#from accounts.models import CustomUser
+#from posts.models import Post
 from accounts.mixins import ClientRequiredMixin,AdminRequiredMixin,EmployeeRequiredMixin
+from django.http import HttpResponseRedirect
+from django.shortcuts import reverse
+from django.views import View
+
+class GoBack(View):
+    def get(self, request, *args, **kwargs):
+        # Obtener la URL de la página anterior
+        previous_url = request.META.get('HTTP_REFERER')
+        if previous_url:
+            return HttpResponseRedirect(previous_url)
+        else:
+            # Si no hay una página anterior, redirigir a una URL predeterminada
+            return HttpResponseRedirect(reverse('home'))
+
 
 
 class HomePageView(TemplateView):

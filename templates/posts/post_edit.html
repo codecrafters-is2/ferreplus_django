@@ -6,5 +6,6 @@
 <form action="" method="post">{% csrf_token %}
     {{ form.as_p }}
 <input type="submit" value="Actualizar">
+<p><a href="{% url 'go_back' %}" class="button">Volver</a></p>
 </form>
 {% endblock content %}
