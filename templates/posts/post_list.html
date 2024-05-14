@@ -4,7 +4,7 @@
 
 {% block title %}Publicaciones{% endblock title %}
 {% block content %}
-
+<div class="container">
     <h1>Publicaciones</h1>
 
     {% for post in post_list %}
@@ -27,8 +27,8 @@
         </div>
         {% endcomment %}
     </div>
-    <p><a href="{% url 'go_back' %}" class="button">Volver</a></p>
     <br />
-    
+    <p><a href="{% url 'go_back' %}" class="button">Volver</a></p>
+</div>
 {% endfor %}
 {% endblock content %}
