@@ -1,5 +1,15 @@
 # Ferreplus web app
 
+### Setup del proyecto
+```
+    python3 -m venv .venv
+    source .venv/bin/activate
+    pip install -r requirements.txt
+    # Recordar setear las variables de entorno (más abajo)
+    python3 manage.py makemigrations
+    python3 manage.py migrate
+    python3 manage.py create_user_groups  # Crear grupos para asignar a los usuarios
+```
 ### Configuración del SMTP
 Para que el envío de emails funcione (sign-up, reset password), es necesario configurar las siguientes variables de entorno el archivo .env ubicado a nivel del directorio raíz del proyecto:
 ```

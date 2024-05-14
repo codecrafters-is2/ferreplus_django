@@ -13,12 +13,12 @@
             <h1>Hello Word! Esta es nuestra Homepage.</h1>
             <h2>Debe registrarse para poder utilizar la plataforma.</h2>
         </div>
-        <div class="second-page">
+        {% comment %} <div class="second-page">
             <h1>Productos</h1> 
             <div class="post-product">
                 <a href="{% url 'post_new' %}">+ Publicar producto</a>
             </div>
             <p> <a href="{% url 'post_list' %}">Todas las publicaciones</a>.</p>
-        </div>
+        </div> {% endcomment %}
     </div>
 {% endblock content %}
