@@ -5,6 +5,13 @@
     {% trans "Editar perfil" %}
 {% endblock title %}
 {% block content %}
+    {% if form.non_field_errors %}
+    <ul class="errorlist">
+        {% for error in form.non_field_errors %}
+            <li>{{ error }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
     {% element h1 %}
         {% trans "Email Address" %}
     {% endelement %}
@@ -44,6 +51,15 @@
                     {% endslot %}
                 {% endelement %}
             {% endif %}
+            {% for field in form %}
+                {% if field.errors %}
+                    <ul class="errorlist">
+                        {% for error in field.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endfor %}
             {% element field id=form.email.auto_id name="email" value=form.email.value errors=form.email.errors type="email" %}
                 {% slot label %}
                     {% translate "Change to" %}:

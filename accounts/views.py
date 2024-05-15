@@ -1,15 +1,4 @@
-#from django.contrib.auth.views import PasswordChangeView
-#from django.shortcuts import redirect
-#from django.urls import reverse_lazy
-
-
-
-#class ClientPasswordChangeView(ClientRequiredMixin, PasswordChangeView):
-#    success_url = reverse_lazy('password_change_done')
-
-#class CustomPasswordChangeView(ClientRequiredMixin, PasswordChangeView):
-#    success_url = reverse_lazy('password_change_done')
-    
+ 
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
