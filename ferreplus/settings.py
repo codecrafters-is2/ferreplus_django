@@ -180,5 +180,7 @@ DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
 ACCOUNT_EMAIL_SUBJECT_PREFIX="Ferreplus "
 ACCOUNT_CHANGE_EMAIL=True
 
+ACCOUNT_ADAPTER = "accounts.adapters.FerreplusAccountAdapter"
+
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR,"media")

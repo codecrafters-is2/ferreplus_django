@@ -51,3 +51,8 @@ class AdmiHomeView(AdminRequiredMixin,TemplateView):
 
 class EmployeeHomeView(EmployeeRequiredMixin,TemplateView):
     template_name = "employee_home.html"
+
+
+class PasswordChangeSuccessView(TemplateView):
+    template_name = "temp_messages/password_change_successful.html"
+    
