@@ -3,34 +3,42 @@
 {% load static %}
 
 {% block title %}Mis publicaciones{% endblock title %}
+<head>
+    {% block custom_styles %}
+        <link rel="stylesheet" href="{% static 'styles/generics/generics.css' %}">
+        <link rel="stylesheet" href="{% static 'styles/products/products.css' %}">
+    {% endblock custom_styles %}
+</head>
 {% block content %}
-<div class="container">
-
-    <h1>Mis publicaciones</h1>
-
-    {% for post in post_list %}
-    <div class="card">
-        <div class="card-header">
-        <h2><a href="{% url 'my_post_detail' post.pk %}">{{ post.title }}</a></h2> 
-        <h3>{{ post.body }}</h3>
+    <div>
         
-        {% if post.image %}{#Teoricamente no es necesario porque desde la BD no se peude agregar#}
-        <img src="{{post.image.url}}" alt="post image">
-        
-        {% endif %} 
-    </div>
-    <div class="card-body">
-        {{ post.body }}
-    </div>
-        <div class="card-footer text-center text-muted">
-            <a href="{% url 'post_edit' post.pk %}">Editar</a> | <a href="{% url 'post_delete' post.pk %}">Eliminar</a>
+        <div class="generic-container">
+            <h1 style="color:white; font-size: 48px">Mis publicaciones</h1>
+            <div class="products-wrapper">
+                <div class="grid-display">
+                    {% for post in post_list %}
+                        <div class="product-card">
+                            {% if post.image %} {#Teoricamente no es necesario porque desde la BD no se peude agregar#}
+                                <img src="{{post.image.url}}" alt="post image"> 
+                            {% endif %} 
+                            <div class="card-header">
+                                <h2>
+                                    <a href="{% url 'my_post_detail' post.pk %}">{{ post.title }}</a>
+                                </h2> 
+                                <h3>{{ post.body }}</h3>                  
+                            </div>
+                        <div class="card-body">
+                            {{ post.body }}
+                        </div>
+                            <div class="card-footer text-center text-muted">
+                                <a href="{% url 'post_edit' post.pk %}">Editar</a> | <a href="{% url 'post_delete' post.pk %}">Eliminar</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                <div>
+            </div>
+            <br />
         </div>
+        <p><a href="{% url 'go_back' %}" class="button">Volver</a></p>
     </div>
-    
-    
-    {% endfor %}
-    <br />
-    <p><a href="{% url 'go_back' %}" class="button">Volver</a></p>
-</div>
-
 {% endblock content %}
