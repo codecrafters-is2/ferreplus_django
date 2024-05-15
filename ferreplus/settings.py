@@ -112,13 +112,7 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
@@ -173,6 +167,7 @@ AUTHENTICATION_BACKENDS = (
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_REQUIRED = True
 
+SIGNUP_PASSWORD_ENTER_TWICE = True
 # Email sending config
 EMAIL_BACKEND = env("EMAIL_BACKEND")
 EMAIL_HOST = env("EMAIL_HOST")
@@ -184,6 +179,8 @@ DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
 
 ACCOUNT_EMAIL_SUBJECT_PREFIX="Ferreplus "
 ACCOUNT_CHANGE_EMAIL=True
+
+ACCOUNT_ADAPTER = "accounts.adapters.FerreplusAccountAdapter"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR,"media")

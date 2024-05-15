@@ -5,12 +5,19 @@
 {% block content %}
 <div class="post-entry">
     <h1>Detalle de la publicación</h1>
+    {% if post.status == 'paused' %}
+        <div style="background-color: #ffcccc; padding: 10px; margin-top: 10px;">
+            <p style="font-weight: bold; color: #cc0000;">¡Atención!</p>
+            <p>La publicación se encuentra en <strong>estado PAUSADO </strong>(no es visible a los demás usuarios) debido a que se eliminó la sucursal a la que correspondía.</p>
+            <p>Para solucionar esto, edite la publicación y seleccione una sucursal disponible.</p>
+        </div>
+    {% endif %}
     <h2>{{ post.title }}</h2>
-    <p>Cuerpo: {{ post.body }}</p>
-    <p>Sucursal de preferencia: {{ post.branch }}</p>
-    <p>Categoría: {{ post.get_category_display }}</p>
-    <p>Nuevo: {{ post.new|yesno:"Sí,No" }}</p>
-    <p>Marca: {{ post.brand }}</p>
+    <p><strong>Descripción:</strong> {{ post.body }}</p>
+    <p><strong>Sucursal de preferencia:</strong> {% if post.branch %} {{ post.branch }} {% else %} {% endif %}</p>
+    <p><strong>Categoría:</strong> {{ post.get_category_display }}</p>
+    <p><strong>Nuevo:</strong> {{ post.new|yesno:"Sí,No" }}</p>
+    <p><strong>Marca:</strong> {% if post.branch %} {{ post.brand }} {% else %} {% endif %}</p>
     <img src="{{ post.image.url}}" alt="Imagen de la publicación">
     
 </div>

@@ -34,12 +34,8 @@ class Post(models.Model):
     ]
     
     title = models.CharField(max_length=50)
-    #author = models.ForeignKey( #Muchos a uno, un usuario puede ser autor de muchas publicaciones
-    #    "auth.User" --> settings.AUTH_USER_MODEL,#Acá tengo que referenciar al user posta
-    #    on_delete=models.CASCADE,
-    #)
-    author = models.ForeignKey(User, on_delete=models.CASCADE) #Actualizar con lo de arriba cuando este la parte de usuarios lista
-    body = models.TextField(blank=True, null=True) #Chequear
+    author = models.ForeignKey(User, on_delete=models.CASCADE) 
+    body = models.TextField(blank=True, null=True) 
     image = models.ImageField(upload_to="post_images") #Para una imagen sola
     category = models.CharField(max_length=22, choices=CHOICES)
     branch = models.ForeignKey(Branch, on_delete=models.SET_NULL,null=True) #Sucursal

@@ -1,19 +1,10 @@
 {% extends "_base.html" %}
 {% load crispy_forms_tags %}
 
-{% block title %}Cambiar contraseña{% endblock title %}
+{% block title %}Editar perfil{% endblock title %}
 {% block content %}
-    <h2>Modificar la contraseña</h2>
-    {% comment "" %}
-    {% for message in messages %}
-        {% if message.tags == 'success' %}
-            <div class="alert alert-success">
-                {{ message }}
-            </div>
-        {% endif %}
-        {% endfor %}
-    {% endcomment %}
-    <form method="post">
+    <h2>Modificar correo electrónico</h2>
+    <form>
         {% csrf_token %}
         {{ form.as_p }}
         <div style="width: 100%; display:flex; flex-direction:column; align-items:center; padding: 1rem 1rem;">
@@ -21,7 +12,7 @@
                     type="submit"
                     style="background-color: grey; padding: 1rem 1rem; color: white; border-radius: 16px;"
                     >
-                    Cambiar la contraseña
+                    Cambiar el correo electrónico
             </button>
         </div>
     </form>
