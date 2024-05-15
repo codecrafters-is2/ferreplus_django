@@ -16,6 +16,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.shortcuts import render, redirect
 from django.views import View
 from accounts.mixins import ClientRequiredMixin
+from allauth.account.views import EmailView
 
 class ChangePasswordView(ClientRequiredMixin,View):
     template_name = 'password_change.html'
@@ -36,3 +37,6 @@ class ChangePasswordView(ClientRequiredMixin,View):
         # Si el formulario no es válido, conservamos los mensajes por defecto de Django
         return render(request, self.template_name, {'form': form, 'password_success_message': None})
 
+
+class EditProfileView(EmailView):
+    success_url = "profile_edit_success"
