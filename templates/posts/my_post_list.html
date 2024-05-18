@@ -33,11 +33,11 @@
                                     <a href="{% url 'my_post_detail' post.pk %}">{{ post.title }}</a>
                                 </h2>                  
                             </div>
-                        <div class="card-body">
-                            {% if post.status == 'paused' %}
-                                <p class="paused-message"><strong>¡Atención, publicación pausada!</strong></p> <!-- Aquí agregamos <strong> para negrita -->
-                            {% endif %}
-                        </div>
+                            <div class="card-body">
+                                {% if post.status == 'paused' %}
+                                    <p class="paused-message"><strong>¡Atención, publicación pausada!</strong></p> <!-- Aquí agregamos <strong> para negrita -->
+                                {% endif %}
+                            </div>
                             <div class="card-footer text-center text-muted">
                                 <a href="{% url 'post_edit' post.pk %}">Editar</a> | <a href="{% url 'post_delete' post.pk %}">Eliminar</a>
                             </div>
