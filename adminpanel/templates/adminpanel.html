@@ -1,0 +1,12 @@
+{% extends '_base_admin.html' %}
+
+{% block title %}Panel de Administrador{% endblock %}
+<div class="container">
+{% block content %}
+
+    <h1>Panel de Administrador</h1>
+
+    <a href="{% url 'show_branches' %}"><button>Ver sucursales</button></a>
+
+{% endblock %}
+</div>

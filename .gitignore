@@ -1,5 +1,21 @@
+# Entornos virtuales
 .venv/
 .venv
 venv
+# Variables de entorno
+.env
+.env.production
+.env.mio
+.env.mailtrap
+# Python
 **/__pycache__/
+# Django
 db.sqlite3
+accounts/__pycache__/
+adminpanel/__pycache__/
+branches/__pycache__/
+ferreplus/__pycache__/
+pages/__pycache__/
+posts/__pycache__/
+media/post_images/*
+

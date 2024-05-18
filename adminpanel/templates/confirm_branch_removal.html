@@ -1,0 +1,17 @@
+{% extends '_base_admin.html' %}
+
+{% block title %}Listado de sucursales{% endblock %}
+<div class="container">
+{% block content %}
+
+    <h1>Confirmar Eliminación de Sucursal</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        <p>¿Está seguro de que desea eliminar la sucursal "{{ branch.city }}" - "{{ branch.address }}"?</p>
+        <button type="submit">Eliminar</button>
+        <p><a href="{% url 'go_back' %}" class="button">Cancelar</a></p>
+    </form>
+
+{% endblock %}
+</div>

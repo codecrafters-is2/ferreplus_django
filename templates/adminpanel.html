@@ -1,0 +1,30 @@
+{% extends "_base_admin.html" %} 
+{% load static %}
+
+{% block title %}Ferreplus{% endblock title %} 
+<head>
+    {% block custom_styles %}
+        <link rel="stylesheet" href="{% static 'styles/home/adminpanel.css' %}">
+    {% endblock custom_styles %}
+</head>
+{% block content %}
+    <div>
+        <div class="home-container">
+            <div class="admin-dashboard">
+                <div>
+                    <h1>Panel de Administrador</h1>
+                    <h1>Hola {{ request.user.username }}!</h1>
+                    <h2>Qué bueno verte de nuevo</h2>
+                </div>
+                <div class="admin_menu">
+                    <a href="{% url 'show_branches' %}">
+                        <button class="menu-button">
+                            <img src={% static 'img/icons/sucursales.png' %} %} />
+                            Ver sucursales
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

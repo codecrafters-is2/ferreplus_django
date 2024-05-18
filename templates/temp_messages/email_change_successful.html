@@ -1,0 +1,24 @@
+{% extends "_base.html" %} 
+{% load static %}
+
+{% block title %}Ferreplus{% endblock title %} 
+<head>
+    {% block custom_styles %}
+        <link rel="stylesheet" href="{% static 'styles/home/home.css' %}">
+        <link rel="stylesheet" href="{% static 'styles/accounts/password_change_successful.css' %}">
+    {% endblock custom_styles %}
+</head>
+{% block content %}
+    <div>
+        <div class="home-container">
+            <div class="password-change-msg">
+                <img src="{% static 'img/icons/change_config_celeste.png' %}" />
+                <div style="display: flex; flex-direction: column; align-items: center">
+                    <h2>Modificación de perfil exitoso</h1>
+                    <p style="font-size: large">La operación fue exitosa</p>
+                    <p> Tu email ha sido modificado. Recordá verificarlo!</p>
+                </div>
+            <div>
+        </div>
+    </div>
+{% endblock content %}
