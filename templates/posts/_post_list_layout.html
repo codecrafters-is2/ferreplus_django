@@ -1,0 +1,34 @@
+{% extends "_base_wildcard.html" %}
+{% load static %}
+
+<head>
+    {% block custom_styles %}
+        <link rel="stylesheet" href="{% static 'styles/generics/generics.css' %}">
+        <link rel="stylesheet" href="{% static 'styles/generics/search.css' %}">
+    {% endblock custom_styles %}
+</head>
+<body>
+    {% block content %}
+        <div class="list-layout">
+            <div>
+                {% block list_title %} {% endblock list_title %}
+            </div>
+            <div class="search-ui">
+                <form action="{% url 'post_search_results' %}" method="GET">
+                    <input  class="search-bar"
+                            type="search"
+                            name="title"
+                            placeholder="Search"
+                            aria-label="Search"
+                        />
+                </form>
+            </div>
+            <div>
+                {% block results %}
+
+                {% endblock results %}
+            </div>
+        </div>
+    {% endblock content %}
+</body>
+</html>

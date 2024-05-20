@@ -1,0 +1,21 @@
+.list-layout {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+
+.search-ui {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3rem 3rem;
+}
+
+.search-bar {
+    border-radius: 8px;
+    border: none;
+
+}

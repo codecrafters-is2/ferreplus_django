@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
@@ -115,3 +116,18 @@ class PostDeleteView(ClientRequiredMixin,DeleteView): #Eliminación de la public
         if self.get_object().author != request.user:
             raise Http404("No tienes permiso para eliminar esta publicación.")
         return super().dispatch(request, *args, **kwargs)
+
+
+class PostSearchView(ListView):
+    model = Post
+    context_object_name = "posts_list"
+    template_name = "posts/post_search.html"
+
+    def get_queryset(self):
+        title_query = self.request.GET.get("title")
+        if not title_query: 
+            title_query = ""
+        queryset = Post.objects.filter(
+            Q(title__contains=title_query) | Q(body__contains=title_query)
+        )
+        return queryset
