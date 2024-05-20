@@ -17,7 +17,7 @@
     <p><strong>Sucursal de preferencia:</strong> {% if post.branch %} {{ post.branch }} {% else %} {% endif %}</p>
     <p><strong>Categoría:</strong> {{ post.get_category_display }}</p>
     <p><strong>Nuevo:</strong> {{ post.new|yesno:"Sí,No" }}</p>
-    <p><strong>Marca:</strong> {% if post.branch %} {{ post.brand }} {% else %} {% endif %}</p>
+    <p><strong>Marca:</strong> {% if post.brand %} {{ post.brand }} {% else %} {% endif %}</p>
     <img src="{{ post.image.url}}" alt="Imagen de la publicación">
     
 </div>
