@@ -1,0 +1,33 @@
+<!-- templates/my_post_detail.html -->
+{% extends "posts/detail/general_post_detail.html" %}
+
+
+{% block post_paused%}
+    {% if post.status == 'paused' %}
+    <div style="background-color: #ffcccc; padding: 10px; margin-top: 10px;">
+        <p style="font-weight: bold; color: #cc0000;">¡Atención!</p>
+        <p>La publicación se encuentra en <strong>estado PAUSADO </strong>(no es visible a los demás usuarios) debido a que se eliminó la sucursal a la que correspondía.</p>
+        <p>Para solucionar esto, edite la publicación y seleccione una sucursal disponible.</p>
+    </div>
+    {% endif %}
+{% endblock post_paused%}
+
+{% block questions %}
+<div class="Questions">
+    <hr>
+        <h4> Preguntas: </h4>
+        {% for question in post.questions.all %}
+            <div class="question-box">
+                <p>
+                    <strong>{{ question.user }}:</strong>
+                    {{ question.content }}
+                    <!-- Agregar botón de respuesta aquí si es necesario -->
+                </p>
+            </div>    
+        {% endfor %}
+    </hr>
+</div>
+{% endblock questions %}
+
+{% block additional_content %}
+{% endblock additional_content %}

@@ -1,9 +1,11 @@
 from django.views.generic import ListView, DetailView
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.urls import reverse_lazy
 from django.forms import inlineformset_factory
+from django.shortcuts import redirect
 from django.http import Http404
 from accounts.mixins import ClientRequiredMixin
+from .forms import QuestionForm
 
 from .models import Post, ImagePost
 from .forms import PostForm
@@ -34,12 +36,57 @@ class MyPostListView(ClientRequiredMixin,ListView):
 
 class PostDetailView(ClientRequiredMixin,DetailView): # Visualización de la publicación
     model = Post
-    template_name = "posts/post_detail.html"
+    template_name = "posts/detail/post_detail.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = QuestionForm()
+        return context
 
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = QuestionForm(request.POST)
+        if form.is_valid():
+            question = form.save(commit=False)
+            question.user = request.user
+            question.post = self.object
+            question.save()
+            return redirect(self.object.get_absolute_url())
+        return self.render_to_response(self.get_context_data(form=form))
+    
+    def dispatch(self, request, *args, **kwargs):
+        # Obtiene la instancia del post
+        self.object = self.get_object()
+        # Comprueba si el usuario actual es el autor del post
+        if self.object.author == request.user:
+            # Si es el autor, redirige a la vista de detalle de su propio post
+            return redirect('my_post_detail', pk=self.object.pk)
+        # Si no es el autor, permite el acceso normal a la vista de detalle del post
+        return super().dispatch(request, *args, **kwargs)
+#class AddQuestionView(ClientRequiredMixin, FormView):
+#    form_class = QuestionForm
+#
+#    def form_valid(self, form):
+#        post = get_object_or_404(Post, pk=self.kwargs['pk'])
+#        question = form.save(commit=False)
+#        question.post = post
+#        question.user = self.request.user
+#        question.save()
+#        return redirect(reverse('post_detail', kwargs={'pk': post.pk}))
 
 class MyPostDetailView(ClientRequiredMixin,DetailView): #Visualización de la publicación propia
     model = Post
-    template_name = "posts/my_post_detail.html"
+    template_name = "posts/detail/my_post_detail.html"
+    
+    def dispatch(self, request, *args, **kwargs):
+        # Obtiene la instancia del post
+        self.object = self.get_object()
+        # Comprueba si el usuario actual es el autor del post
+        if self.object.author != request.user:
+            # Si el usuario no es el autor, la abre como si la estuviera visualizando
+            return redirect('post_detail', pk=self.object.pk)
+        # Si el usuario es el autor, permite el acceso normal a la vista
+        return super().dispatch(request, *args, **kwargs)
 
 
 class PostCreateView(ClientRequiredMixin,CreateView): #Creación de la publicación
