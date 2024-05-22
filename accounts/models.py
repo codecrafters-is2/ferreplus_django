@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import Group, Permission
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.exceptions import ValidationError
@@ -21,4 +22,20 @@ class CustomUser(AbstractUser):
         default=None,
     )
     birthdate = models.DateField(default=None, null=True)
+    groups = models.ManyToManyField(Group, related_name="customuser_set")
+    user_permissions = models.ManyToManyField(
+        Permission, related_name="customuser_permissions"
+    )
+    def __str__(self):
+        return self.username
 
+
+class EmployeeUser(AbstractUser):
+    nombre = models.CharField(max_length=20)
+    apellido = models.CharField(max_length=20)
+    legajo = models.CharField(max_length=20)
+    groups = models.ManyToManyField(Group, related_name='employeeuser_set')
+    user_permissions = models.ManyToManyField(Permission, related_name='employeeuser_permissions')
+    
+    def __str__(self):
+        return f"{self.nombre} {self.apellido} ({self.user.username})"

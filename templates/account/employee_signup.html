@@ -1,0 +1,14 @@
+{#{% extends "_base.html" %}#}
+<html>
+  <head>
+    <title>Registrar Empleado</title>
+  </head>
+  <body>
+    <h2>Registrar Empleado</h2>
+    <p>FALTA CONTINUAR CON ESTO-- debería aparecer el formulario del empleado</p>
+    <form method="post" action="{% url 'employee_signup' %}">
+      {% csrf_token %} {{ form.as_p }}
+      <button type="submit">Registrar</button>
+    </form>
+  </body>
+</html>

@@ -1,6 +1,7 @@
 from allauth.account.forms import SignupForm
 from django import forms
 from .models import CustomUser
+from .models import EmployeeUser
 from datetime import datetime
 from datetime import date
 from django.contrib.auth import password_validation
@@ -9,7 +10,54 @@ from allauth.account.adapter import get_adapter
 from ferreplus import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
+import secrets
+import string
 
+
+def generate_password(longitud=12):
+    characters = string.ascii_letters + string.digits + string.punctuation
+    password = "".join(secrets.choice(characters) for i in range(longitud))
+    return password
+
+
+class EmployeeUserCreationForm(SignupForm):
+    nombre = forms.CharField(
+        label="Nombre",
+        widget=forms.TextInput(
+            attrs={"placeholder": ("Nombre")}
+        )
+    )
+    apellido = forms.CharField(
+        label="Apellido", widget=forms.TextInput(attrs={"placeholder": ("Apellido")})
+    )
+    legajo = forms.CharField(
+        label="Legajo", widget=forms.TextInput(attrs={"placeholder": ("Legajo")})
+    )
+    def __init__(self, *args, **kwargs):
+        super(SignupForm, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        cleaned_data = super(SignupForm, self).clean()
+
+        # Clean Legajo
+        legajo_value = cleaned_data.get("legajo")
+        if EmployeeUser.objects.filter(legajo=legajo_value).exists():
+            self.add_error(
+                "legajo",
+                ("El legajo ingresado ya está registrado en el sistema"),
+            )
+
+    def save(self, request):
+        user = super(CustomUserCreationForm, self).save(request)
+        user.nombre = self.cleaned_data["nombre"]
+        user.apellido = self.cleaned_data["apellido"]
+        user.legajo = self.cleaned_data["legajo"]
+        user.username = self.cleaned_data["legajo"]
+        user.password1 = generate_password()
+        user.save()
+        grupo = Group.objects.get(name="employee")
+        user.groups.add(grupo)
+        return user
 
 class CustomUserCreationForm(SignupForm):
     dni = forms.IntegerField(
@@ -71,9 +119,7 @@ class CustomUserCreationForm(SignupForm):
         if birthdate_value.year > actual_year:
             self.add_error(
                 "birthdate",
-                (
-                    "¡La fecha de nacimiento ingresada es inválida!"
-                ),
+                ("¡La fecha de nacimiento ingresada es inválida!"),
             )
         if birthdate_value.year <= 1904:
             self.add_error(
@@ -103,7 +149,6 @@ class CustomUserCreationForm(SignupForm):
                     ("Las contraseñas ingresadas no coinciden."),
                 )
 
-        
         return self.cleaned_data
 
     def save(self, request):
@@ -113,6 +158,6 @@ class CustomUserCreationForm(SignupForm):
         user.password1 = self.cleaned_data["password1"]
         user.password2 = self.cleaned_data["password2"]
         user.save()
-        grupo = Group.objects.get(name='client')
+        grupo = Group.objects.get(name="client")
         user.groups.add(grupo)
         return user
