@@ -1,5 +1,6 @@
 from django import forms
 from .models import Post,ImagePost
+from branches.models import Branch
 
 #class MultipleFileInput(forms.ClearableFileInput):
 #    allow_multiple_selected = True
@@ -73,6 +74,7 @@ class PostForm(forms.ModelForm):
         self.fields["brand"].label = "Marca"
         self.fields["image"].label = "Imagen del producto"
         self.fields["branch"].label= "Sucursal de preferencia"
+        self.fields['branch'].queryset = Branch.active_objects.all()
     
     #def clean_images(self):
     #    images = self.cleaned_data.get('images')
