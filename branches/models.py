@@ -21,3 +21,6 @@ class Branch(models.Model):
     def delete(self):
         self.is_active = False
         self.save()
+
+    def __str__(self):
+        return self.city +" - "+ self.address
