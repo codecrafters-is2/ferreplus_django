@@ -20,24 +20,35 @@ def generate_password(longitud=12):
     return password
 
 
-class EmployeeUserCreationForm(SignupForm):
-    nombre = forms.CharField(
-        label="Nombre",
-        widget=forms.TextInput(
-            attrs={"placeholder": ("Nombre")}
-        )
-    )
-    apellido = forms.CharField(
-        label="Apellido", widget=forms.TextInput(attrs={"placeholder": ("Apellido")})
-    )
-    legajo = forms.CharField(
-        label="Legajo", widget=forms.TextInput(attrs={"placeholder": ("Legajo")})
-    )
+class EmployeeUserCreationForm(forms.ModelForm):
+    class Meta:
+        model = EmployeeUser
+        fields = [
+            "nombre",
+            "apellido",
+            "legajo",
+            "branch",
+        ]  # Campos que va a completar el usuario
+        widgets = {
+            "nombre": forms.TextInput(attrs={"placeholder": "Nombre: "}),
+            "apellido": forms.TextInput(attrs={"placeholder": "Apellido: "}),
+            "legajo": forms.TextInput(attrs={"placeholder": "Legajo: "}),
+        }
+        field_classes = {
+            "nombre": forms.CharField,
+            "apellido": forms.CharField,
+            "legajo": forms.CharField
+        }
+
     def __init__(self, *args, **kwargs):
-        super(SignupForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
+        self.fields["nombre"].label = "Nombre"
+        self.fields["apellido"].label = "Apellido"
+        self.fields["legajo"].label = "Legajo"
+        self.fields["branch"].label = "Asignar Sucursal"
 
     def clean(self):
-        cleaned_data = super(SignupForm, self).clean()
+        cleaned_data = super().clean()
 
         # Clean Legajo
         legajo_value = cleaned_data.get("legajo")
@@ -47,17 +58,14 @@ class EmployeeUserCreationForm(SignupForm):
                 ("El legajo ingresado ya está registrado en el sistema"),
             )
 
-    def save(self, request):
-        user = super(CustomUserCreationForm, self).save(request)
-        user.nombre = self.cleaned_data["nombre"]
-        user.apellido = self.cleaned_data["apellido"]
-        user.legajo = self.cleaned_data["legajo"]
-        user.username = self.cleaned_data["legajo"]
-        user.password1 = generate_password()
-        user.save()
-        grupo = Group.objects.get(name="employee")
-        user.groups.add(grupo)
-        return user
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        instance.username = instance.legajo
+        instance.password = generate_password()  # Generar password aleatorio
+        if commit:
+            instance.save()
+        return instance
+
 
 class CustomUserCreationForm(SignupForm):
     dni = forms.IntegerField(

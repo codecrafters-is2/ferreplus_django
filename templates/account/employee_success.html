@@ -1,0 +1,19 @@
+<!-- templates/employee_success.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Empleado Registrado</title>
+</head>
+<body>
+    <h1>Empleado registrado exitosamente</h1>
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <a href="{% url 'employee_signup' %}">Registrar otro empleado</a>
+</body>
+</html>
