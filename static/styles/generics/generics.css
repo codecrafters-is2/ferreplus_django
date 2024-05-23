@@ -75,6 +75,48 @@
     gap: 4rem;
 }
 
+.list-layout {
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.search-ui {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.search-bar {
+    display: flex;
+    flex-direction: row;
+    border: none;
+}
+
+.search-bar svg {
+    width: 32px;
+}
+
+.search-bar input {
+    background: transparent;
+    border: none;
+    border-radius: 1.5em;
+    box-shadow: 0 0 0 0.4em #171717 inset;
+    padding: 0.75em;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none
+}
+
+.search-bar input::-webkit-search-decoration {
+    -webkit-appearance: none;
+}
+
+
+
 
 @media (min-width: 1024px) { 
     .grid-display {

@@ -1,5 +1,5 @@
 <!-- templates/article_list.html -->
-{% extends "_base.html" %}
+{% extends "posts/_post_list_layout.html" %}
 {% load static %}
 
 {% block title %}Publicaciones{% endblock title %}
@@ -10,10 +10,12 @@
     {% endblock custom_styles %}
 </head>
 
-{% block content %}
+{% block list_title %} <h1 style="color:white; font-size: 48px">Publicaciones</h1> {% endblock list_title %}
+
+{% block results %}
     <div>
         <div class="generic-container">
-            <h1 style="color:white; font-size: 48px">Publicaciones</h1>
+            
             <div class="products-wrapper">
                 <div class="grid-display">
                     {% for post in post_list %}
@@ -33,4 +35,4 @@
             <p><a href="{% url 'go_back' %}" class="button">Volver</a></p>
         </div>
     </div>
-{% endblock content %}
+{% endblock results %}

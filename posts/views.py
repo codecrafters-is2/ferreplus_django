@@ -125,9 +125,16 @@ class PostSearchView(ListView):
 
     def get_queryset(self):
         title_query = self.request.GET.get("title")
+        categories_query = self.request.GET.get("categories")
+
         if not title_query: 
             title_query = ""
+
         queryset = Post.objects.filter(
             Q(title__contains=title_query) | Q(body__contains=title_query)
         )
+        
+        if categories_query:
+            queryset.filter(category__in=categories_query)
+
         return queryset
