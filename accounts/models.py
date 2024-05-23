@@ -49,4 +49,4 @@ class EmployeeUser(models.Model):
     user_permissions = models.ManyToManyField(Permission, related_name='employeeuser_permissions')
 
     def __str__(self):
-        return f"{self.nombre} {self.apellido} ({self.user.username})"
+        return f"{self.nombre} {self.apellido} ({self.username})"

@@ -14,6 +14,11 @@
             {% endfor %}
         </ul>
     {% endif %}
+    {% if employee %}
+        <p>Nombre: {{ employee.nombre }}</p>
+        <p>Apellido: {{ employee.apellido }}</p>
+        <!-- Agregar más campos si es necesario -->
+    {% endif %}
     <a href="{% url 'employee_signup' %}">Registrar otro empleado</a>
 </body>
 </html>
