@@ -9,17 +9,13 @@
 {% block content %}
 <div class="container">
     <div class="generic-container">
-        <!-- Para cuando la publicación está pausada -->
-        {% block post_paused%}
-        {% endblock post_paused%}
+        {% block warning_sign_post %}<!-- Para cuando la publicación está pausada -->{% endblock warning_sign_post %}
         <div class="product-card-detail">
             <div class="post-details">
                 <h1 style="color:white; font-size: 48px; text-align: center;">{{ post.title }}</h1>
                 <p><strong>Descripción:</strong></p>
                 <p>{{ post.body }}</p>
-                <!-- Aquí puedes agregar más campos según sea necesario -->
-                {% block additional_fields %}
-                {% endblock additional_fields %}
+                {% block additional_fields %}<!-- Aquí puedes agregar más campos según sea necesario -->{% endblock additional_fields %}
                 <p><strong>Sucursal de preferencia:</strong> {% if post.branch %} {{ post.branch }} {% else %} {% endif %}</p>
                 <p><strong>Categoría:</strong> {{ post.get_category_display }}</p>
                 <p><strong>Nuevo:</strong> {{ post.new|yesno:"Sí,No" }}</p>
@@ -34,11 +30,21 @@
                 <div class="Questions">
                     <hr>
                     <h4> Preguntas: </h4>
+                    {% block for-questions %}
                     {% for question in post.questions.all %}
+                    
                     <div class="question-box">
                         <p>{{ question.content }}</p>
+                        {% block answer %}<!-- Para que el dueño pueda responder la pregunta -->{% endblock answer %}
+                        <!-- Cuadro gris para la respuesta  -->
+                        {% if question.answer %}
+                            <div class="response-box">
+                                <p><strong>Respuesta:</strong> {{ question.answer }}</p>
+                            </div>
+                        {% endif %}
                     </div>    
                     {% endfor %}
+                    {% endblock for-questions %}
                     <hr>
                 </div>
             </div>
@@ -56,67 +62,3 @@
 </div>
 {% endblock content %}
 
-
-
-{% comment "" %}
-<!-- templates/general_post_detail.html -->
-{% extends "_base.html" %}
-{% load static %} 
-
-{% block custom_styles %}
-<link rel="stylesheet" type="text/css" href="{% static 'styles/products/detail_post.css' %}">
-{% endblock custom_styles %}
-
-{% block content %}
-<div class="container">
-    <div class="generic-container">
-        <h1 style="color:white; font-size: 48px">{{ post.title }}</h1>
-        <div class="products-wrapper">
-            <div class="grid-display">
-                {% block post_paused%}
-                {% endblock post_paused%}
-                {% block image_and_description %}
-                <div class="product-card-detail">
-                    <div class="product-card-image">
-                        <img src="{{ post.image.url }}" alt="Imagen de la publicación"> 
-                    </div>
-                    <div class="product-card-details">
-                        <p><strong>Descripción:</strong></p>
-                        <p>{{ post.body }}</p>
-                        <!-- Aquí puedes agregar más campos según sea necesario -->
-                        {% block additional_fields %}
-                        {% endblock additional_fields %}
-                        <p><strong>Sucursal de preferencia:</strong> {% if post.branch %} {{ post.branch }} {% else %} {% endif %}</p>
-                        <p><strong>Categoría:</strong> {{ post.get_category_display }}</p>
-                        <p><strong>Nuevo:</strong> {{ post.new|yesno:"Sí,No" }}</p>
-                        <p><strong>Marca:</strong> {% if post.brand %} {{ post.brand }} {% else %} {% endif %}</p>
-                    </div>
-                </div>
-                {% endblock image_and_description %}
-            </div>
-        </div>
-        {% block questions %}
-        <div class="Questions">
-            <hr>
-                <h4> Preguntas: </h4>
-                {% for question in post.questions.all %}
-                    <div class="question-box">
-                        <p>{{ question.content }}</p>
-                    </div>    
-                {% endfor %}
-            </hr>
-        </div>
-        {% endblock questions %}
-        <!-- Acá se agregan las preguntas para hacer -->
-        {% block ask_question %}
-        {% endblock ask_question %}
-        
-        {% block additional_content %}
-        {% endblock additional_content %}
-    </div>
-    
-    <p> <a href="{% url 'post_list' %}">Todas las publicaciones</a>.</p>
-    <p><a href="{% url 'go_back' %}" class="button">Volver</a></p>
-</div>
-{% endblock content %}
-{% endcomment %}}

@@ -1,8 +1,9 @@
 <!-- templates/my_post_detail.html -->
 {% extends "posts/detail/general_post_detail.html" %}
+{% load static %} 
 
 
-{% block post_paused%}
+{% block warning_sign_post %}
     {% if post.status == 'paused' %}
     <div style="background-color: #ffcccc; padding: 10px; margin-top: 10px;">
         <p style="font-weight: bold; color: #cc0000;">¡Atención!</p>
@@ -10,24 +11,41 @@
         <p>Para solucionar esto, edite la publicación y seleccione una sucursal disponible.</p>
     </div>
     {% endif %}
-{% endblock post_paused%}
+    {% if post.has_unanswered_questions %}
+    <div style="background-color: #fff3cd; padding: 10px; margin-top: 10px;">
+        <p style="font-weight: bold; color: #856404;">¡Atención!</p>
+        <p>Esta publicación tiene preguntas sin responder. Por favor, revisa y responde las preguntas pendientes.</p>
+    </div>
+    {% endif %}
+    <br></br>
+{% endblock warning_sign_post %}
 
-{% block questions %}
-<div class="Questions">
-    <hr>
-        <h4> Preguntas: </h4>
-        {% for question in post.questions.all %}
-            <div class="question-box">
-                <p>
-                    <strong>{{ question.user }}:</strong>
-                    {{ question.content }}
-                    <!-- Agregar botón de respuesta aquí si es necesario -->
-                </p>
-            </div>    
-        {% endfor %}
-    </hr>
-</div>
-{% endblock questions %}
+{% block for-questions %}
+    {% for question, answer_form in questions_with_forms %}
+    <div class="question-box">
+        <p>{{ question.content }}</p>
+        {% block answer %}<!-- Mostrar botón de "Responder" solo si la pregunta no tiene respuesta -->
+        {% if not question.answer %}
+            <button class="toggle-response-form" data-question-id="{{ question.id }}">Responder</button>
+        {% endif %}
+        <!-- Formulario de respuesta (inicialmente oculto) -->
+        <div id="response-form-{{ question.id }}" class="response-form" style="display: none;">
+            <form method="post" action="{% url 'my_post_detail' post.pk %}">
+                {% csrf_token %}
+                {{ answer_form.as_p }}
+                <button type="submit">Enviar respuesta</button>
+            </form>
+        </div>{% endblock answer %}
+        <!-- Cuadro gris para la respuesta  -->
+        {% if question.answer %}
+            <div class="response-box">
+                <p><strong>Respuesta:</strong> {{ question.answer }}</p>
+            </div>
+        {% endif %}
+    </div>    
+    {% endfor %}
+{% endblock for-questions %}
 
 {% block additional_content %}
+<script src="{% static '/styles/products/toggleResponseForm.js' %}"></script>
 {% endblock additional_content %}

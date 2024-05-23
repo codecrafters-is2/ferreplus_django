@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.db.models import Q
 from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.core.validators import MaxLengthValidator
@@ -48,6 +49,9 @@ class Post(models.Model):
     brand = models.CharField(max_length=30,blank=True, null=True) #marca
     status = models.CharField(max_length=20, choices=POST_STATUS_CHOICES, default=POST_STATUS_AVAILABLE,) 
 
+    def has_unanswered_questions(self):
+        return self.questions.filter(Q(answer__isnull=True) | Q(answer='')).exists()
+    
     def __str__(self):
         return self.title
 
@@ -59,10 +63,12 @@ class Question(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField(validators=[MaxLengthValidator(150)])
     created_at = models.DateTimeField(auto_now_add=True)
+    #Como va a ser siempre el dueño de la publicación el que responda la pregunta no necesito hacer una clase nueva
+    answer = models.TextField(validators=[MaxLengthValidator(150)],blank=True, null=True)
     
     def __str__(self):
         return f'Question by {self.user.username} on {self.post.title}'
-    
+
 
 
 

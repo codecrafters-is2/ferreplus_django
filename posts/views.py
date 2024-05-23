@@ -3,9 +3,10 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormVi
 from django.urls import reverse_lazy
 from django.forms import inlineformset_factory
 from django.shortcuts import redirect
-from django.http import Http404
+from django.http import Http404,HttpResponseRedirect
+from django.urls import reverse
 from accounts.mixins import ClientRequiredMixin
-from .forms import QuestionForm
+from .forms import QuestionForm, AnswerForm
 
 from .models import Post, ImagePost
 from .forms import PostForm
@@ -63,20 +64,43 @@ class PostDetailView(ClientRequiredMixin,DetailView): # Visualización de la pub
             return redirect('my_post_detail', pk=self.object.pk)
         # Si no es el autor, permite el acceso normal a la vista de detalle del post
         return super().dispatch(request, *args, **kwargs)
-#class AddQuestionView(ClientRequiredMixin, FormView):
-#    form_class = QuestionForm
-#
-#    def form_valid(self, form):
-#        post = get_object_or_404(Post, pk=self.kwargs['pk'])
-#        question = form.save(commit=False)
-#        question.post = post
-#        question.user = self.request.user
-#        question.save()
-#        return redirect(reverse('post_detail', kwargs={'pk': post.pk}))
 
 class MyPostDetailView(ClientRequiredMixin,DetailView): #Visualización de la publicación propia
     model = Post
     template_name = "posts/detail/my_post_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        post = self.get_object()
+        # Verificar si el usuario actual es el autor de la publicación
+        if self.request.user == post.author:
+            # Obtén todas las preguntas asociadas a esta publicación
+            questions = post.questions.all()
+            questions_with_forms = []
+            for question in questions:
+                # Crear una instancia de AnswerForm y vincularla a la pregunta actual
+                answer_form = AnswerForm(prefix=str(question.id), initial={'question_id': question.id})
+                questions_with_forms.append((question, answer_form))
+            context['questions_with_forms'] = questions_with_forms
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        post = self.object
+        # Itera sobre todas las preguntas y sus respectivos formularios de respuesta
+        for question in post.questions.all():
+            # Obtiene el prefijo del formulario que corresponde a esta pregunta
+            prefix = str(question.id)
+            form = AnswerForm(request.POST, prefix=prefix)
+            # Verifica si el formulario es válido y ha sido enviado para esta pregunta específica
+            if form.is_valid() and f'{prefix}-answer' in request.POST:
+                # Guarda la respuesta en la pregunta correspondiente
+                answer_text = form.cleaned_data['answer']
+                question.answer = answer_text
+                question.save()
+                break # Sal del bucle después de procesar el formulario enviado
+        # Después de procesar todas las respuestas, redirige de vuelta a la vista de detalle del post
+        return HttpResponseRedirect(reverse('my_post_detail', kwargs={'pk': self.object.pk}))
     
     def dispatch(self, request, *args, **kwargs):
         # Obtiene la instancia del post

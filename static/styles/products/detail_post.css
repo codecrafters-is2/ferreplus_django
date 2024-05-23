@@ -62,3 +62,11 @@
         width: 100%;
     }
 }
+
+/* Estilos para el cuadro de respuesta */
+.response-box {
+    background-color: hsl(227, 13%, 79%);
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+}

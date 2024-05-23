@@ -29,9 +29,10 @@ class PostForm(forms.ModelForm):
 class QuestionForm(forms.ModelForm):
     class Meta:
         model = Question
-        fields = ['content']
+        fields = ['content']#, "answer"
         widgets = {
             'content': forms.Textarea(attrs={'maxlength': 150}),
+            #'answer': forms.Textarea(),  # Asegúrate de que el campo de respuesta sea un área de texto
         }
         help_texts = {
             'content': 'Máximo 150 caracteres.',
@@ -40,6 +41,19 @@ class QuestionForm(forms.ModelForm):
         super().__init__(*args,**kwargs)
         self.fields["content"].label = ""
 
+class AnswerForm(forms.ModelForm):
+    class Meta:
+        model = Question
+        fields = ['answer']
+        widgets = {
+            'answer': forms.Textarea(attrs={'maxlength': 150})
+        }
+        help_texts = {
+            'answer': 'Máximo 150 caracteres.',
+        }
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        self.fields["answer"].label = ""
 
 #class MultipleFileInput(forms.ClearableFileInput):
 #    allow_multiple_selected = True
