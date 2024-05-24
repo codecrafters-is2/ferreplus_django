@@ -25,6 +25,7 @@
                                 <h2>
                                     <a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a>
                                 </h2> 
+                                <a href="{% url 'barter_request' post.pk %}" class="button">Solicitar Trueque</a>
                             </div>
                         </div>
                     {% endfor %}
