@@ -1,0 +1,59 @@
+<head>
+    <style>
+        .categories-widget {
+            display: grid;
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+            text-decoration: none;
+            list-style-type: none;
+            gap: 1em;
+        }
+
+        .category-button {
+            width: 100%;
+            gap: 10px;
+            background: rgba(4, 249, 225, 0.20);
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(7.6px);
+            -webkit-backdrop-filter: blur(7.6px);
+            border: 1px solid #04f9e15c;
+            white-space: nowrap;
+            color: black;
+            font-size: 18px;
+            padding: 1rem 2rem;
+            transition: all 300ms ease;
+        }
+
+        .selected {
+            color: #C128AF;
+            background-color: rgba(4, 249, 225, 0.78);
+        }
+
+        @media (min-width: 1024px) {
+            .categories-widget {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+    </style>
+    <script>
+        function selectCategoryToggle(id) {
+            let button = document.getElementById(id);
+            button.classList.contains("selected") ? button.classList.remove("selected") : button.classList.add("selected");
+        }
+    </script>
+</head>
+
+<ul class="categories-widget">
+{% for category in categories %}
+    <li class="category_item">
+        <button
+            id="{{ category.db_name }}"
+            onclick="selectCategoryToggle(this.id)"
+            class="category-button"
+            type="button"
+            >
+            {{ category.name }}
+        </button>
+    </li>
+{% endfor %}
+</ul>

@@ -85,36 +85,51 @@
 
 
 .search-ui {
+    width: 100vw;
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 2rem 1rem;
+    background: #ffffff;
 }
 
 .search-bar {
     display: flex;
     flex-direction: row;
     border: none;
+    align-items: center;
+    border: 1px black solid;
+    border-radius: 1em;
+    padding: 0rem 1rem;
+}
+
+.search-bar button {
+    width: 32px;
+    padding: none;
 }
 
 .search-bar svg {
-    width: 32px;
+    width: 100%;
+    padding: none;
 }
 
 .search-bar input {
     background: transparent;
     border: none;
-    border-radius: 1.5em;
-    box-shadow: 0 0 0 0.4em #171717 inset;
-    padding: 0.75em;
     -webkit-appearance: none;
     -moz-appearance: none;
-    appearance: none
+    appearance: none;
+    padding: 0px 0px 0px 0px;
+    margin: 0;
 }
 
 .search-bar input::-webkit-search-decoration {
     -webkit-appearance: none;
 }
 
+.products-wrapper {
+    padding: 2rem 6%;
+}
 
 
 
