@@ -8,6 +8,10 @@
             gap: 1em;
         }
 
+        .category_item {
+            width: 100%;
+        }
+
         .category-button {
             width: 100%;
             gap: 10px;
@@ -38,22 +42,35 @@
     <script>
         function selectCategoryToggle(id) {
             let button = document.getElementById(id);
-            button.classList.contains("selected") ? button.classList.remove("selected") : button.classList.add("selected");
+            let input = document.getElementById("categories");
+            let query = input.value;
+            if (button.classList.contains("selected")) {
+                button.classList.remove("selected");
+                let category_str = "," + button.id;
+                query = query.replace(category_str, "");
+
+            } else {
+                button.classList.add("selected");
+                query += ",";
+                query += button.id;
+            }
+            input.value = query;
         }
     </script>
 </head>
 
 <ul class="categories-widget">
-{% for category in categories %}
-    <li class="category_item">
-        <button
-            id="{{ category.db_name }}"
-            onclick="selectCategoryToggle(this.id)"
-            class="category-button"
-            type="button"
-            >
-            {{ category.name }}
-        </button>
-    </li>
-{% endfor %}
+    <input type="hidden" id="categories" name="categories" value=""></input>
+    {% for category in categories %}
+        <li class="category_item">
+            <button
+                id="{{ category.db_name }}"
+                onclick="selectCategoryToggle(this.id)"
+                class="category-button"
+                type="button"
+                >
+                {{ category.name }}
+            </button>     
+        </li>
+    {% endfor %}
 </ul>

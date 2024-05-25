@@ -1,0 +1,26 @@
+<head>
+    <style>
+        .branches-widget {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 2em;
+            padding: 2em 0em;
+        }
+    </style>
+</head>
+
+
+<div class="branches-widget">
+    <label for="branches">Elija la sucursal: </label>
+    <select type="hidden" id="branches" name="branches" value="">
+        {% for branch in branches %}
+            <option
+                id="{{ branch.id }}"
+                value="{{ branch.id }}"
+                >
+                {{ branch.name }}
+            </option>
+        {% endfor %}
+    </select>
+</ul>

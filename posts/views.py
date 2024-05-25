@@ -8,6 +8,7 @@ from accounts.mixins import ClientRequiredMixin
 
 from .models import Post, ImagePost
 from .forms import PostForm
+from .services import get_active_posts
 
 class PostListView(ClientRequiredMixin,ListView): 
     model = Post
@@ -125,16 +126,28 @@ class PostSearchView(ListView):
 
     def get_queryset(self):
         title_query = self.request.GET.get("title")
-        categories_query = self.request.GET.get("categories")
 
-        if not title_query: 
-            title_query = ""
+        raw_categories_query = self.request.GET.get("categories")
+        categories_query = raw_categories_query.split(",") 
+        categories_query.remove("")
+        
+        branch_query = self.request.GET.get("branches")
 
-        queryset = Post.objects.filter(
-            Q(title__contains=title_query) | Q(body__contains=title_query)
-        )
+        queryset = get_active_posts()
+    
+        if title_query:
+            print("title")
+            queryset = queryset.filter(
+                Q(title__contains=title_query) | Q(body__contains=title_query)
+            )
         
         if categories_query:
-            queryset.filter(category__in=categories_query)
+            print("cat")
+            print(categories_query)
+            queryset = queryset.filter(category__in=categories_query)
+
+        if branch_query:
+            print("branch")
+            queryset = queryset.filter(branch__id=branch_query)
 
         return queryset
