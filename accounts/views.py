@@ -40,6 +40,18 @@ class EmployeeSuccessView(AdminRequiredMixin, View):
 #        return render(request, "account/user_detail.html", {"user": user})
 
 
+#class UserDetailWithPostsView(LoginRequiredMixin, TemplateView):
+#    template_name = "account/user_detail.html"
+#
+#    def get_context_data(self, **kwargs):
+#        context = super().get_context_data(**kwargs)
+#        user_id = self.kwargs.get("user_id")
+#        user = get_object_or_404(CustomUser, id=user_id)
+#        context["user"] = user
+#        context["post_list"] = Post.objects.filter(author=user)
+#        return context
+
+
 class UserDetailWithPostsView(LoginRequiredMixin, TemplateView):
     template_name = "account/user_detail.html"
 
@@ -47,6 +59,9 @@ class UserDetailWithPostsView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         user_id = self.kwargs.get("user_id")
         user = get_object_or_404(CustomUser, id=user_id)
-        context["user"] = user
+        context["user_post"] = user
         context["post_list"] = Post.objects.filter(author=user)
+        context["user"] = (
+            self.request.user
+        ) 
         return context

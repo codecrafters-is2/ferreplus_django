@@ -1,5 +1,6 @@
 <!-- templates/account/user_detail.html -->
 <!DOCTYPE html>
+{% extends "_base.html" %} 
 {% load static %}
 
 {% block title %}Perfil de Usuario{% endblock title %}
@@ -14,7 +15,7 @@
 <div class="container">
 
     <div class="generic-container">
-        <h1 style="color:white; font-size: 48px">{{ user.username }}</h1>
+        <h1 style="color:white; font-size: 48px">{{ user_post.username }}</h1>
               <h1 style="color:white; font-size: 48px">Publicaciones</h1>
             <div class="products-wrapper">
                 <div class="grid-display">
