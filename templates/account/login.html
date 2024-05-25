@@ -3,22 +3,22 @@
 {% load static %}
 
 {% block title %}Log In{% endblock title %}
-<head>
-    {% block custom_styles %}
-        <link rel="stylesheet" href="{% static 'styles/generics/generics.css' %}">
-    {% endblock custom_styles %}
-</head>
-
 
 {% block content %}
-    <div>
-        <div class="generic-col-container-pad">
-            <h2 style="font-size: 32px;">Log In</h2>
-            <form method="post" style="display: flex; flex-direction: column; align-items: start; justify-content: center; gap: 1rem;">
-                {% csrf_token %}
-                {{ form|crispy }}
-                <button class="btn btn-success" type="submit">Log In</button>
-            </form>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card mt-5">
+                <div class="card-body">
+                    <h2 class="card-title text-center mb-4">Log In</h2>
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <button class="btn btn-success btn-block" type="submit">Log In</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
+</div>
 {% endblock content %}

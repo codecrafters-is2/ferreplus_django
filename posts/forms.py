@@ -5,8 +5,7 @@ class PostForm(forms.ModelForm):
 
     class Meta:
         model = Post
-        fields = ["title","body","image","category","branch","new","brand",
-                ] #Campos que va a completar el usuario
+        fields = ["title","body","image","category","branch","new","brand", ] #Campos que va a completar el usuario
         widgets = {
             "title" : forms.TextInput(
                 attrs= {
@@ -29,10 +28,10 @@ class PostForm(forms.ModelForm):
 class QuestionForm(forms.ModelForm):
     class Meta:
         model = Question
-        fields = ['content']#, "answer"
+        fields = ['content']
         widgets = {
             'content': forms.Textarea(attrs={'maxlength': 150}),
-            #'answer': forms.Textarea(),  # Asegúrate de que el campo de respuesta sea un área de texto
+            
         }
         help_texts = {
             'content': 'Máximo 150 caracteres.',
@@ -105,34 +104,6 @@ from branches.models import Branch
 #            raise forms.ValidationError("Solo puedes subir un máximo de 4 imágenes.")
 #        return images
 
-
-<<<<<<< HEAD
-=======
-    class Meta:
-        model = Post
-        fields = ["title","body","image","category","branch","new","brand",
-                ] #Campos que va a completar el usuario
-        widgets = {
-            "title" : forms.TextInput(
-                attrs= {
-                    "class" : "forms-control",
-                    "placeholder" : "Ingrese nombre"
-                }
-            )
-        }
-    
-    def __init__(self,*args,**kwargs):
-        super().__init__(*args,**kwargs)
-        self.fields["title"].label = "Nombre del producto"
-        self.fields["body"].label = "Descripción del producto"
-        self.fields["category"].label = "Categoría del producto"
-        self.fields["new"].label = "Nuevo"
-        self.fields["brand"].label = "Marca"
-        self.fields["image"].label = "Imagen del producto"
-        self.fields["branch"].label= "Sucursal de preferencia"
-        self.fields['branch'].queryset = Branch.active_objects.all()
->>>>>>> 85b5a83621ad7f3741ba529813ffb78057f61d0c
-    
     #def clean_images(self):
     #    images = self.cleaned_data.get('images')
     #    if not images:

@@ -1,15 +1,20 @@
-
 {% extends "_base_wildcard.html" %} 
 
 {% load crispy_forms_tags %}
 
 {% block title %}Log Out{% endblock %}
 {% block content %}
-    <h1>Log Out</h1>
-    <p>¿Estas seguro que deseas salir?</p>
-    <form method="post" action="{% url 'account_logout' %}">
-        {% csrf_token %}
-        {{ form|crispy }}
-        <button class="btn btn-danger" type="submit">Log Out</button>
-    </form>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h1 class="text-center">Log Out</h1>
+            <p class="text-center">¿Estás seguro de que deseas salir?</p>
+            <form method="post" action="{% url 'account_logout' %}">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <button class="btn btn-danger btn-block" type="submit">Log Out</button>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock content %}

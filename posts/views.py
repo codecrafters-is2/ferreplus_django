@@ -1,16 +1,49 @@
+from django.views import View
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.urls import reverse_lazy
-from django.forms import inlineformset_factory
-from django.shortcuts import redirect
+from django.shortcuts import redirect,get_object_or_404
 from django.http import Http404,HttpResponseRedirect
 from django.urls import reverse
 from accounts.mixins import ClientRequiredMixin
 from .forms import QuestionForm, AnswerForm
 
-from .models import Post, ImagePost
+from .models import Post, ImagePost, Question
 from .forms import PostForm
 
+#Preguntas de las publicaciones:
+class DeleteQuestionView(ClientRequiredMixin, View):
+    model = Question
+    
+    def post(self, request, *args, **kwargs):
+        question_id = kwargs.get('question_id')
+        question = get_object_or_404(Question, id=question_id)
+        
+        # Elimina la pregunta
+        if request.user == question.user:
+            question.delete()
+
+        # Redirige a la página de detalle de la publicación
+        return redirect('post_detail', pk=question.post.pk)
+
+class DeleteAnswerView(ClientRequiredMixin, View):
+    model = Question
+    
+    def post(self, request, *args, **kwargs):
+        question_id = kwargs.get('question_id')
+        question = get_object_or_404(Question, id=question_id)
+
+        # Verifica que el usuario sea el autor de la publicación
+        if request.user == question.post.author:
+            # Elimina la respuesta
+            question.answer = None
+            question.save()
+
+        # Redirige a la página de detalle de la publicación
+        return redirect('post_detail', pk=question.post.pk)
+
+
+#Publicaciones:
 class PostListView(ClientRequiredMixin,ListView): 
     model = Post
     template_name = "posts/post_list.html"

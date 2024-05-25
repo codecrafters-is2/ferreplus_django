@@ -1,64 +1,66 @@
 <!-- templates/general_post_detail.html -->
 {% extends "_base.html" %}
-{% load static %} 
-
-{% block custom_styles %}
-<link rel="stylesheet" type="text/css" href="{% static 'styles/products/detail_post.css' %}">
-{% endblock custom_styles %}
+{% load static %}
 
 {% block content %}
-<div class="container">
+<div class="container mt-5">
     <div class="generic-container">
-        {% block warning_sign_post %}<!-- Para cuando la publicación está pausada -->{% endblock warning_sign_post %}
-        <div class="product-card-detail">
-            <div class="post-details">
-                <h1 style="color:white; font-size: 48px; text-align: center;">{{ post.title }}</h1>
+        {% block warning_sign_post %}{% endblock warning_sign_post %}
+        <div class="row">
+            <div class="col-md-8">
+                <h1 class="text-black text-center">{{ post.title }}</h1>
                 <p><strong>Descripción:</strong></p>
                 <p>{{ post.body }}</p>
-                {% block additional_fields %}<!-- Aquí puedes agregar más campos según sea necesario -->{% endblock additional_fields %}
+                {% block additional_fields %}{% endblock additional_fields %}
                 <p><strong>Sucursal de preferencia:</strong> {% if post.branch %} {{ post.branch }} {% else %} {% endif %}</p>
                 <p><strong>Categoría:</strong> {{ post.get_category_display }}</p>
                 <p><strong>Nuevo:</strong> {{ post.new|yesno:"Sí,No" }}</p>
                 <p><strong>Marca:</strong> {% if post.brand %} {{ post.brand }} {% else %} {% endif %}</p>
             </div>
-            <div class="post-image">
-                <img src="{{ post.image.url }}" alt="Imagen de la publicación"> 
+            <div class="col-md-4">
+                <img src="{{ post.image.url }}" alt="Imagen de la publicación" class="img-fluid rounded">
             </div>
         </div>
         {% block questions %}
-            <div class="questions-container">
+            <div class="mt-4">
                 <div class="Questions">
                     <hr>
                     <h4> Preguntas: </h4>
                     {% block for-questions %}
                     {% for question in post.questions.all %}
-                    
-                    <div class="question-box">
+                    <div class="border p-3 mb-3 rounded bg-light">
                         <p>{{ question.content }}</p>
-                        {% block answer %}<!-- Para que el dueño pueda responder la pregunta -->{% endblock answer %}
-                        <!-- Cuadro gris para la respuesta  -->
+                        {% block answer %}{% endblock answer %}
                         {% if question.answer %}
-                            <div class="response-box">
+                            <div class="bg-secondary text-white p-3 rounded mt-2">
                                 <p><strong>Respuesta:</strong> {{ question.answer }}</p>
                             </div>
                         {% endif %}
-                    </div>    
+                        <form method="post" action="{% url 'delete_question' question.id %}" onsubmit="return confirmDelete();">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Eliminar Pregunta</button>
+                        </form>
+                    </div>
                     {% endfor %}
                     {% endblock for-questions %}
                     <hr>
                 </div>
             </div>
         {% endblock questions %}
-        <!-- Acá se agregan las preguntas para hacer -->
-        {% block ask_question %}
-        {% endblock ask_question %}
-        
-        {% block additional_content %}
-        {% endblock additional_content %}
-        
-        <p> <a href="{% url 'post_list' %}">Todas las publicaciones</a>.</p>
-        <p><a href="{% url 'go_back' %}" class="button">Volver</a></p>
+        {% block ask_question %}{% endblock ask_question %}
+        {% block additional_content %}{% endblock additional_content %}
+        <div class="mt-4">
+            <div class="buttons">
+                <p><a href="{% url 'post_list' %}" class="btn btn-primary">Todas las publicaciones</a></p>
+                <p><a href="{% url 'go_back' %}" class="btn btn-secondary">Volver</a></p>
+            </div>
+        </div>
     </div>
 </div>
-{% endblock content %}
 
+<script>
+function confirmDelete() {
+    return confirm('¿Estás seguro de que deseas eliminar esta pregunta?');
+}
+</script>
+{% endblock content %}

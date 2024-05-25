@@ -42,9 +42,6 @@ class Post(models.Model):
     category = models.CharField(max_length=22, choices=CHOICES)
     branch = models.ForeignKey(Branch, on_delete=models.SET_NULL,null=True) #Sucursal
     original_branch_id = models.IntegerField(null=True) #ID sucursal original para cuando eliminamos una sucursal y la publi se ponga en pausado
-    #barter = models.ForeignKey("Trueque" , on_delete=models.CASCADE) #Trueque
-    #La "pregunta" se tiene que hacer desde su modelo
-    related_posts = models.ManyToManyField('self', blank=True, related_name='related_by', editable=False)
     new = models.BooleanField(blank=True, null=True)
     brand = models.CharField(max_length=30,blank=True, null=True) #marca
     status = models.CharField(max_length=20, choices=POST_STATUS_CHOICES, default=POST_STATUS_AVAILABLE,) 

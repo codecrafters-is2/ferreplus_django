@@ -2,19 +2,16 @@
 {% extends "posts/detail/general_post_detail.html" %}
 
 {% block additional_fields %}
-    <!-- Aquí puedes agregar más campos específicos de my_post_detail.html si es necesario -->
     <p><strong>Autor:</strong> {{ post.author }}</p>
 {% endblock additional_fields %}
 
 {% block ask_question %}
-    <div class="realizar-pregunta">
+    <div class="mt-4">
         <h4>Realizar una pregunta</h4>
         <form action="" method="post">{% csrf_token %}
             {{ form.as_p }}
-            <button class="btn btn-success ml-2" type="submit">Preguntar</button>
+            <button class="btn btn-success mt-2" type="submit">Preguntar</button>
         </form>
     </div>
 {% endblock ask_question %}
-
-{% block additional_content %}
-{% endblock additional_content %}
+{% block additional_content %}{% endblock additional_content %}
