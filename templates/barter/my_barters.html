@@ -1,0 +1,40 @@
+{% extends "_base.html" %}
+{% load static %}
+
+{% block title %}Mis Trueques{% endblock title %}
+
+{% block custom_styles %}
+    <link rel="stylesheet" href="{% static 'styles/barters/barters_list.css' %}">
+{% endblock custom_styles %}
+
+{% block content %}
+<div class="barter-list-container">
+    <h1>Mis Trueques</h1>
+    {% for barter in object_list %}
+    <div class="barter-item">
+        <div class="barter-header">
+            <h2>
+                <a href="{% url 'post_detail' barter.requesting_post.pk %}">{{ barter.requesting_post.title }}</a> 
+                x 
+                <a href="{% url 'post_detail' barter.requested_post.pk %}">{{ barter.requested_post.title }}</a>
+            </h2>  
+            <p class="barter-state {% if barter.state == 'requested' %}requested-state{% elif barter.state == 'accepted' %}accepted-state{% elif barter.state == 'parcial_accepted' %}parcial_accepted-state{% elif barter.state == 'committed' %}committed-state{% elif barter.state == 'cancelled' %}cancelled-state{% endif %}">{{ barter.get_state_display }}</p>
+            {% if barter.state == 'accepted' or barter.state == 'committed' %}
+                <p class="branch">Sucursal: {{ barter.branch }}</p>
+            {% endif %}
+            {% if barter.state == 'requested' %}
+                {% if barter.requested_post.author == request.user %}
+                    <a href="{% url 'propose_turns' barter.id %}" class="btn btn-success">Aceptar Trueque</a>
+                {% endif %}
+                <form method="post" action="{% url 'barter_cancel' barter.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Cancelar</button>
+                </form>
+            {% endif %}
+        
+        </div>
+    </div>
+    {% endfor %}
+    <p><a href="{% url 'go_back' %}" class="button">Volver</a></p>
+</div>
+{% endblock content %}

@@ -1,0 +1,67 @@
+.barter-list-container {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.barter-item {
+    border-bottom: 1px solid #000000;
+    padding: 15px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.barter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.barter-header h2 {
+    margin: 0;
+}
+
+.barter-state {
+    font-size: 0.9em;
+    margin-right: auto;
+    padding-left: 20px;
+}
+
+.cancel-button {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+.cancel-button:hover {
+    background-color: darkred;
+}
+
+/* Estilos para los diferentes estados */
+.committed-state {
+    color: blue !important; /* Color para el estado "committed" */
+}
+
+.accepted-state {
+    color: green !important; /* Color para el estado "accepted" */
+}
+
+.parcial_accepted-state {
+    color: rgb(224, 221, 26) !important; /* Color para el estado "parcial accepted" */
+}
+
+.requested-state {
+    color: orange !important; /* Color para el estado "requested" */
+}
+
+.cancelled-state {
+    color: red !important; /* Color para el estado "cancelled" */
+}
+
+.text-center {
+    text-align: center;
+}
+

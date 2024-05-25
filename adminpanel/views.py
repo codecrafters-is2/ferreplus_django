@@ -15,7 +15,7 @@ class BranchListView(AdminRequiredMixin, ListView):
     context_object_name = 'branches'
 
     def get_queryset(self):
-         return Branch.active_objects.all()
+        return Branch.active_objects.all()
 
 class BranchCreateView(AdminRequiredMixin, CreateView):
     model = Branch

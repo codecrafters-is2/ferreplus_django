@@ -1,0 +1,15 @@
+{% extends "_base.html" %}
+{% load static %}
+
+{% block title %}Seleccionar Turno{% endblock title %}
+
+{% block content %}
+<div class="select-turn-container">
+    <h1>Seleccionar Turno</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Seleccionar Turno</button>
+    </form>
+</div>
+{% endblock content %}

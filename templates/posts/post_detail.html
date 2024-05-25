@@ -6,7 +6,7 @@
 <div class="container">
 
     <div class="generic-container">
-        <h1 style="color:white; font-size: 48px">{{ post.title }}</h1>
+        <h1 style="color:rgb(8, 8, 8); font-size: 48px">{{ post.title }}</h1>
         <div class="products-wrapper">
             <div class="grid-display">
                 <div class="product-card-detail">
@@ -22,6 +22,7 @@
                         <p><strong>Nuevo:</strong> {{ post.new|yesno:"Sí,No" }}</p>
                         <p><strong>Marca:</strong> {% if post.brand %} {{ post.brand }} {% else %} {% endif %}</p>
                     </div>
+                    <a href="{% url 'barter_request' post.pk %}" class="btn btn-info">Solicitar Trueque</a>
                 </div>
             </div>
         </div>
