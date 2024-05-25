@@ -1,0 +1,13 @@
+<!-- templates/employee_signup.html -->
+{% extends "_base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>Registrar Empleado</h1>
+    <form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Guardar">
+        <a href="{% url 'go_back' %}" class="button">Volver</a>
+    </form>
+</div>
+{% endblock content %}

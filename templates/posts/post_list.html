@@ -17,18 +17,20 @@
             <div class="products-wrapper">
                 <div class="grid-display">
                     {% for post in post_list %}
-                    <div class="product-card">
-                        {% if post.image %}
-                            <img src="{{post.image.url}}" alt="post image"> 
-                        {% endif %} 
-                        <div class="card-header">
-                            <h2>
-                                <a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a>
-                            </h2> 
+                        <div class="product-card">
+                            {% if post.image %}
+                                <img src="{{post.image.url}}" alt="post image"> 
+                            {% endif %} 
+                            <div class="card-header">
+                                <h2>
+                                    <a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a>
+                                </h2> 
+                            </div>
                         </div>
-                    </div>
-                    <br />
                     {% endfor %}
-        <p><a href="{% url 'go_back' %}" class="button">Volver</a></p>
+                </div>
+            </div>        
+            <p><a href="{% url 'go_back' %}" class="button">Volver</a></p>
+        </div>
     </div>
 {% endblock content %}

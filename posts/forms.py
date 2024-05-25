@@ -54,6 +54,8 @@ class AnswerForm(forms.ModelForm):
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
         self.fields["answer"].label = ""
+from .models import Post,ImagePost
+from branches.models import Branch
 
 #class MultipleFileInput(forms.ClearableFileInput):
 #    allow_multiple_selected = True
@@ -104,6 +106,32 @@ class AnswerForm(forms.ModelForm):
 #        return images
 
 
+<<<<<<< HEAD
+=======
+    class Meta:
+        model = Post
+        fields = ["title","body","image","category","branch","new","brand",
+                ] #Campos que va a completar el usuario
+        widgets = {
+            "title" : forms.TextInput(
+                attrs= {
+                    "class" : "forms-control",
+                    "placeholder" : "Ingrese nombre"
+                }
+            )
+        }
+    
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        self.fields["title"].label = "Nombre del producto"
+        self.fields["body"].label = "Descripción del producto"
+        self.fields["category"].label = "Categoría del producto"
+        self.fields["new"].label = "Nuevo"
+        self.fields["brand"].label = "Marca"
+        self.fields["image"].label = "Imagen del producto"
+        self.fields["branch"].label= "Sucursal de preferencia"
+        self.fields['branch'].queryset = Branch.active_objects.all()
+>>>>>>> 85b5a83621ad7f3741ba529813ffb78057f61d0c
     
     #def clean_images(self):
     #    images = self.cleaned_data.get('images')
