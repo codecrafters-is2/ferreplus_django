@@ -1,24 +1,23 @@
 <!-- templates/employee_success.html -->
+{% extends "_base_admin.html" %} 
+{% load static %}
 
 <!DOCTYPE html>
-<html>
+{% block title %}Registro exitoso{% endblock title %}
 <head>
-    <title>Empleado Registrado</title>
+    {% block custom_styles %}
+        <link rel="stylesheet" href="{% static 'styles/generics/generics.css' %}">
+    {% endblock custom_styles %}
 </head>
-<body>
-    <h1>Empleado registrado exitosamente</h1>
-    {% if messages %}
-        <ul>
-            {% for message in messages %}
-                <li class="{{ message.tags }}">{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-    {% if employee %}
-        <p>Nombre: {{ employee.nombre }}</p>
-        <p>Apellido: {{ employee.apellido }}</p>
-        <!-- Agregar más campos si es necesario -->
-    {% endif %}
-    <a href="{% url 'employee_signup' %}">Registrar otro empleado</a>
-</body>
-</html>
+{% block content %}
+    <div>
+        <div class="generic-col-container-pad">
+            <h2 style="font-size: 32px;">¡Empleado registrado exitosamente!</h2>
+            {% if employee %}
+                <p style="font-weight: bold; color: black; font-size: 20px;">Nombre de usuario asignado: {{ employee.username }}</p>
+                <p style="font-weight: bold; color: black; font-size: 20px;">Contrageña generada: {{ employee.password }}</p>
+            {% endif %}
+            <a href="{% url 'employee_signup' %}">Registrar otro empleado</a>
+        </div>
+    </div>
+{% endblock content %} 

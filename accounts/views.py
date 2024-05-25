@@ -1,31 +1,31 @@
-from django.views.generic.edit import CreateView
+from django.views import View
 from django.views.generic import DetailView
 from .forms import EmployeeUserCreationForm
 from .models import EmployeeUser
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.http import request
+from .mixins import AdminRequiredMixin
+from django.shortcuts import render, get_object_or_404
 
 
-def employeeSignupView(request):
-    if request.method == "POST":
+class EmployeeSignupView(AdminRequiredMixin, View):
+    def get(self, request):
+        form = EmployeeUserCreationForm()
+        return render(request, "account/employee_signup.html", {"form": form})
+
+    def post(self, request):
         form = EmployeeUserCreationForm(request.POST)
         if form.is_valid():
-            form.save()  # Pasando el request al método save
-            messages.success(request, "Empleado registrado exitosamente.")
-            return redirect(
-                "employee_success"
-            )  # Redirigir a una URL llamada 'employee_success'
-    else:
-        form = EmployeeUserCreationForm()
-
-    return render(request, "account/employee_signup.html", {"form": form})
+            employee = form.save()
+            messages.success(
+                request,
+                f"Empleado {employee.nombre} {employee.apellido} registrado exitosamente.",
+            )
+            return redirect("employee_success", employee_id=employee.id)
+        return render(request, "account/employee_signup.html", {"form": form})
 
 
-# class EmployeeSuccess(DetailView):  # Visualización de la publicación propia
-#    model = EmployeeUser
-#    template_name = "account/employee_success.html"
-
-
-def employee_success(request):
-    return render(request, "account/employee_success.html")
+class EmployeeSuccessView(AdminRequiredMixin, View):
+    def get(self, request, employee_id):
+        employee = get_object_or_404(EmployeeUser, id=employee_id)
+        return render(request, "account/employee_success.html", {"employee": employee})
