@@ -20,3 +20,6 @@ class Appointment(models.Model):
     branch = models.ForeignKey(Branch, on_delete=models.SET_NULL, null=True)
     date = models.DateField()
     time = models.TimeField()
+
+    def __str__(self) :
+        return f"{self.branch}\n Día: {self.date}\n {self.time} horas."

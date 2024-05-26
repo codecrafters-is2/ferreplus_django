@@ -1,0 +1,23 @@
+{% extends "_base.html" %}
+{% load static %}
+
+{% block custom_styles %}
+    <link rel="stylesheet" href="{% static 'styles/turns/turns_list.css' %}">
+{% endblock custom_styles %}
+
+{% block title %}Mis Turnos{% endblock title %}
+
+{% block content %}
+<div class="turn-list-container">
+    <h1>Mis Turnos</h1>
+    {% for appointment in appointments %}
+        <div class="list-group-item">
+            <div class="turn-header">
+                <p>{{ appointment }}</p>
+                <p>{{ appointment.barter }}</p>
+            </div>
+        </div>
+    {% endfor %}
+    <p><a href="{% url 'go_back' %}" class="btn btn-light">Volver</a></p>
+</div>
+{% endblock content %}

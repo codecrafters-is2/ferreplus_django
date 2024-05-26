@@ -29,6 +29,8 @@
                         <input type="hidden" name="selected_barter_id" value="{{ barter.id }}">
                         <button type="submit" class="btn btn-success">Aceptar Trueque</button>
                     </form>
+                {% else %}
+                <a href="{% url 'turns_list' %}?barter_id={{ barter.id }}" class="btn btn-info">Ver Propuestas de Turnos</a>
                 {% endif %}
                 <form method="post" action="{% url 'barter_cancel' barter.id %}">
                     {% csrf_token %}

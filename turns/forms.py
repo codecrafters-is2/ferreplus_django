@@ -3,7 +3,6 @@ from .models import Appointment, TurnProposal, Branch
 from datetime import date, timedelta
 
 class TurnProposalForm(forms.ModelForm):
-    branch = Branch.active_objects.all()
     tomorrow = (date.today() + timedelta(days=1)).strftime('%Y-%m-%d')
     date = forms.DateField(
         label="Fecha",

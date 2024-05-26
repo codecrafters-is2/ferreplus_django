@@ -15,10 +15,12 @@
             <div class="turn-header">
                 <p>{{ turn }}</p>
             </div>
+            {% if request.user != turn.proposer %}
             <form method="post" action="{% url 'select-turn' turn.id %}">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-primary" name="selected_turn_id" value="{{ turn.id }}">Seleccionar Turno</button>
             </form>
+            {% endif %}
             </div>
     {% endfor %}
     <p><a href="{% url 'propose_turns' barter_id%}" class="btn btn-primary">Agregar</a></p>

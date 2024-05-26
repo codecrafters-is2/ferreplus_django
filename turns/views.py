@@ -75,6 +75,11 @@ class AppointmentCreateView(ClientRequiredMixin, FormView, CreateView):
     success_url = reverse_lazy('appointment_success')
 
     def form_valid(self, form):
+        form.instance.branch = self.get_form_kwargs()['branch']
+        form.instance.barter = self.get_form_kwargs()['barter']
+        form.instance.date = self.get_form_kwargs()['date']
+        form.instance.barter.branch = form.instance.branch
+        form.instance.barter.save()
         appointment = form.save(commit=False)
         appointment.save()
         return super().form_valid(form)
@@ -96,3 +101,16 @@ class AppointmentCreateView(ClientRequiredMixin, FormView, CreateView):
     
 class AppointmentCreateSuccessView(ClientRequiredMixin,TemplateView):
     template_name = 'temp_messages/appointment_created.html'
+
+class AppointmentListView(ClientRequiredMixin,TemplateView):
+    model = Appointment
+    template_name = 'turns/appointments_list.html'
+    context_object_name = 'appointments'
+
+    def get_context_data(self, **kwargs):
+        user = self.request.user
+        context = super().get_context_data(**kwargs)
+        context['appointments'] = Appointment.objects.filter(
+            Q(barter__requesting_post__author=user) | Q(barter__requested_post__author=user)
+        ) 
+        return context
