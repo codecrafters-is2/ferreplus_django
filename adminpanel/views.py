@@ -5,6 +5,12 @@ from django.urls import reverse_lazy
 from branches.models import Branch
 from .forms import BranchForm
 from accounts.mixins import AdminRequiredMixin
+from django.views import View
+from accounts.forms import EmployeeUserCreationForm
+from accounts.models import EmployeeUser
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.shortcuts import render, get_object_or_404
 
 class AdminPanelView(AdminRequiredMixin, TemplateView):
     template_name = 'adminpanel.html'
@@ -42,6 +48,28 @@ class BranchDeleteView(AdminRequiredMixin, DeleteView):
     success_url = reverse_lazy('show_branches')
 
     def delete(self, request, *args, **kwargs):
-         self.get_object().delete()
-         return super().delete(request, *args, **kwargs)
-    
+        self.get_object().delete()
+        return super().delete(request, *args, **kwargs)
+
+
+class EmployeeSignupView(AdminRequiredMixin, View):
+    def get(self, request):
+        form = EmployeeUserCreationForm()
+        return render(request, "account/employee_signup.html", {"form": form})
+
+    def post(self, request):
+        form = EmployeeUserCreationForm(request.POST)
+        if form.is_valid():
+            employee = form.save()
+            messages.success(
+                request,
+                f"Empleado {employee.nombre} {employee.apellido} registrado exitosamente.",
+            )
+            return redirect("employee_success", employee_id=employee.id)
+        return render(request, "account/employee_signup.html", {"form": form})
+
+
+class EmployeeSuccessView(AdminRequiredMixin, View):
+    def get(self, request, employee_id):
+        employee = get_object_or_404(EmployeeUser, id=employee_id)
+        return render(request, "account/employee_success.html", {"employee": employee})

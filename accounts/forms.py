@@ -14,10 +14,8 @@ import secrets
 import string
 
 
-def generate_password(longitud=12):
-    characters = string.ascii_letters + string.digits + string.punctuation
-    password = "".join(secrets.choice(characters) for i in range(longitud))
-    return password
+def generate_password(legajo, longitud=12):
+    return "ferreplus-"+legajo+"-emp"
 
 
 class EmployeeUserCreationForm(forms.ModelForm):
@@ -28,16 +26,19 @@ class EmployeeUserCreationForm(forms.ModelForm):
             "apellido",
             "legajo",
             "branch",
+            "email"
         ]  # Campos que va a completar el usuario
         widgets = {
             "nombre": forms.TextInput(attrs={"placeholder": "Nombre: "}),
             "apellido": forms.TextInput(attrs={"placeholder": "Apellido: "}),
             "legajo": forms.TextInput(attrs={"placeholder": "Legajo: "}),
+            "email": forms.TextInput(attrs={"placeholder": "Email: "}),
         }
         field_classes = {
             "nombre": forms.CharField,
             "apellido": forms.CharField,
-            "legajo": forms.CharField
+            "legajo": forms.CharField,
+            "email": forms.CharField
         }
 
     def __init__(self, *args, **kwargs):
@@ -46,6 +47,7 @@ class EmployeeUserCreationForm(forms.ModelForm):
         self.fields["apellido"].label = "Apellido"
         self.fields["legajo"].label = "Legajo"
         self.fields["branch"].label = "Asignar Sucursal"
+        self.fields["email"].label = "Email"
 
     def clean(self):
         cleaned_data = super().clean()
@@ -58,12 +60,39 @@ class EmployeeUserCreationForm(forms.ModelForm):
                 ("El legajo ingresado ya está registrado en el sistema"),
             )
 
+        # Clean email
+        email_value = cleaned_data.get("email")
+        if EmployeeUser.objects.filter(email=email_value).exists():
+            self.add_error(
+                "email",
+                ("El email ingresado ya está registrado en el sistema"),
+            )
+        if "@" not in email_value:
+            self.add_error(
+                "email",
+                ("¡Email inválido!"),
+            )
+        if ".com" not in email_value:
+            self.add_error(
+                "email",
+                ("¡Email inválido!"),
+            )
+
     def save(self, commit=True):
         instance = super().save(commit=False)
         instance.username = instance.legajo
-        instance.password = generate_password()  # Generar password aleatorio
+        instance.password = generate_password(instance.legajo)  # Generar password aleatorio
+
         if commit:
             instance.save()
+        # creación de usuario Empleado
+        user = CustomUser.objects.create_user(
+            instance.username, instance.email, instance.password
+        )
+        user.save()
+        grupo = Group.objects.get(name="employee")
+        user.groups.add(grupo)
+
         return instance
 
 

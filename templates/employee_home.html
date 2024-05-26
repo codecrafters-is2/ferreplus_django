@@ -1,0 +1,38 @@
+{% extends "_base.html" %} 
+{% load static %}
+
+{% block title %}Ferreplus{% endblock title %} 
+<head>
+    {% block custom_styles %}
+        <link rel="stylesheet" href="{% static 'styles/home/client_home.css' %}">
+    {% endblock custom_styles %}
+</head>
+{% block content %}
+    <div>
+        <div class="home-container">
+            <div class="client-dashboard">
+                <div>
+                    <h1>Hola {{ request.user.username }}!</h1>
+                    <h2>Qué bueno verte de nuevo</h2>
+                </div>
+                <div class="productos-container">
+                    <h1>Productos</h1> 
+                    <div class="post-product">
+                        <a href="{% url 'post_new' %}">
+                            <button class="menu-button">
+                                <img src={% static 'img/icons/add_product.png' %} %} />
+                                Publicar producto
+                            </button>
+                        </a>
+                        <a href="{% url 'post_list' %}">
+                            <button class="menu-button">
+                                <img src={% static 'img/icons/add_product.png' %} %} />
+                                Todas las publicaciones
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
