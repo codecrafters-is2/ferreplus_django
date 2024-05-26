@@ -1,15 +1,11 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from .models import Appointment
+from posts.models import Post
 
-@receiver(post_save, sender=Appointment)
-def update_barter_state(sender, instance, created, **kwargs):
-    if created:
-        # Cambiar el estado del trueque a 'aceptado'
-        instance.barter.state = 'accepted'
-        instance.barter.save()
-
-        # Cambiar el estado de las publicaciones asociadas a 'reservado'
-        for post in instance.barter.posts.all():
-            post.status = 'reserved'
-            post.save()
+@receiver(post_save, sender=Post)
+def cancel_barter(sender, instance, created, **kwargs):
+    if not instance.status == 'available':
+        barter = instance.barter
+        if not barter.posts.filter(status='available').exists():
+            barter.state = 'cancelado'
+            barter.save()

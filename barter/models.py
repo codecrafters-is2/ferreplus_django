@@ -32,6 +32,8 @@ class Barter(models.Model):
     def accept(self, branch):
         self.state = 'accepted'
         self.branch = branch
+        self.requested_post.reserve_post()
+        self.requesting_post.reserve_post()
         self.save()
 
     def __str__(self) -> str:
