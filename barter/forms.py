@@ -1,6 +1,6 @@
 
 from django import forms
-from .models import Barter, Branch
+from .models import Barter
 from posts.models import Post
 
 class BarterForm(forms.ModelForm):
@@ -16,4 +16,12 @@ class BarterForm(forms.ModelForm):
         self.fields['requesting_post'].queryset = Post.objects.filter(
             author=user,
             category=requested_post.category
+        ).exclude(
+            id__in=Barter.objects.filter(
+                requested_post=requested_post
+            ).values_list('requesting_post_id', flat=True)
+        ).exclude(
+            id__in=Barter.objects.filter(
+                requesting_post=requested_post
+            ).values_list('requested_post_id', flat=True)
         )

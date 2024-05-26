@@ -23,7 +23,9 @@
             {% endif %}
             </div>
     {% endfor %}
-    <p><a href="{% url 'propose_turns' barter_id%}" class="btn btn-primary">Agregar</a></p>
+    {% if request.user == proposer %}
+        <p><a href="{% url 'propose_turns' barter_id %}" class="btn btn-primary">Agregar</a></p>
+    {% endif %}
     <p><a href="{% url 'go_back' %}" class="btn btn-light">Volver</a></p>
 </div>
 {% endblock content %}

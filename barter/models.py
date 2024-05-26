@@ -25,6 +25,14 @@ class Barter(models.Model):
         self.state = self.BARTER_STATE_CANCELLED
         self.save()
 
+    def change_state(self, state):
+        self.state = state
+        self.save()
+
+    def accept(self, branch):
+        self.state = 'accepted'
+        self.branch = branch
+        self.save()
 
     def __str__(self) -> str:
         return self.requested_post.title +" x "+ self.requesting_post.title
