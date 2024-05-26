@@ -15,7 +15,7 @@ class BranchListView(AdminRequiredMixin, ListView):
     context_object_name = 'branches'
 
     def get_queryset(self):
-         return Branch.active_objects.all()
+        return Branch.active_objects.all()
 
 class BranchCreateView(AdminRequiredMixin, CreateView):
     model = Branch
@@ -42,6 +42,6 @@ class BranchDeleteView(AdminRequiredMixin, DeleteView):
     success_url = reverse_lazy('show_branches')
 
     def delete(self, request, *args, **kwargs):
-         self.get_object().delete()
-         return super().delete(request, *args, **kwargs)
+        self.get_object().delete()
+        return super().delete(request, *args, **kwargs)
     

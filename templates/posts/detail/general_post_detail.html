@@ -18,7 +18,9 @@
                 <p><strong>Marca:</strong> {% if post.brand %} {{ post.brand }} {% else %} {% endif %}</p>
             </div>
             <div class="col-md-4">
-                <img src="{{ post.image.url }}" alt="Imagen de la publicación" class="img-fluid rounded">
+                <div class="shadow border border-dark rounded-lg p-3">
+                    <img src="{{ post.image.url }}" alt="Imagen de la publicación" class="img-fluid">
+                </div>
             </div>
         </div>
         {% block questions %}
