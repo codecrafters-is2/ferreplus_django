@@ -1,10 +1,9 @@
-from django.shortcuts import redirect, get_object_or_404
+from django.shortcuts import redirect
 from django.views.generic import CreateView, ListView, DeleteView, TemplateView
 from django.urls import reverse_lazy
 from accounts.mixins import ClientRequiredMixin
 from .models import Barter, Post
 from .forms import BarterForm
-from django.contrib import messages
 from django.db.models import Q
 
 class BarterCreateSuccessView(ClientRequiredMixin,TemplateView):
@@ -14,7 +13,7 @@ class BarterCreateView(ClientRequiredMixin, CreateView):
     model = Barter
     form_class = BarterForm
     template_name = 'barter/barter_request.html'
-    success_url = reverse_lazy('barter_success')  # Reemplaza con la URL de éxito adecuada
+    success_url = reverse_lazy('barter_success')
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -38,6 +37,12 @@ class BarterListView(ClientRequiredMixin, ListView):
         return Barter.objects.filter(
             Q(requesting_post__author=user) | Q(requested_post__author=user)
         ).distinct()
+    
+    def post(self, request, *args, **kwargs):
+        selected_barter_id = request.POST.get('selected_barter_id')
+        if selected_barter_id:
+            return redirect('propose_turns', barter_id=selected_barter_id)
+        return super().post(request, *args, **kwargs)
     
 class BarterCancelView(ClientRequiredMixin, DeleteView):
     model = Barter

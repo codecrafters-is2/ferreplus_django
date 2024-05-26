@@ -11,3 +11,11 @@ def update_posts_state(sender, instance, **kwargs):
         posts = Post.objects.filter(original_branch_id=instance.id)
         # Actualiza el estado de los posts a "paused"
         posts.update(status=Post.POST_STATUS_PAUSED, branch=None)
+
+@receiver(post_save, sender=Post)
+def cancel_barter(sender, instance, created, **kwargs):
+    if not instance.status == 'available':
+        barter = instance.barter
+        if not barter.posts.filter(status='available').exists():
+            barter.state = 'cancelado'
+            barter.save()

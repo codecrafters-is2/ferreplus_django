@@ -8,11 +8,8 @@
     <h1>Proponer Turnos</h1>
     <form method="post">
         {% csrf_token %}
-        {{ formset.management_form }}
-        {% for form in formset %}
-            {{ form.as_p }}
-        {% endfor %}
-        <button type="submit" class="btn btn-primary">Proponer Turnos</button>
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Proponer Turno</button>
     </form>
 </div>
 {% endblock content %}

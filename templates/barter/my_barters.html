@@ -24,7 +24,11 @@
             {% endif %}
             {% if barter.state == 'requested' %}
                 {% if barter.requested_post.author == request.user %}
-                    <a href="{% url 'propose_turns' barter.id %}" class="btn btn-success">Aceptar Trueque</a>
+                    <form method="post" action="{% url 'propose_turns' barter.id %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="selected_barter_id" value="{{ barter.id }}">
+                        <button type="submit" class="btn btn-success">Aceptar Trueque</button>
+                    </form>
                 {% endif %}
                 <form method="post" action="{% url 'barter_cancel' barter.id %}">
                     {% csrf_token %}

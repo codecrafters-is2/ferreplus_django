@@ -1,12 +1,13 @@
 
 from django import forms
-from .models import Barter
+from .models import Barter, Branch
 from posts.models import Post
 
 class BarterForm(forms.ModelForm):
     class Meta:
         model = Barter
         fields = ['requesting_post']
+        labels = {'requesting_post': 'Postular publicación'}
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user')
