@@ -2,16 +2,14 @@ from allauth.account.forms import SignupForm
 from django import forms
 from .models import CustomUser
 from .models import EmployeeUser
+from branches.models import Branch
 from datetime import datetime
-from datetime import date
 from django.contrib.auth import password_validation
 from allauth.account.forms import PasswordField
 from allauth.account.adapter import get_adapter
 from ferreplus import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
-import secrets
-import string
 
 
 def generate_password(legajo, longitud=12):
@@ -43,10 +41,11 @@ class EmployeeUserCreationForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields["branch"].queryset = Branch.objects.filter(is_active=True)
         self.fields["nombre"].label = "Nombre"
         self.fields["apellido"].label = "Apellido"
         self.fields["legajo"].label = "Legajo"
-        self.fields["branch"].label = "Asignar Sucursal"
+        #self.fields["branch"].label = "Asignar Sucursal"
         self.fields["email"].label = "Email"
 
     def clean(self):
