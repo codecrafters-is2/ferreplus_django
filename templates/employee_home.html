@@ -1,4 +1,4 @@
-{% extends "_base.html" %} 
+{% extends "_base_employee.html" %} 
 {% load static %}
 
 {% block title %}Ferreplus{% endblock title %} 
@@ -12,26 +12,8 @@
         <div class="home-container">
             <div class="client-dashboard">
                 <div>
-                    <h1>Hola {{ request.user.username }}!</h1>
-                    <h2>Qué bueno verte de nuevo</h2>
-                </div>
-                <div class="productos-container">
-                    <h1>Productos</h1> 
-                    <div class="post-product">
-                        <a href="{% url 'post_new' %}">
-                            <button class="menu-button">
-                                <img src={% static 'img/icons/add_product.png' %} %} />
-                                Publicar producto
-                            </button>
-                        </a>
-                        <a href="{% url 'post_list' %}">
-                            <button class="menu-button">
-                                <img src={% static 'img/icons/add_product.png' %} %} />
-                                Todas las publicaciones
-                            </button>
-                        </a>
-                    </div>
-                </div>
+                    <h1>Hola {{employee.nombre }}!</h1>
+                    <h2>¡Bienvenido al panel de empleados!</h2>
             </div>
         </div>
     </div>
