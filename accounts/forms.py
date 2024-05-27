@@ -3,7 +3,6 @@ from django import forms
 from .models import CustomUser
 from .models import EmployeeUser
 from datetime import datetime
-from datetime import date
 from django.contrib.auth import password_validation
 from allauth.account.forms import PasswordField
 from allauth.account.adapter import get_adapter
@@ -12,6 +11,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 import secrets
 import string
+from branches.models import Branch
 
 
 def generate_password(longitud=12):
@@ -45,6 +45,7 @@ class EmployeeUserCreationForm(forms.ModelForm):
         self.fields["nombre"].label = "Nombre"
         self.fields["apellido"].label = "Apellido"
         self.fields["legajo"].label = "Legajo"
+        self.fields['branch'].queryset = Branch.active_objects.all()
         self.fields["branch"].label = "Asignar Sucursal"
 
     def clean(self):
