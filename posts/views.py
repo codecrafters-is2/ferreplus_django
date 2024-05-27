@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.views import View
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
@@ -10,15 +11,16 @@ from .forms import QuestionForm, AnswerForm
 
 from .models import Post, ImagePost, Question
 from .forms import PostForm
+from .services import get_active_posts
 
 #Preguntas de las publicaciones:
 class DeleteQuestionView(ClientRequiredMixin, View):
     model = Question
-    
+
     def post(self, request, *args, **kwargs):
         question_id = kwargs.get('question_id')
         question = get_object_or_404(Question, id=question_id)
-        
+
         # Elimina la pregunta
         if request.user == question.user:
             question.delete()
@@ -28,7 +30,7 @@ class DeleteQuestionView(ClientRequiredMixin, View):
 
 class DeleteAnswerView(ClientRequiredMixin, View):
     model = Question
-    
+
     def post(self, request, *args, **kwargs):
         question_id = kwargs.get('question_id')
         question = get_object_or_404(Question, id=question_id)
@@ -44,7 +46,7 @@ class DeleteAnswerView(ClientRequiredMixin, View):
 
 
 #Publicaciones:
-class PostListView(ClientRequiredMixin,ListView): 
+class PostListView(ClientRequiredMixin,ListView):
     model = Post
     template_name = "posts/post_list.html"
     
@@ -71,7 +73,7 @@ class MyPostListView(ClientRequiredMixin,ListView):
 class PostDetailView(ClientRequiredMixin,DetailView): # Visualización de la publicación
     model = Post
     template_name = "posts/detail/post_detail.html"
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = QuestionForm()
@@ -87,7 +89,7 @@ class PostDetailView(ClientRequiredMixin,DetailView): # Visualización de la pub
             question.save()
             return redirect(self.object.get_absolute_url())
         return self.render_to_response(self.get_context_data(form=form))
-    
+
     def dispatch(self, request, *args, **kwargs):
         # Obtiene la instancia del post
         self.object = self.get_object()
@@ -134,7 +136,7 @@ class MyPostDetailView(ClientRequiredMixin,DetailView): #Visualización de la pu
                 break # Sal del bucle después de procesar el formulario enviado
         # Después de procesar todas las respuestas, redirige de vuelta a la vista de detalle del post
         return HttpResponseRedirect(reverse('my_post_detail', kwargs={'pk': self.object.pk}))
-    
+
     def dispatch(self, request, *args, **kwargs):
         # Obtiene la instancia del post
         self.object = self.get_object()
@@ -219,3 +221,53 @@ class PostDeleteView(ClientRequiredMixin,DeleteView): #Eliminación de la public
         if self.get_object().author != request.user:
             raise Http404("No tienes permiso para eliminar esta publicación.")
         return super().dispatch(request, *args, **kwargs)
+
+
+class PostSearchView(ListView):
+    model = Post
+    context_object_name = "posts_list"
+    template_name = "posts/post_search.html"
+
+    def get_queryset(self):
+        queryset = get_active_posts()
+        query_params = self._get_query_params()
+
+        title_query = query_params.get("title")
+        if title_query:
+            queryset = queryset.filter(
+                Q(title__contains=title_query) | Q(body__contains=title_query)
+            )
+
+        categories_query = query_params.get("categories")
+        if categories_query:
+            queryset = queryset.filter(category__in=categories_query)
+
+        branch_query = query_params.get("branches")
+        if branch_query:
+            queryset = queryset.filter(branch__id=branch_query)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        """ Datos adicionales para los filtros """
+        context = super().get_context_data()
+        query_params = self._get_query_params()
+        context["active_filters"] = query_params
+        return context
+
+    def _get_query_params(self):
+        title_query = self.request.GET.get("title")
+
+        raw_categories_query = self.request.GET.get("categories")
+        if raw_categories_query:
+            categories_query = raw_categories_query.split(",")
+        else:
+            categories_query = ""
+
+        branch_query = self.request.GET.get("branches")
+
+        return {
+            "title": title_query,
+            "categories": categories_query,
+            "branches": branch_query
+        }
