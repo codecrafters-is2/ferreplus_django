@@ -8,19 +8,30 @@
             padding: 2em 0em;
         }
     </style>
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const searchParams = new URLSearchParams(window.location.search);
+            const selectedBranch = searchParams.get("branches");
+            if (selectedBranch) {
+              const selectedOption = document.getElementById(selectedBranch);
+              selectedOption.selected = true;
+            }
+        })
+    </script>
 </head>
 
 
 <div class="branches-widget">
     <label for="branches">Elija la sucursal: </label>
-    <select type="hidden" id="branches" name="branches" value="">
+    <select id="branches" name="branches">
         {% for branch in branches %}
             <option
                 id="{{ branch.id }}"
                 value="{{ branch.id }}"
+                name="{{ branch.name }}"
                 >
                 {{ branch.name }}
             </option>
         {% endfor %}
     </select>
-</ul>
+</div>

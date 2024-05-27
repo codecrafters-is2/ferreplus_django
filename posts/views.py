@@ -125,29 +125,45 @@ class PostSearchView(ListView):
     template_name = "posts/post_search.html"
 
     def get_queryset(self):
-        title_query = self.request.GET.get("title")
-
-        raw_categories_query = self.request.GET.get("categories")
-        categories_query = raw_categories_query.split(",") 
-        categories_query.remove("")
-        
-        branch_query = self.request.GET.get("branches")
-
         queryset = get_active_posts()
-    
+        query_params = self._get_query_params()
+
+        title_query = query_params.get("title")
         if title_query:
-            print("title")
             queryset = queryset.filter(
                 Q(title__contains=title_query) | Q(body__contains=title_query)
             )
-        
+
+        categories_query = query_params.get("categories")
         if categories_query:
-            print("cat")
-            print(categories_query)
             queryset = queryset.filter(category__in=categories_query)
 
+        branch_query = query_params.get("branches")
         if branch_query:
-            print("branch")
             queryset = queryset.filter(branch__id=branch_query)
 
         return queryset
+
+    def get_context_data(self, **kwargs):
+        """ Datos adicionales para los filtros """
+        context = super().get_context_data()
+        query_params = self._get_query_params()
+        context["active_filters"] = query_params
+        return context
+
+    def _get_query_params(self):
+        title_query = self.request.GET.get("title")
+
+        raw_categories_query = self.request.GET.get("categories")
+        if raw_categories_query:
+            categories_query = raw_categories_query.split(",")
+        else:
+            categories_query = ""
+
+        branch_query = self.request.GET.get("branches")
+
+        return {
+            "title": title_query,
+            "categories": categories_query,
+            "branches": branch_query
+        }

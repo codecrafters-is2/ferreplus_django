@@ -43,19 +43,30 @@
         function selectCategoryToggle(id) {
             let button = document.getElementById(id);
             let input = document.getElementById("categories");
-            let query = input.value;
-            if (button.classList.contains("selected")) {
+            let categoriesQuery = input.value ? input.value.split(",") : [];
+
+            if (categoriesQuery.includes(id)) {
                 button.classList.remove("selected");
-                let category_str = "," + button.id;
-                query = query.replace(category_str, "");
+                categoriesQuery = categoriesQuery.filter((category) => category != id);
 
             } else {
                 button.classList.add("selected");
-                query += ",";
-                query += button.id;
+                categoriesQuery.push(id);
             }
-            input.value = query;
+
+            input.value = categoriesQuery.join(",");
         }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const searchParams = new URLSearchParams(window.location.search);
+            let selectedCategories = searchParams.get("categories");
+            if (selectedCategories) {
+              selectedCategories = selectedCategories.split(',');
+              selectedCategories.forEach(
+                (category) => selectCategoryToggle(category)
+              );
+            }
+        });
     </script>
 </head>
 
