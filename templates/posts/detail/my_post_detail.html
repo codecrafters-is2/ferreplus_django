@@ -1,0 +1,57 @@
+<!-- templates/my_post_detail.html -->
+{% extends "posts/detail/general_post_detail.html" %}
+{% load static %}
+
+{% block warning_sign_post %}
+    {% if post.status == 'paused' %}
+    <div class="alert alert-danger mt-3">
+        <p class="font-weight-bold">¡Atención!</p>
+        <p>La publicación se encuentra en <strong>estado PAUSADO</strong> (no es visible a los demás usuarios) debido a que se eliminó la sucursal a la que correspondía. Para solucionar esto, edite la publicación y seleccione una sucursal disponible.</p>
+    </div>
+    {% endif %}
+    {% if post.has_unanswered_questions %}
+    <div class="alert alert-warning mt-3">
+        <p class="font-weight-bold">¡Atención!</p>
+        <p>Esta publicación tiene preguntas sin responder. Por favor, revisa y responde las preguntas pendientes.</p>
+    </div>
+    {% endif %}
+{% endblock warning_sign_post %}
+
+{% block for-questions %}
+    {% for question, answer_form in questions_with_forms %}
+    <div class="border p-3 mb-3 rounded bg-light">
+        <p>{{ question.content }}</p>
+        {% block answer %}
+        {% if not question.answer %}
+            <button class="btn btn-primary toggle-response-form" data-question-id="{{ question.id }}">Responder</button>
+        {% else %}
+            <div class="bg-secondary text-white p-3 rounded mt-2">
+                <p><strong>Respuesta:</strong> {{ question.answer }}</p>
+            </div>
+            {% if request.user == post.author %}
+                <form method="post" action="{% url 'delete_answer' question.id %}" onsubmit="return confirmDeleteAnswer();">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Eliminar Respuesta</button>
+                </form>
+            {% endif %}
+        {% endif %}
+        <div id="response-form-{{ question.id }}" class="response-form" style="display: none;">
+            <form method="post" action="{% url 'my_post_detail' post.pk %}">
+                {% csrf_token %}
+                {{ answer_form.as_p }}
+                <button type="submit" class="btn btn-success mt-2">Enviar respuesta</button>
+            </form>
+        </div>
+        {% endblock answer %}
+    </div>
+    {% endfor %}
+{% endblock for-questions %}
+
+{% block additional_content %}
+<script>
+    function confirmDeleteAnswer() {
+        return confirm('¿Estás seguro de que deseas eliminar esta respuesta?');
+}
+</script>
+<script src="{% static '/styles/products/toggleResponseForm.js' %}"></script>
+{% endblock additional_content %}
