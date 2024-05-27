@@ -1,6 +1,17 @@
 from django.urls import path
 from django.contrib.auth.decorators import login_required #Para chequear el inicio de sesion
-from .views import PostListView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView, MyPostListView,MyPostDetailView, DeleteQuestionView, DeleteAnswerView, PostSearchView
+from .views import (
+    PostListView,
+    PostDetailView,
+    PostCreateView,
+    PostUpdateView,
+    PostDeleteView,
+    MyPostListView,
+    MyPostDetailView,
+    DeleteQuestionView,
+    DeleteAnswerView,
+    PostSearchView
+)
 
 
 urlpatterns = [
@@ -11,7 +22,7 @@ urlpatterns = [
     path("post/new/", PostCreateView.as_view(), name="post_new"),
     path("post/<int:pk>/edit/", PostUpdateView.as_view(), name="post_edit"),
     path("post/<int:pk>/delete/", PostDeleteView.as_view(), name="post_delete"),
-    path("search/", PostSearchView.as_view(), name="post_search_results")
-path('delete_question/<int:question_id>/', DeleteQuestionView.as_view(), name='delete_question'),
+    path("search/", PostSearchView.as_view(), name="post_search_results"),
+    path('delete_question/<int:question_id>/', DeleteQuestionView.as_view(), name='delete_question'),
     path('delete_answer/<int:question_id>/', DeleteAnswerView.as_view(), name='delete_answer'),
 ]
