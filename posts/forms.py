@@ -1,4 +1,58 @@
 from django import forms
+from .models import Post,ImagePost, Question
+
+class PostForm(forms.ModelForm):
+
+    class Meta:
+        model = Post
+        fields = ["title","body","image","category","branch","new","brand", ] #Campos que va a completar el usuario
+        widgets = {
+            "title" : forms.TextInput(
+                attrs= {
+                    "class" : "forms-control",
+                    "placeholder" : "Ingrese nombre"
+                }
+            )
+        }
+    
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        self.fields["title"].label = "Nombre del producto"
+        self.fields["body"].label = "Descripción del producto"
+        self.fields["category"].label = "Categoría del producto"
+        self.fields["new"].label = "Nuevo"
+        self.fields["brand"].label = "Marca"
+        self.fields["image"].label = "Imagen del producto"
+        self.fields["branch"].label= "Sucursal de preferencia"
+
+class QuestionForm(forms.ModelForm):
+    class Meta:
+        model = Question
+        fields = ['content']
+        widgets = {
+            'content': forms.Textarea(attrs={'maxlength': 150}),
+            
+        }
+        help_texts = {
+            'content': 'Máximo 150 caracteres.',
+        }
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        self.fields["content"].label = ""
+
+class AnswerForm(forms.ModelForm):
+    class Meta:
+        model = Question
+        fields = ['answer']
+        widgets = {
+            'answer': forms.Textarea(attrs={'maxlength': 150})
+        }
+        help_texts = {
+            'answer': 'Máximo 150 caracteres.',
+        }
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        self.fields["answer"].label = ""
 from .models import Post,ImagePost
 from branches.models import Branch
 
@@ -50,32 +104,6 @@ from branches.models import Branch
 #            raise forms.ValidationError("Solo puedes subir un máximo de 4 imágenes.")
 #        return images
 
-class PostForm(forms.ModelForm):
-
-    class Meta:
-        model = Post
-        fields = ["title","body","image","category","branch","new","brand",
-                ] #Campos que va a completar el usuario
-        widgets = {
-            "title" : forms.TextInput(
-                attrs= {
-                    "class" : "forms-control",
-                    "placeholder" : "Ingrese nombre"
-                }
-            )
-        }
-    
-    def __init__(self,*args,**kwargs):
-        super().__init__(*args,**kwargs)
-        self.fields["title"].label = "Nombre del producto"
-        self.fields["body"].label = "Descripción del producto"
-        self.fields["category"].label = "Categoría del producto"
-        self.fields["new"].label = "Nuevo"
-        self.fields["brand"].label = "Marca"
-        self.fields["image"].label = "Imagen del producto"
-        self.fields["branch"].label= "Sucursal de preferencia"
-        self.fields['branch'].queryset = Branch.active_objects.all()
-    
     #def clean_images(self):
     #    images = self.cleaned_data.get('images')
     #    if not images:

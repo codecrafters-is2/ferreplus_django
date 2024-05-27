@@ -1,0 +1,20 @@
+{% extends "_base_employee.html" %} 
+{% load static %}
+
+{% block title %}Ferreplus{% endblock title %} 
+<head>
+    {% block custom_styles %}
+        <link rel="stylesheet" href="{% static 'styles/home/client_home.css' %}">
+    {% endblock custom_styles %}
+</head>
+{% block content %}
+    <div>
+        <div class="home-container">
+            <div class="client-dashboard">
+                <div>
+                    <h1>Hola {{employee.nombre }}!</h1>
+                    <h2>¡Bienvenido al panel de empleados!</h2>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

@@ -40,10 +40,13 @@ class EmployeeUser(models.Model):
         related_name="employees",
         null=True,
     )
+    email = models.CharField(
+        max_length=100,
+        unique=True,
+        null=True,
+    )
     username = models.CharField(max_length=100, unique=True)  # Generado automáticamente
     password = models.CharField(max_length=100)  # Generado aleatoriamente
-
-
 
     groups = models.ManyToManyField(Group, related_name='employeeuser_set')
     user_permissions = models.ManyToManyField(Permission, related_name='employeeuser_permissions')

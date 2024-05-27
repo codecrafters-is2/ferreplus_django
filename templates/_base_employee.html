@@ -1,4 +1,4 @@
-<!-- templates/_base.html-->
+<!-- templates/_base_admin.html-->
 
 
 <!DOCTYPE html>
@@ -8,7 +8,6 @@
     <meta charset="utf-8" />
     <title>{% block title %}Ferreplus{% endblock title %}</title>
     <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="{% static 'styles/layout/layout.css' %}">
     {% comment %}
       Dejo este bloque 'custom_styles' para hacerle override en cada página
@@ -33,28 +32,15 @@
         <nav class="navbar-nav"> 
           <ul class="nav-list">
             <li class="nav-item">
-              <a href="/">
-                Nosotros
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="/">
-                Contacto
-              </a>
-            </li>
-            <li class="nav-item">
               <div class="auth-info">
                 {% block authentication %}
                   {% if user.is_authenticated %}
                     <div style="position:relative; display:flex; flex-direction:row; gap: 1rem; align-items:center; width:100%;">
                       <p style="font-size:14px;">{{ user.username }}</p>
                       <button id="user-button" class="logged-user-button">
-                        <img src="{% static '/img/icons/user-icon.png' %}" alt="mi-cuenta" style="width: 30px;" />
+                        <img src="{% static 'img/icons/employee.png' %}" alt="mi-cuenta" style="width: 30px;" />
                       </button>
                       <div class="user-menu">
-                        <p><a href="{% url 'my_post_list' %}">Mis publicaciones</a></p>
-                        <p><a href="{% url 'account_email' %}">Editar perfil</a></p>
-                        <p><a href="{% url 'account_change_password' %}">Cambiar contraseña</a></p>
                         <p><a href="{% url 'account_logout' %}">Log Out</a></p>
                       </div>
                     </div>
@@ -96,10 +82,6 @@
           <p style="font-size:small;letter-spacing:0.2px">Hecho por <span style="font-weight:bold">Codecrafters</span></p>
         </div>
       </div>
-    </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
- 
+    </div> 
   </body>
 </html>
