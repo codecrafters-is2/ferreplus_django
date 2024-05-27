@@ -23,3 +23,7 @@ media/post_images/*
 package-lock.json
 package.json
 
+#Node
+node_modules
+package-lock.json
+package.json

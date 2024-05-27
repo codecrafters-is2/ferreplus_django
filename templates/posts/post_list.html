@@ -28,6 +28,8 @@
                                 <a href="{% url 'barter_request' post.pk %}" class="btn btn-info">Solicitar Trueque</a>
                             </div>
                         </div>
+                    {% empty %}
+                        <li>No hay publicaciones disponibles.</li>
                     {% endfor %}
                 </div>
             </div>        

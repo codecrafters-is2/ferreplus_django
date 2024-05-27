@@ -20,7 +20,7 @@ class ClientRequiredMixin(LoginRequiredMixin):
         # Registro de un mensaje para ayudar a depurar el redireccionamiento
         print("Acceso denegado: El usuario no pertenece al grupo de clientes.")
         return redirect('home')
-    
+
 class EmployeeRequiredMixin(LoginRequiredMixin):
     
     def dispatch(self, request, *args, **kwargs):

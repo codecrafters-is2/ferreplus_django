@@ -1,0 +1,23 @@
+<!-- templates/employee_success.html -->
+{% extends "_base_admin.html" %} 
+{% load static %}
+
+<!DOCTYPE html>
+{% block title %}Registro exitoso{% endblock title %}
+<head>
+    {% block custom_styles %}
+        <link rel="stylesheet" href="{% static 'styles/generics/generics.css' %}">
+    {% endblock custom_styles %}
+</head>
+{% block content %}
+    <div>
+        <div class="generic-col-container-pad">
+            <h2 style="font-size: 32px;">¡Empleado registrado exitosamente!</h2>
+            {% if employee %}
+                <p style="font-weight: bold; color: black; font-size: 20px;">Nombre de usuario asignado: {{ employee.username }}</p>
+                <p style="font-weight: bold; color: black; font-size: 20px;">Contrageña generada: {{ employee.password }}</p>
+            {% endif %}
+            <a href="{% url 'employee_signup' %}">Registrar otro empleado</a>
+        </div>
+    </div>
+{% endblock content %} 

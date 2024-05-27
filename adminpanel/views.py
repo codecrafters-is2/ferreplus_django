@@ -42,6 +42,6 @@ class BranchDeleteView(AdminRequiredMixin, DeleteView):
     success_url = reverse_lazy('show_branches')
 
     def delete(self, request, *args, **kwargs):
-         self.get_object().delete()
-         return super().delete(request, *args, **kwargs)
+        self.get_object().delete()
+        return super().delete(request, *args, **kwargs)
     
