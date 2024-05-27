@@ -1,4 +1,4 @@
-.turn-list-container {
+.list-container {
     width: 80%;
     margin: 0 auto;
 }
@@ -9,7 +9,7 @@
     justify-content: space-between; /* Alinear elementos a los extremos */
     align-items: center; /* Alinear elementos verticalmente */
 }
-.turn-header {
+.item-header {
     display: flex;
     justify-content: space-between;
     align-items: center;

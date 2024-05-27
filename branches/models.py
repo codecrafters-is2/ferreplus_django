@@ -24,4 +24,4 @@ class Branch(models.Model):
         self.save()
 
     def __str__(self):
-        return f"{self.city} - {self.address}"
+        return f"{self.city} - {self.address} - CP {self.postal_code}"
