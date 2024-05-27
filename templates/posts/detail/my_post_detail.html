@@ -47,11 +47,11 @@
     {% endfor %}
 {% endblock for-questions %}
 
+{% block additional_buttons %}
+    <p><a href="{% url 'post_edit' post.pk %}"class="btn btn-warning">Editar publicación</a></p>
+    <p><a href="{% url 'post_delete' post.pk %}" class="btn btn-danger" id="delete-post-button" data-post-status="{{ post.status }}">Eliminar publicación</a></p>
+{% endblock additional_buttons %}
+
 {% block additional_content %}
-<script>
-    function confirmDeleteAnswer() {
-        return confirm('¿Estás seguro de que deseas eliminar esta respuesta?');
-}
-</script>
 <script src="{% static '/styles/products/toggleResponseForm.js' %}"></script>
 {% endblock additional_content %}

@@ -1,0 +1,15 @@
+{% extends "_base.html" %}
+{% load static %}
+
+{% block title %}Proponer Turnos{% endblock title %}
+
+{% block content %}
+<div class="propose-turns-container">
+    <h1>Proponer Turnos</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Proponer Turno</button>
+    </form>
+</div>
+{% endblock content %}

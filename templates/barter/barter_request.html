@@ -1,0 +1,13 @@
+{% extends "_base.html" %}
+
+{% block content %}
+    <div class="container">
+        <h2>Solicitar Trueque</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Solicitar Trueque</button>
+        </form>
+        <p><a href="{% url 'go_back' %}" class="button">Volver</a></p>
+    </div>
+{% endblock %}

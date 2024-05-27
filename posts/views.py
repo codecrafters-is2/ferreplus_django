@@ -1,6 +1,7 @@
 from django.views import View
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
+from django.db.models import Q
 from django.urls import reverse_lazy
 from django.shortcuts import redirect,get_object_or_404
 from django.http import Http404,HttpResponseRedirect
@@ -51,10 +52,7 @@ class PostListView(ClientRequiredMixin,ListView):
     def get_queryset(self):
         # Obtener todas las publicaciones
         queryset = super().get_queryset()
-        # Aplicar filtro para obtener solo las publicaciones disponibles
-        queryset = queryset.filter(status="available") #Por defecto -> queryset = Model.objects.all()
-        # Excluir las publicaciones del usuario actual
-        queryset = queryset.exclude(author=self.request.user)
+        queryset = queryset.filter(status="available").exclude(author=self.request.user) #Por defecto -> queryset = Model.objects.all()
         return queryset
 
 
@@ -64,8 +62,16 @@ class MyPostListView(ClientRequiredMixin,ListView):
     context_object_name = "post_list"  # Cambia el nombre del contexto para que coincida con la plantilla
     
     def get_queryset(self):
-        # Filtrar las publicaciones por el autor que coincide con el usuario actual
-        return Post.objects.filter(author=self.request.user)
+        queryset = super().get_queryset()
+        queryset = queryset.filter(
+            author=self.request.user,
+            status__in=[
+                Post.POST_STATUS_AVAILABLE,
+                Post.POST_STATUS_PAUSED,
+                Post.POST_STATUS_RESERVED
+            ]
+        )
+        return queryset
 
 
 class PostDetailView(ClientRequiredMixin,DetailView): # Visualización de la publicación
@@ -218,4 +224,24 @@ class PostDeleteView(ClientRequiredMixin,DeleteView): #Eliminación de la public
     def dispatch(self, request, *args, **kwargs):
         if self.get_object().author != request.user:
             raise Http404("No tienes permiso para eliminar esta publicación.")
+        
+        # Verifica el estado del post
+        if self.get_object().status not in [Post.POST_STATUS_AVAILABLE, Post.POST_STATUS_PAUSED]:
+            raise Http404("No se puede eliminar la publicación debido a que la misma se encuentra en un trueque confimado.")
+        
         return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        post = get_object_or_404(Post, pk=kwargs['pk'])
+        if post.author != request.user:
+            raise Http404("No tienes permiso para eliminar esta publicación.")
+        post.delete_post()  
+        return redirect("my_post_list")
+    #def delete(self, request, *args, **kwargs):
+    #    from .models import Barter #Importación diferida
+    #    # Obtener la publicación antes de eliminarla
+    #    post = self.get_object()
+    #    # Cancelar todos los trueques donde la publicación estaba involucrada
+    #    Barter.objects.filter(Q(requesting_post=post) | Q(requested_post=post)).exclude(state=Barter.BARTER_STATE_CANCELLED).update(state=Barter.BARTER_STATE_CANCELLED)
+    #    # Llamar al método delete de la superclase para eliminar la publicación
+    #    return super().delete(request, *args, **kwargs)

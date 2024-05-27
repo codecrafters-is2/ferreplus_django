@@ -1,0 +1,31 @@
+{% extends "_base.html" %}
+{% load static %}
+
+{% block custom_styles %}
+    <link rel="stylesheet" href="{% static 'styles/turns/turns_list.css' %}">
+{% endblock custom_styles %}
+
+{% block title %}Turnos Propuestos{% endblock title %}
+
+{% block content %}
+<div class="turn-list-container">
+    <h1>Turnos Propuestos</h1>
+    {% for turn in turns %}
+        <div class="list-group-item">
+            <div class="turn-header">
+                <p>{{ turn }}</p>
+            </div>
+            {% if request.user != turn.proposer %}
+            <form method="post" action="{% url 'select-turn' turn.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary" name="selected_turn_id" value="{{ turn.id }}">Seleccionar Turno</button>
+            </form>
+            {% endif %}
+            </div>
+    {% endfor %}
+    {% if request.user == proposer %}
+        <p><a href="{% url 'propose_turns' barter_id %}" class="btn btn-primary">Agregar</a></p>
+    {% endif %}
+    <p><a href="{% url 'go_back' %}" class="btn btn-light">Volver</a></p>
+</div>
+{% endblock content %}

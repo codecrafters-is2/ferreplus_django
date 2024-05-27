@@ -1,0 +1,24 @@
+{% extends "_base.html" %} 
+{% load static %}
+
+{% block title %}Ferreplus{% endblock title %} 
+<head>
+    {% block custom_styles %}
+        <link rel="stylesheet" href="{% static 'styles/home/home.css' %}">
+        <link rel="stylesheet" href="{% static 'styles/accounts/password_change_successful.css' %}">
+    {% endblock custom_styles %}
+</head>
+{% block content %}
+    <div>
+        <div class="home-container">
+            <div class="password-change-msg">
+                <img src="{% static 'img/icons/barter_success1.png' %}" />
+                <div style="display: flex; flex-direction: column; align-items: center">
+                    <h2>Trueque solicitado exitosamente</h1>
+                    <p> El trueque ha sido solicitado.</p>
+                    <p>¡Prestá atención al estado de tus trueques para ver las novedades!</p>
+                </div>
+            <div>
+        </div>
+    </div>
+{% endblock content %}
