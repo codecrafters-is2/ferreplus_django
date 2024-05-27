@@ -1,16 +1,52 @@
 from django.db.models import Q
+from django.views import View
 from django.views.generic import ListView, DetailView
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.urls import reverse_lazy
-from django.forms import inlineformset_factory
-from django.http import Http404
+from django.shortcuts import redirect,get_object_or_404
+from django.http import Http404,HttpResponseRedirect
+from django.urls import reverse
 from accounts.mixins import ClientRequiredMixin
+from .forms import QuestionForm, AnswerForm
 
-from .models import Post, ImagePost
+from .models import Post, ImagePost, Question
 from .forms import PostForm
 from .services import get_active_posts
 
-class PostListView(ClientRequiredMixin,ListView): 
+#Preguntas de las publicaciones:
+class DeleteQuestionView(ClientRequiredMixin, View):
+    model = Question
+
+    def post(self, request, *args, **kwargs):
+        question_id = kwargs.get('question_id')
+        question = get_object_or_404(Question, id=question_id)
+
+        # Elimina la pregunta
+        if request.user == question.user:
+            question.delete()
+
+        # Redirige a la página de detalle de la publicación
+        return redirect('post_detail', pk=question.post.pk)
+
+class DeleteAnswerView(ClientRequiredMixin, View):
+    model = Question
+
+    def post(self, request, *args, **kwargs):
+        question_id = kwargs.get('question_id')
+        question = get_object_or_404(Question, id=question_id)
+
+        # Verifica que el usuario sea el autor de la publicación
+        if request.user == question.post.author:
+            # Elimina la respuesta
+            question.answer = None
+            question.save()
+
+        # Redirige a la página de detalle de la publicación
+        return redirect('post_detail', pk=question.post.pk)
+
+
+#Publicaciones:
+class PostListView(ClientRequiredMixin,ListView):
     model = Post
     template_name = "posts/post_list.html"
     
@@ -36,12 +72,80 @@ class MyPostListView(ClientRequiredMixin,ListView):
 
 class PostDetailView(ClientRequiredMixin,DetailView): # Visualización de la publicación
     model = Post
-    template_name = "posts/post_detail.html"
+    template_name = "posts/detail/post_detail.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = QuestionForm()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = QuestionForm(request.POST)
+        if form.is_valid():
+            question = form.save(commit=False)
+            question.user = request.user
+            question.post = self.object
+            question.save()
+            return redirect(self.object.get_absolute_url())
+        return self.render_to_response(self.get_context_data(form=form))
+
+    def dispatch(self, request, *args, **kwargs):
+        # Obtiene la instancia del post
+        self.object = self.get_object()
+        # Comprueba si el usuario actual es el autor del post
+        if self.object.author == request.user:
+            # Si es el autor, redirige a la vista de detalle de su propio post
+            return redirect('my_post_detail', pk=self.object.pk)
+        # Si no es el autor, permite el acceso normal a la vista de detalle del post
+        return super().dispatch(request, *args, **kwargs)
 
 class MyPostDetailView(ClientRequiredMixin,DetailView): #Visualización de la publicación propia
     model = Post
-    template_name = "posts/my_post_detail.html"
+    template_name = "posts/detail/my_post_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        post = self.get_object()
+        # Verificar si el usuario actual es el autor de la publicación
+        if self.request.user == post.author:
+            # Obtén todas las preguntas asociadas a esta publicación
+            questions = post.questions.all()
+            questions_with_forms = []
+            for question in questions:
+                # Crear una instancia de AnswerForm y vincularla a la pregunta actual
+                answer_form = AnswerForm(prefix=str(question.id), initial={'question_id': question.id})
+                questions_with_forms.append((question, answer_form))
+            context['questions_with_forms'] = questions_with_forms
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        post = self.object
+        # Itera sobre todas las preguntas y sus respectivos formularios de respuesta
+        for question in post.questions.all():
+            # Obtiene el prefijo del formulario que corresponde a esta pregunta
+            prefix = str(question.id)
+            form = AnswerForm(request.POST, prefix=prefix)
+            # Verifica si el formulario es válido y ha sido enviado para esta pregunta específica
+            if form.is_valid() and f'{prefix}-answer' in request.POST:
+                # Guarda la respuesta en la pregunta correspondiente
+                answer_text = form.cleaned_data['answer']
+                question.answer = answer_text
+                question.save()
+                break # Sal del bucle después de procesar el formulario enviado
+        # Después de procesar todas las respuestas, redirige de vuelta a la vista de detalle del post
+        return HttpResponseRedirect(reverse('my_post_detail', kwargs={'pk': self.object.pk}))
+
+    def dispatch(self, request, *args, **kwargs):
+        # Obtiene la instancia del post
+        self.object = self.get_object()
+        # Comprueba si el usuario actual es el autor del post
+        if self.object.author != request.user:
+            # Si el usuario no es el autor, la abre como si la estuviera visualizando
+            return redirect('post_detail', pk=self.object.pk)
+        # Si el usuario es el autor, permite el acceso normal a la vista
+        return super().dispatch(request, *args, **kwargs)
 
 
 class PostCreateView(ClientRequiredMixin,CreateView): #Creación de la publicación
