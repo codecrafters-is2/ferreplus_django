@@ -45,7 +45,7 @@ class EmployeeUserCreationForm(forms.ModelForm):
         self.fields["nombre"].label = "Nombre"
         self.fields["apellido"].label = "Apellido"
         self.fields["legajo"].label = "Legajo"
-        #self.fields["branch"].label = "Asignar Sucursal"
+        # self.fields["branch"].label = "Asignar Sucursal"
         self.fields["email"].label = "Email"
 
     def clean(self):
@@ -61,7 +61,10 @@ class EmployeeUserCreationForm(forms.ModelForm):
 
         # Clean email
         email_value = cleaned_data.get("email")
-        if EmployeeUser.objects.filter(email=email_value).exists():
+        if (
+            EmployeeUser.objects.filter(email=email_value).exists()
+            or CustomUser.objects.filter(email=email_value).exists()
+        ):
             self.add_error(
                 "email",
                 ("El email ingresado ya está registrado en el sistema"),
