@@ -2,7 +2,14 @@
 {% extends "posts/detail/general_post_detail.html" %}
 
 {% block additional_fields %}
-    <p><strong>Autor:</strong> {{ post.author }}</p>
+    <p><strong>Autor:</strong> 
+        <a href="{% url 'user_detail' post.author.id %}">
+            <button style="border: solid; border-width: 1px;" class="menu-button">
+            {{post.author }}
+            </button>
+        </a>
+    </p>
+
 {% endblock additional_fields %}
 
 {% block ask_question %}

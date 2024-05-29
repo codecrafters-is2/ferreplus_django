@@ -14,7 +14,7 @@ class PostForm(forms.ModelForm):
                 }
             )
         }
-    
+
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
         self.fields["title"].label = "Nombre del producto"
@@ -24,6 +24,7 @@ class PostForm(forms.ModelForm):
         self.fields["brand"].label = "Marca"
         self.fields["image"].label = "Imagen del producto"
         self.fields["branch"].label= "Sucursal de preferencia"
+        self.fields["branch"].queryset = Branch.objects.filter(is_active=True)
 
 class QuestionForm(forms.ModelForm):
     class Meta:
@@ -56,10 +57,10 @@ class AnswerForm(forms.ModelForm):
 from .models import Post,ImagePost
 from branches.models import Branch
 
-#class MultipleFileInput(forms.ClearableFileInput):
+# class MultipleFileInput(forms.ClearableFileInput):
 #    allow_multiple_selected = True
 
-#class MultipleFileField(forms.FileField):
+# class MultipleFileField(forms.FileField):
 #    def __init__(self, *args, **kwargs):
 #        kwargs.setdefault("widget", MultipleFileInput())
 #        super().__init__(*args, **kwargs)
@@ -72,17 +73,17 @@ from branches.models import Branch
 #            result = [single_file_clean(data, initial)]
 #        return result
 
-#class FileFieldForm(forms.Form):
+# class FileFieldForm(forms.Form):
 #    file_field = MultipleFileField()
 
-#class ImageForm(forms.ModelForm):
+# class ImageForm(forms.ModelForm):
 #    class Meta:
 #        model = ImagePost
 #        fields = ['image',]
-        #widgets = {
-        #    'image': forms.FileInput(attrs={'multiple': True}) -->Falla con esto, por eso se usa MultipleFileField
-        #}
-        
+# widgets = {
+#    'image': forms.FileInput(attrs={'multiple': True}) -->Falla con esto, por eso se usa MultipleFileField
+# }
+
 #    def form_valid(self, form):
 #        files = form.cleaned_data["file_field"]
 #        for f in files:
@@ -91,11 +92,11 @@ from branches.models import Branch
 #                    instance = ImagePost(image=image, post=self.object)
 #                    instance.save()
 #        return super().form_valid(form)
-    
+
 #    def __init__(self,*args,**kwargs):
 #        super().__init__(*args,**kwargs)
 #        self.fields["image"].label = "Imagen "
-#        
+#
 #    def clean_image(self): #No chequea un choto
 #        images = self.cleaned_data_data.get['image']
 #        if len(images) < 1:
@@ -104,8 +105,8 @@ from branches.models import Branch
 #            raise forms.ValidationError("Solo puedes subir un máximo de 4 imágenes.")
 #        return images
 
-    #def clean_images(self):
-    #    images = self.cleaned_data.get('images')
-    #    if not images:
-    #        raise forms.ValidationError("Debe cargar al menos una imagen.")
-    #    return images
+# def clean_images(self):
+#    images = self.cleaned_data.get('images')
+#    if not images:
+#        raise forms.ValidationError("Debe cargar al menos una imagen.")
+#    return images

@@ -1,5 +1,5 @@
 <!-- templates/article_list.html -->
-{% extends "_base.html" %}
+{% extends "posts/_post_list_layout.html" %}
 {% load static %}
 
 {% block title %}Publicaciones{% endblock title %}
@@ -10,10 +10,12 @@
     {% endblock custom_styles %}
 </head>
 
-{% block content %}
+{% block list_title %} <h1 style="color:white; font-size: 48px">Publicaciones</h1> {% endblock list_title %}
+
+{% block results %}
     <div>
         <div class="generic-container">
-            <h1 style="color:black; font-size: 48px">Publicaciones</h1>
+
             <div class="products-wrapper">
                 <div class="grid-display">
                     {% for post in post_list %}
@@ -32,7 +34,7 @@
                         <li>No hay publicaciones disponibles.</li>
                     {% endfor %}
                 </div>
-            </div>        
+            </div>
         </div>
         <p><a href="{% url 'home' %}" class="btn btn-light">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-return-left" viewBox="0 0 16 16">
@@ -41,4 +43,4 @@
                 Volver
         </a></p>
     </div>
-{% endblock content %}
+{% endblock results %}
