@@ -1,0 +1,17 @@
+.list-container {
+    width: 80%;
+    margin: 0 auto;
+}
+.list-group-item {
+    border-bottom: 1px solid #000000; /* Línea divisoria entre elementos */
+    padding: 15px 0; /* Espaciado interno */
+    display: flex; /* Mostrar los elementos en una fila */
+    justify-content: space-between; /* Alinear elementos a los extremos */
+    align-items: center; /* Alinear elementos verticalmente */
+}
+.item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}

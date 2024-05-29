@@ -4,6 +4,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 class ActiveManager(models.Manager):
     def get_queryset(self) -> models.QuerySet:
         return super().get_queryset().filter(is_active=True)
+    #self.fields['branch'].queryset = Branch.active_objects.all() para levantar sólo las activas en cualquier lugar
 
 class Branch(models.Model):
     city = models.CharField(max_length=100)
@@ -23,4 +24,4 @@ class Branch(models.Model):
         self.save()
 
     def __str__(self):
-        return self.city +" - "+ self.address
+        return f"{self.city} - {self.address} - CP {self.postal_code}"

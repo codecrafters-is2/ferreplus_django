@@ -11,3 +11,4 @@ def update_posts_state(sender, instance, **kwargs):
         posts = Post.objects.filter(original_branch_id=instance.id)
         # Actualiza el estado de los posts a "paused"
         posts.update(status=Post.POST_STATUS_PAUSED, branch=None)
+

@@ -18,7 +18,9 @@
                 <p><strong>Marca:</strong> {% if post.brand %} {{ post.brand }} {% else %} {% endif %}</p>
             </div>
             <div class="col-md-4">
-                <img src="{{ post.image.url }}" alt="Imagen de la publicación" class="img-fluid rounded">
+                <div class="shadow border border-dark rounded-lg p-3">
+                    <img src="{{ post.image.url }}" alt="Imagen de la publicación" class="img-thumbnail">
+                </div>
             </div>
         </div>
         {% block questions %}
@@ -51,8 +53,7 @@
         {% block additional_content %}{% endblock additional_content %}
         <div class="mt-4">
             <div class="buttons">
-                <p><a href="{% url 'post_list' %}" class="btn btn-primary">Todas las publicaciones</a></p>
-                <p><a href="{% url 'go_back' %}" class="btn btn-secondary">Volver</a></p>
+                {% block additional_buttons %}{% endblock additional_buttons %}
             </div>
         </div>
     </div>
