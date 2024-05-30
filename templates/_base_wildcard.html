@@ -46,10 +46,16 @@
               <div class="auth-info">
                 {% block authentication %}
                   {% if user.is_authenticated %}
-                    <div style="position:relative; display:flex; flex-direction:row; gap: 1rem; align-items:center; width:100%;">
-                      <p style="font-size:14px;">{{ user.username }}</p>
+                    <div style="position:relative; display:flex; flex-direction:row; gap: 1rem; align-items:center; justify-content: center; width:100%;">
+                      <p style="font-size:14px; border:1px red solid;">{{ user.username }}</p>
                       <button id="user-button" class="logged-user-button">
-                        <img src="{% static '/img/icons/user-icon.png' %}" alt="mi-cuenta" style="width: 30px;" />
+                        {% if user|belongs_to_group:"client" %}
+                          <img src="{% static '/img/icons/user-icon.png' %}" alt="mi-cuenta" style="width: 30px;" />
+                        {% elif user|belongs_to_group:"employee" %}
+                          <img src="{% static '/img/icons/employee.png' %}" alt="mi-cuenta" style="width: 30px;" />
+                        {% elif user|belongs_to_group:"admi" %}
+                          <img src="{% static '/img/icons/admin.png' %}" alt="mi-cuenta" style="width: 30px;" />
+                        {% endif %}
                       </button>
                       <div class="user-menu">
                         {% if user|belongs_to_group:"client" %}
