@@ -15,8 +15,10 @@ import secrets
 import string
 
 
-def generate_password(legajo, longitud=12):
-    return "ferreplus-"+legajo+"-emp"
+def generate_password(longitud=12):
+    characters = string.ascii_letters + string.digits + string.punctuation
+    password = "".join(secrets.choice(characters) for i in range(longitud))
+    return password
 
 
 class EmployeeUserCreationForm(forms.ModelForm):
@@ -27,7 +29,7 @@ class EmployeeUserCreationForm(forms.ModelForm):
             "apellido",
             "legajo",
             "branch",
-            "email"
+            "email",
         ]  # Campos que va a completar el usuario
         widgets = {
             "nombre": forms.TextInput(attrs={"placeholder": "Nombre: "}),
@@ -39,7 +41,7 @@ class EmployeeUserCreationForm(forms.ModelForm):
             "nombre": forms.CharField,
             "apellido": forms.CharField,
             "legajo": forms.CharField,
-            "email": forms.CharField
+            "email": forms.CharField,
         }
 
     def __init__(self, *args, **kwargs):
@@ -48,7 +50,7 @@ class EmployeeUserCreationForm(forms.ModelForm):
         self.fields["nombre"].label = "Nombre"
         self.fields["apellido"].label = "Apellido"
         self.fields["legajo"].label = "Legajo"
-        self.fields['branch'].queryset = Branch.active_objects.all()
+        self.fields["branch"].queryset = Branch.active_objects.all()
         self.fields["branch"].label = "Asignar Sucursal"
         self.fields["email"].label = "Email"
 
@@ -87,7 +89,7 @@ class EmployeeUserCreationForm(forms.ModelForm):
     def save(self, commit=True):
         instance = super().save(commit=False)
         instance.username = instance.legajo
-        instance.password = generate_password(instance.legajo)  # Generar password aleatorio
+        instance.password = generate_password()  # Generar password aleatorio
 
         if commit:
             instance.save()
