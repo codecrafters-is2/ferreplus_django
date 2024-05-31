@@ -78,7 +78,7 @@ class AppointmentForm(forms.ModelForm):
         end_hour = int(turn_proposal.end_time[:2])
         TIME_CHOICES_APPOINTMENT = [
             (f"{h:02d}:00", f"{h:02d}:00") 
-            for h in range(start_hour, end_hour+1)
+            for h in range(start_hour, end_hour)
         ]
         self.fields['time'].choices = TIME_CHOICES_APPOINTMENT
 

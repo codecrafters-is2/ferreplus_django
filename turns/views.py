@@ -3,12 +3,13 @@ from django.shortcuts import get_object_or_404, redirect
 from django.forms import modelformset_factory
 from django.urls import reverse_lazy
 from .models import Barter, TurnProposal, Appointment
+from accounts.models import EmployeeUser
 from .forms import TurnProposalForm, AppointmentForm
-from accounts.mixins import ClientRequiredMixin
-from django.views.generic import TemplateView, CreateView
+from accounts.mixins import ClientRequiredMixin, EmployeeRequiredMixin
+from django.views.generic import TemplateView, CreateView, View
 from django.db.models import Q
 from django.views.decorators.http import require_POST
-from django.utils.decorators import method_decorator
+from django.http import JsonResponse
 
 class ProposeTurnsView(ClientRequiredMixin, FormView):
     template_name = 'turns/propose_turns.html'
@@ -133,3 +134,26 @@ class AppointmentListView(ClientRequiredMixin,TemplateView):
             Q(barter__requesting_post__author=user) | Q(barter__requested_post__author=user)
         ) 
         return context
+    
+class EmployeeAppointmentListView(EmployeeRequiredMixin,TemplateView):
+    model = Appointment
+    template_name = 'turns/employee_appointments_list.html'
+    context_object_name = 'appointments'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        employee = EmployeeUser.objects.get(id=self.kwargs['employee_id'])
+        employee_branch = employee.branch
+        context['appointments'] = Appointment.objects.filter(branch=employee_branch, barter__state='accepted')
+        return context
+    
+class RegisterBarterView(EmployeeRequiredMixin, View):
+    model = Barter
+    def post(self, request, *args, **kwargs):
+        barter_id = kwargs.get('barter_id')
+        barter = get_object_or_404(Barter, id=barter_id)
+        employee_id = kwargs.get('employee_id')
+        employee = get_object_or_404(EmployeeUser, id=employee_id)
+        barter.register(employee)
+        Appointment.objects.filter(barter=barter).delete()
+        return redirect('employee_appointments_list', employee_id=employee.pk)

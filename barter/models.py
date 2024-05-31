@@ -1,6 +1,7 @@
 from django.db import models
 from posts.models import Post
 from branches.models import Branch
+from accounts.models import EmployeeUser
 
 class Barter(models.Model):
     BARTER_STATE_REQUESTED = 'requested'
@@ -19,7 +20,7 @@ class Barter(models.Model):
     requested_post = models.ForeignKey(Post, related_name='requested_barters', on_delete=models.SET_NULL, null=True)
     branch = models.ForeignKey(Branch, related_name='barter_branch', on_delete=models.SET_NULL, null=True)
     state = models.CharField(max_length=20, choices=BARTER_STATE_CHOICES, default=BARTER_STATE_REQUESTED,) 
-    #employee = models.ForeignKey(Employee, related_name='barter_employee', on_delete=models.SET_NULL)
+    employee = models.ForeignKey(EmployeeUser, related_name='barter_employee', on_delete=models.SET_NULL, null=True)
     
     def delete(self):
         self.state = self.BARTER_STATE_CANCELLED
@@ -34,6 +35,13 @@ class Barter(models.Model):
         self.branch = branch
         self.requested_post.reserve_post()
         self.requesting_post.reserve_post()
+        self.save()
+    
+    def register(self, employee):
+        self.change_state('committed')
+        self.employee = employee
+        self.requested_post.complete_post()
+        self.requesting_post.complete_post()
         self.save()
 
     def __str__(self) -> str:

@@ -13,7 +13,8 @@
     {% for appointment in appointments %}
         <div class="list-group-item">
             <div class="item-header">
-                <p>{{ appointment }}</p>
+                <h5>Día {{ appointment.date }} a las {{ appointment.time }}</h5>
+                <p>{{ appointment.branch }}</p>
                 <p>{{ appointment.barter }}</p>
             </div>
         </div>

@@ -1,10 +1,11 @@
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.views.generic import CreateView, ListView, DeleteView, TemplateView
 from django.urls import reverse_lazy
-from accounts.mixins import ClientRequiredMixin
+from accounts.mixins import ClientRequiredMixin, EmployeeRequiredMixin
 from .models import Barter, Post
 from .forms import BarterForm
 from django.db.models import Q
+from accounts.models import EmployeeUser
 
 class BarterCreateSuccessView(ClientRequiredMixin,TemplateView):
     template_name = 'temp_messages/barter_requested_successfuly.html'
@@ -52,3 +53,21 @@ class BarterCancelView(ClientRequiredMixin, DeleteView):
     def delete(self, request, *args, **kwargs):
         self.get_object().delete()
         return super().delete(request, *args, **kwargs)
+    
+class CommittedBartersListView(EmployeeRequiredMixin, ListView):
+    model = Barter
+    template_name = 'barter/barters_record.html'
+
+    #def get_context_data(self, **kwargs):
+    #    context = super().get_context_data(**kwargs)
+    #    employee = EmployeeUser.objects.get(id=self.kwargs['employee_id'])
+    #    employee_branch = employee.branch
+    #    context['barter'] = Barter.objects.filter(branch=employee_branch, state='committed')
+    #    return context
+    
+    def get_queryset(self):
+        employee = EmployeeUser.objects.get(id=self.kwargs['employee_id'])
+        return Barter.objects.filter(
+            Q(branch=employee.branch) & Q(state='committed')
+        )
+
