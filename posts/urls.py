@@ -1,5 +1,4 @@
 from django.urls import path
-from django.contrib.auth.decorators import login_required #Para chequear el inicio de sesion
 from .views import (
     PostListView,
     PostDetailView,
