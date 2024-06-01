@@ -1,28 +1,53 @@
 {% extends "_base.html" %}
-{% load static %}
-
-{% block title %}Registro de Trueques{% endblock title %}
-
-{% block custom_styles %}
-    <link rel="stylesheet" href="{% static 'styles/barters/barters_list.css' %}">
-{% endblock custom_styles %}
-
-{% block content %}
-<div class="barter-list-container">
-    <h1>Registro de Trueques</h1>
-    {% for barter in object_list %}
-    <div class="barter-item">
-        <div class="barter-header">
-            <h2>{{ barter }}</h2>  
+    {% load static %}
+    
+    {% block title %}Registro de Trueques{% endblock title %}
+    
+    {% block custom_styles %}
+        <link rel="stylesheet" href="{% static 'styles/barters/barters_list.css' %}">
+    {% endblock custom_styles %}
+    
+    {% block content %}
+    <div class="barter-list-container">
+        <h1>Registro de Trueques</h1>
+        {% for barter in object_list %}
+        <div class="barter-item">
+            <div class="barter-header">
+                <h2>{{ barter }}</h2>  
+            </div>
+            {% if barter.state == 'cancelled' %}
+            <p>
+                <button type="button" class="btn btn-light" data-toggle="modal" data-target="#reportModal{{ barter.id }}">Ver reporte</button>
+            </p>
+            {% endif %}
+            <p class="barter-state {% if barter.state == 'requested' %}requested-state{% elif barter.state == 'accepted' %}accepted-state{% elif barter.state == 'parcial_accepted' %}parcial_accepted-state{% elif barter.state == 'committed' %}committed-state{% elif barter.state == 'cancelled' %}cancelled-state{% endif %}">{{ barter.get_state_display }}</p>
         </div>
-        <p class="barter-state {% if barter.state == 'requested' %}requested-state{% elif barter.state == 'accepted' %}accepted-state{% elif barter.state == 'parcial_accepted' %}parcial_accepted-state{% elif barter.state == 'committed' %}committed-state{% elif barter.state == 'cancelled' %}cancelled-state{% endif %}">{{ barter.get_state_display }}</p>        
+    
+        <!-- Modal -->
+        <div class="modal fade" id="reportModal{{ barter.id }}" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel{{ barter.id }}" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="reportModalLabel{{ barter.id }}">Reporte de Cancelación</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        {% with report=barter.get_cancellation_report %}
+                                <p><strong>Empleado:</strong> {{ barter.employee }}</p>
+                                <p><strong>Motivo:</strong> {{ report.reason }}</p>
+                        {% endwith %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        <p><a href="{% url 'home' %}" class="btn btn-light">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-return-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/>
+              </svg>
+                Volver
+        </a></p>
     </div>
-    {% endfor %}
-    <p><a href="{% url 'home' %}" class="btn btn-light">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-return-left" viewBox="0 0 16 16">
-            <path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/>
-          </svg>
-            Volver
-    </a></p>
-</div>
-{% endblock content %}
+    {% endblock content %}

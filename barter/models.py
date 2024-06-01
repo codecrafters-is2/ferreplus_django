@@ -24,6 +24,8 @@ class Barter(models.Model):
     
     def delete(self):
         self.state = self.BARTER_STATE_CANCELLED
+        self.requested_post.free_post()
+        self.requesting_post.free_post()
         self.save()
 
     def change_state(self, state):
@@ -43,6 +45,15 @@ class Barter(models.Model):
         self.requested_post.complete_post()
         self.requesting_post.complete_post()
         self.save()
+
+
+    def get_cancellation_report(self):
+        from turns.models import CancellationReport
+        try:
+            return self.cancellationreport_set.get()
+        except CancellationReport.DoesNotExist:
+            return None 
+
 
     def __str__(self) -> str:
         return self.requested_post.title +" x "+ self.requesting_post.title

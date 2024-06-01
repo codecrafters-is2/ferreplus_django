@@ -1,5 +1,5 @@
 from django import forms
-from .models import Appointment, TurnProposal, Branch
+from .models import Appointment, TurnProposal, Branch, CancellationReport, Barter
 from datetime import date, timedelta
 
 class TurnProposalForm(forms.ModelForm):
@@ -85,3 +85,12 @@ class AppointmentForm(forms.ModelForm):
         self.instance.branch = branch
         self.instance.barter = barter
         self.instance.date = date 
+
+class CancelBarterForm(forms.ModelForm):
+    class Meta:
+        model = CancellationReport
+        fields = ['reason']
+        labels = {'reason':''}
+
+    def __init__(self, barter, *args, **kwargs):
+        super().__init__(*args, **kwargs)

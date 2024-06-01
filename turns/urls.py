@@ -6,6 +6,7 @@ from .views import (ProposeTurnsView,
                     AppointmentListView, 
                     EmployeeAppointmentListView,
                     RegisterBarterView,
+                    EmployeeBarterCancelView,
                     )
 
 urlpatterns = [
@@ -16,4 +17,5 @@ urlpatterns = [
     path('appointments/', AppointmentListView.as_view(), name='appointments_list'),
     path('employee_appointments/<int:employee_id>/', EmployeeAppointmentListView.as_view(), name='employee_appointments_list'),
     path('register_barter/<int:barter_id>/<int:employee_id>', RegisterBarterView.as_view(), name='register_barter'),
+    path('cancel_barter/<int:barter_id>/<int:employee_id>/', EmployeeBarterCancelView.as_view(), name='employee_cancel_barter'),
 ]

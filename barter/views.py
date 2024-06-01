@@ -57,17 +57,10 @@ class BarterCancelView(ClientRequiredMixin, DeleteView):
 class CommittedBartersListView(EmployeeRequiredMixin, ListView):
     model = Barter
     template_name = 'barter/barters_record.html'
-
-    #def get_context_data(self, **kwargs):
-    #    context = super().get_context_data(**kwargs)
-    #    employee = EmployeeUser.objects.get(id=self.kwargs['employee_id'])
-    #    employee_branch = employee.branch
-    #    context['barter'] = Barter.objects.filter(branch=employee_branch, state='committed')
-    #    return context
     
     def get_queryset(self):
         employee = EmployeeUser.objects.get(id=self.kwargs['employee_id'])
         return Barter.objects.filter(
-            Q(branch=employee.branch) & Q(state='committed')
+            Q(branch=employee.branch) & (Q(state='committed') | Q(state='cancelled'))
         )
 

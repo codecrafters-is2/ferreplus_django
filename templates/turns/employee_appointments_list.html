@@ -22,6 +22,10 @@
                     <input type="hidden" name="employee_id" value="{{ employee_id }}">
                     <button type="submit" class="btn btn-success register-barter-button">Registrar Trueque</button>
                 </form>
+                <form method="post" action="{% url 'employee_cancel_barter' appointment.barter.id employee_id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger" >Cancelar</button>
+                </form>
                 {% endif %}
             </div>
         </div>
@@ -35,45 +39,3 @@
 </div>
 {% endblock content %}
 
-{% block custom_scripts %}
-<script>
-    function confirmDelete() {
-        console.log('Confirm delete function called');
-        return confirm('¿Estás seguro de que deseas registrar este trueque?');
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.register-barter-button').forEach(function(button) {
-            button.addEventListener('click', function() {
-                var form = button.closest('.register-barter-form');
-                var barterId = form.querySelector('input[name="barter_id"]').value;
-                var csrfToken = form.querySelector('input[name="csrfmiddlewaretoken"]').value;
-
-                var confirmation = confirmDelete(); // Confirmación con el alerta estándar
-
-                if (confirmation) { // Si el usuario confirma
-                    fetch(`/turns/register_barter/${barterId}/`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRFToken': csrfToken
-                        },
-                        body: JSON.stringify({
-                            barter_id: barterId
-                        })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.status === 'success') {
-                            alert('El trueque ha sido registrado.'); // Alerta de éxito
-                            location.reload(); // Recargar la página
-                        }
-                    });
-                }
-            });
-        });
-    });
-</script>
-
-
-{% endblock custom_scripts %}
