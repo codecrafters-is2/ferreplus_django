@@ -248,7 +248,7 @@ class PostDeleteView(ClientRequiredMixin,DeleteView): #Eliminación de la public
     #    return super().delete(request, *args, **kwargs)
 
 
-class PostSearchView(ListView):
+class PostSearchView(ClientRequiredMixin,ListView):
     model = Post
     context_object_name = "posts_list"
     template_name = "posts/post_search.html"

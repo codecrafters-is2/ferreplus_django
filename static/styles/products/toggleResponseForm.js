@@ -36,3 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function confirmDeleteAnswer() {
     return confirm('¿Estás seguro de que deseas eliminar esta respuesta?');
 }
+// Función para confirmar la eliminación de la pregunta
+function confirmDelete() {
+    return confirm('¿Estás seguro de que deseas eliminar esta pregunta?');
+}

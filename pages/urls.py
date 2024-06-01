@@ -7,9 +7,7 @@ from accounts.mixins import AdminRequiredMixin, ClientRequiredMixin
 urlpatterns = [
     path("home", HomePageView.as_view(), name="home"),
     path("adminpanel/", AdmiHomeView.as_view(), name="admi_home"),
-    path(
-        "employee/", EmployeeHomeView.as_view(), name="employee_home"
-    ),  # Falta implementar
+    path("employee/", EmployeeHomeView.as_view(), name="employee_home"),  
     path(
         "password/change/successful",
         PasswordChangeSuccessView.as_view(),
