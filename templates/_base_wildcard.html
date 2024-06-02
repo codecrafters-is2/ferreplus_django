@@ -30,7 +30,7 @@
             <path d="M 3 9 A 1.0001 1.0001 0 1 0 3 11 L 47 11 A 1.0001 1.0001 0 1 0 47 9 L 3 9 z M 3 24 A 1.0001 1.0001 0 1 0 3 26 L 47 26 A 1.0001 1.0001 0 1 0 47 24 L 3 24 z M 3 39 A 1.0001 1.0001 0 1 0 3 41 L 47 41 A 1.0001 1.0001 0 1 0 47 39 L 3 39 z"/>
           </svg>
         </button>
-        <nav class="navbar-nav"> 
+        <div class="navbar-navigation"> 
           <ul class="nav-list">
             <li class="nav-item">
               <a href="/">
@@ -46,12 +46,21 @@
               <div class="auth-info">
                 {% block authentication %}
                   {% if user.is_authenticated %}
-                    <div style="position:relative; display:flex; flex-direction:row; gap: 1rem; align-items:center; width:100%;">
-                      <p style="font-size:14px;">{{ user.username }}</p>
+                    <div style="position:relative; display:flex; flex-direction:row; gap: 1rem; align-items:center; justify-content: center; width:100%;"> 
+                      <p style="font-size:14px; align-self: auto;">{{ user.username }}</p>
                       <button id="user-button" class="logged-user-button">
-                        <img src="{% static '/img/icons/user-icon.png' %}" alt="mi-cuenta" style="width: 30px;" />
+                        {% if user|belongs_to_group:"client" %}
+                          <img src="{% static '/img/icons/user-icon.png' %}" alt="mi-cuenta" style="width: 30px;" />
+                        {% elif user|belongs_to_group:"employee" %}
+                          <img src="{% static '/img/icons/employee.png' %}" alt="mi-cuenta" style="width: 30px;" />
+                        {% elif user|belongs_to_group:"admi" %}
+                          <img src="{% static '/img/icons/admin.png' %}" alt="mi-cuenta" style="width: 30px;" />
+                        {% endif %}
                       </button>
                       <div class="user-menu">
+                        {% if user|belongs_to_group:"employee" %}
+                          <p><a href="{% url 'account_change_password' %}">Cambiar contraseña</a></p>
+                        {% endif %}
                         {% if user|belongs_to_group:"client" %}
                           <p><a href="{% url 'my_post_list' %}">Mis publicaciones</a></p>
                           <p><a href="{% url 'account_email' %}">Editar perfil</a></p>
@@ -63,7 +72,6 @@
                     </div>
                   {% else %}
                     <div style="position:relative;display:flex;flex-direction:column;gap:1rem;align-items:center; width:100%;">
-                      <p style="font-size:9px; position:absolute;transform:translateY(-220%)">No has iniciado sesión</p>
                       <div style="display:flex;flex-direction:row;gap:1rem">
                         <a href="{% url 'account_login' %}">Iniciar sesión</a>
                         <a href="{% url 'account_signup' %}">Registrarse</a>
@@ -71,10 +79,10 @@
                     </div>
                   {% endif %}
                 {% endblock authentication %}
-               <div>
+              <div>
             </li>
           </ul>
-        </nav>
+        </div>
       </div>
     </header>
     <div class="container">
