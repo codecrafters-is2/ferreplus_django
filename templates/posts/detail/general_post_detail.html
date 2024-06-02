@@ -23,7 +23,7 @@
                 </div>
             </div>
         </div>
-        {% block questions %}
+        {% block questions %} {# Se deja este general para el cliente visitante de la publicación (los otros deben redefinir el bloque)#}
             <div class="mt-4">
                 <div class="Questions">
                     <hr>
@@ -59,9 +59,4 @@
     </div>
 </div>
 
-<script>
-function confirmDelete() {
-    return confirm('¿Estás seguro de que deseas eliminar esta pregunta?');
-}
-</script>
 {% endblock content %}
