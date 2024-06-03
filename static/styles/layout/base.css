@@ -25,12 +25,6 @@ body {
     font-family: Raleway, 'Open Sans', serif;
 }
 
-nav {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
 
 .navbar-container {
     position: fixed;
@@ -170,12 +164,24 @@ button {
     transform: scale(1.05);
 }
 
+.login-buttons {
+    display:flex;
+    flex-direction:row;
+    gap: 1rem;
+    padding: 0.5em 0.5em;
+    background-color: #47565717;
+    border-radius: 15px;
+    font-size: sm;
+}
+
 .user-menu {
     width: 100%;
     display: none;
     background-color: #ebf1f8;
     padding: 1em 6em;
     box-shadow:rgba(0, 0, 0, 0.1) 0px 3px 8px;
+    z-index: 20;
+    border-radius: 8px;
 }
 
 .shown {
@@ -185,15 +191,6 @@ button {
     align-items: center;
 }
 
-.container {
-    min-width: 100vw;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-top: 100px;
-}
 
 @media (min-width: 640px) {
     .navbar-inner-container {
@@ -223,16 +220,11 @@ button {
     }
 
     .navbar-navigation {
-        display: block;
-        align-items: center;
-    }
-
-    .navbar-navigation nav {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-
+        gap: 4em;
     }
 
     .nav-list {
