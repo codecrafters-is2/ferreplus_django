@@ -16,7 +16,7 @@
                 <h5>Día {{ appointment.date }} a las {{ appointment.time }}</h5>
                 <p>{{ appointment.barter }}</p>
                 {% if appointment.barter.state == 'accepted' %}
-                <form method="post" action="{% url 'register_barter' appointment.barter.id employee_id %}" class="register-barter-form" onsubmit="return confirmRegister();">
+                <form method="post" action="{% url 'confirm_committed_barter' appointment.barter.id employee_id %}" class="register-barter-form" onsubmit="return confirmRegister();">
                     {% csrf_token %}
                     <input type="hidden" name="barter_id" value="{{ appointment.barter.id }}">
                     <input type="hidden" name="employee_id" value="{{ employee_id }}">

@@ -1,0 +1,21 @@
+{% extends "_base.html" %}
+{% load static %}
+
+{% block title %}Registrar Trueque{% endblock title %}
+{% block content %}
+<div class="container">
+    <h1>Registrar Trueque</h1>
+    <h5>¿Está seguro que desea registrar el trueque?</h5>
+    <div class="button-container">
+        <p><form method="post" action="{% url 'register_barter' barter_id employee_id %}" class="register-barter-form">
+        {% csrf_token %}
+        <input type="hidden" name="barter_id" value="{{ barter_id }}">
+        <input type="hidden" name="employee_id" value="{{ employee_id }}">
+        <button type="submit" class="btn btn-success register-barter-button">Sí, registrar</button>
+        </form>
+        <a href="{% url 'employee_appointments_list' employee_id %}" class="btn btn-danger">
+                No, cancelar
+        </a></p>
+    </div>
+</div>
+{% endblock %}

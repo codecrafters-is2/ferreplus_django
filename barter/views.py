@@ -64,3 +64,5 @@ class CommittedBartersListView(EmployeeRequiredMixin, ListView):
             Q(branch=employee.branch) & (Q(state='committed') | Q(state='cancelled'))
         )
 
+class BarterFinishedView(EmployeeRequiredMixin,TemplateView):
+    template_name = 'temp_messages/barter_finished.html'

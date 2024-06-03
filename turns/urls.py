@@ -7,6 +7,7 @@ from .views import (ProposeTurnsView,
                     EmployeeAppointmentListView,
                     RegisterBarterView,
                     EmployeeBarterCancelView,
+                    ConfirmCommittedBarterView,
                     )
 
 urlpatterns = [
@@ -18,4 +19,5 @@ urlpatterns = [
     path('employee_appointments/<int:employee_id>/', EmployeeAppointmentListView.as_view(), name='employee_appointments_list'),
     path('register_barter/<int:barter_id>/<int:employee_id>', RegisterBarterView.as_view(), name='register_barter'),
     path('cancel_barter/<int:barter_id>/<int:employee_id>/', EmployeeBarterCancelView.as_view(), name='employee_cancel_barter'),
+    path('confirm_committed_barter/<int:barter_id>/<int:employee_id>', ConfirmCommittedBarterView.as_view(), name='confirm_committed_barter'),
 ]

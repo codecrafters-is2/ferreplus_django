@@ -1,5 +1,5 @@
 from django.views.generic.edit import FormView
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.forms import modelformset_factory
 from django.urls import reverse_lazy
 from .models import Barter, TurnProposal, Appointment
@@ -156,7 +156,22 @@ class RegisterBarterView(EmployeeRequiredMixin, View):
         employee = get_object_or_404(EmployeeUser, id=employee_id)
         barter.register(employee)
         Appointment.objects.filter(barter=barter).delete()
-        return redirect('employee_appointments_list', employee_id=employee.pk)
+        return redirect('barter_finished', employee_id)
+    
+class ConfirmCommittedBarterView(EmployeeRequiredMixin, View):
+    template_name = 'turns/confirm_committed_barter.html'
+
+    def post(self, request, *args, **kwargs):
+        barter_id = kwargs.get('barter_id')
+        employee_id = kwargs.get('employee_id')
+        barter = get_object_or_404(Barter, id=barter_id)
+        employee = get_object_or_404(EmployeeUser, id=employee_id)
+        return render(request, self.template_name, {
+            'barter_id': barter_id,
+            'employee_id': employee_id,
+            'barter': barter,
+            'employee': employee
+        })
     
 class EmployeeBarterCancelView(EmployeeRequiredMixin, FormView):
     model = Barter
@@ -191,4 +206,5 @@ class EmployeeBarterCancelView(EmployeeRequiredMixin, FormView):
         barter.employee = employee
         report.save()
         barter.delete()
+        Appointment.objects.filter(barter=barter).delete()
         return super().form_valid(form)
