@@ -48,7 +48,7 @@ class DeleteAnswerView(ClientRequiredMixin, View):
 #Publicaciones:
 class PostListView(ClientRequiredMixin,ListView):
     model = Post
-    template_name = "posts/post_list.html"
+    template_name = "posts/list/post_list.html"
     
     def get_queryset(self):
         # Obtener todas las publicaciones
@@ -59,7 +59,7 @@ class PostListView(ClientRequiredMixin,ListView):
 
 class MyPostListView(ClientRequiredMixin,ListView): 
     model = Post
-    template_name = "posts/my_post_list.html"
+    template_name = "posts/list/my_post_list.html"
     context_object_name = "post_list"  # Cambia el nombre del contexto para que coincida con la plantilla
     
     def get_queryset(self):
@@ -250,11 +250,11 @@ class PostDeleteView(ClientRequiredMixin,DeleteView): #Eliminación de la public
 
 class PostSearchView(ClientRequiredMixin,ListView):
     model = Post
-    context_object_name = "posts_list"
+    context_object_name = "post_list"
     template_name = "posts/post_search.html"
 
     def get_queryset(self):
-        queryset = get_active_posts()
+        queryset = get_active_posts().exclude(author=self.request.user) #Agregué esta linea para excluir su propia publicación
         query_params = self._get_query_params()
 
         title_query = query_params.get("title")
