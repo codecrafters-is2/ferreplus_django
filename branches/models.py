@@ -1,5 +1,6 @@
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
+from django.http import Http404
 
 class ActiveManager(models.Manager):
     def get_queryset(self) -> models.QuerySet:
@@ -20,8 +21,11 @@ class Branch(models.Model):
     active_objects = ActiveManager()
 
     def delete(self):
-        self.is_active = False
-        self.save()
+        if self.employees.exists():
+            raise Http404("No se puede eliminar la sucursal porque tiene empleados asignados.")
+        else:
+            self.is_active = False
+            self.save()
 
     def __str__(self):
         return f"{self.city} - {self.address} - CP {self.postal_code}"
