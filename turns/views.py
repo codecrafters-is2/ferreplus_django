@@ -1,14 +1,15 @@
 from django.views.generic.edit import FormView
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.forms import modelformset_factory
 from django.urls import reverse_lazy
 from .models import Barter, TurnProposal, Appointment
-from .forms import TurnProposalForm, AppointmentForm
-from accounts.mixins import ClientRequiredMixin
-from django.views.generic import TemplateView, CreateView
+from accounts.models import EmployeeUser
+from .forms import TurnProposalForm, AppointmentForm, CancelBarterForm
+from accounts.mixins import ClientRequiredMixin, EmployeeRequiredMixin
+from django.views.generic import TemplateView, CreateView, View, DeleteView
 from django.db.models import Q
 from django.views.decorators.http import require_POST
-from django.utils.decorators import method_decorator
+from django.http import JsonResponse
 
 class ProposeTurnsView(ClientRequiredMixin, FormView):
     template_name = 'turns/propose_turns.html'
@@ -133,3 +134,77 @@ class AppointmentListView(ClientRequiredMixin,TemplateView):
             Q(barter__requesting_post__author=user) | Q(barter__requested_post__author=user)
         ) 
         return context
+    
+class EmployeeAppointmentListView(EmployeeRequiredMixin,TemplateView):
+    model = Appointment
+    template_name = 'turns/employee_appointments_list.html'
+    context_object_name = 'appointments'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        employee = EmployeeUser.objects.get(id=self.kwargs['employee_id'])
+        employee_branch = employee.branch
+        context['appointments'] = Appointment.objects.filter(branch=employee_branch, barter__state='accepted')
+        return context
+    
+class RegisterBarterView(EmployeeRequiredMixin, View):
+    model = Barter
+    def post(self, request, *args, **kwargs):
+        barter_id = kwargs.get('barter_id')
+        barter = get_object_or_404(Barter, id=barter_id)
+        employee_id = kwargs.get('employee_id')
+        employee = get_object_or_404(EmployeeUser, id=employee_id)
+        barter.register(employee)
+        Appointment.objects.filter(barter=barter).delete()
+        return redirect('barter_finished', employee_id)
+    
+class ConfirmCommittedBarterView(EmployeeRequiredMixin, View):
+    template_name = 'turns/confirm_committed_barter.html'
+
+    def post(self, request, *args, **kwargs):
+        barter_id = kwargs.get('barter_id')
+        employee_id = kwargs.get('employee_id')
+        barter = get_object_or_404(Barter, id=barter_id)
+        employee = get_object_or_404(EmployeeUser, id=employee_id)
+        return render(request, self.template_name, {
+            'barter_id': barter_id,
+            'employee_id': employee_id,
+            'barter': barter,
+            'employee': employee
+        })
+    
+class EmployeeBarterCancelView(EmployeeRequiredMixin, FormView):
+    model = Barter
+    form_class = CancelBarterForm
+    template_name = "barter/employee_cancel_barter.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['employee'] = self.get_employee_object()
+        context['barter'] = self.get_barter_object()
+        return context
+
+    def get_success_url(self) -> str:
+        return reverse_lazy('employee_appointments_list', kwargs={'employee_id':self.kwargs['employee_id']})
+
+    def get_barter_object(self):
+        return get_object_or_404(Barter, pk=self.kwargs['barter_id'])
+    
+    def get_employee_object(self):
+        return get_object_or_404(EmployeeUser, pk=self.kwargs['employee_id'])
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['barter'] = self.get_barter_object()
+        return kwargs
+
+    def form_valid(self, form):
+        report = form.save(commit=False)
+        barter = self.get_barter_object()
+        report.barter = barter
+        employee = self.get_employee_object()
+        barter.employee = employee
+        report.save()
+        barter.delete()
+        Appointment.objects.filter(barter=barter).delete()
+        return super().form_valid(form)

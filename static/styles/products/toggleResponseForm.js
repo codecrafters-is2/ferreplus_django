@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (!allowedStatuses.includes(postStatus)) {
                 event.preventDefault();
-                alert("No se puede eliminar la publicación debido a que la misma se encuentra en un trueque confimado.");
+                alert("No se puede eliminar la publicación debido a que la misma se encuentra en un trueque confirmado.");
             }
         });
     }
