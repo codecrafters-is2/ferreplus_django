@@ -1,3 +1,10 @@
 from django.db import models
 
-# Create your models here.
+
+class HomeCarouselBanner(models.Model):
+    title = models.CharField(default='imagen_banner', max_length=100, null=False)
+    description = models.CharField(max_length=200)
+    active = models.BooleanField(default=True)
+    image_widescreen = models.ImageField(upload_to='home/banner', null=False)
+    # Después podemos linkear con producto de catálogo u otro link
+    
