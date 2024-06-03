@@ -1,4 +1,4 @@
-<!-- templates/_base_admin.html-->
+<!-- templates/_base_employee.html-->
 
 
 <!DOCTYPE html>
@@ -41,6 +41,7 @@
                         <img src="{% static 'img/icons/employee.png' %}" alt="mi-cuenta" style="width: 30px;" />
                       </button>
                       <div class="user-menu">
+                        <p><a href="{% url 'account_change_password' %}">Cambiar contraseña</a></p>
                         <p><a href="{% url 'account_logout' %}">Log Out</a></p>
                       </div>
                     </div>
@@ -54,7 +55,7 @@
                     </div>
                   {% endif %}
                 {% endblock authentication %}
-               <div>
+               </div>
             </li>
           </ul>
         </nav>

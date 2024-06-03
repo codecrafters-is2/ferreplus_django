@@ -1,5 +1,5 @@
 <!-- templates/employee_success.html -->
-{% extends "_base_admin.html" %} 
+{% extends "_base_wildcard_bootstrap.html" %} 
 {% load static %}
 
 <!DOCTYPE html>
@@ -12,12 +12,16 @@
 {% block content %}
     <div>
         <div class="generic-col-container-pad">
-            <h2 style="font-size: 32px;">¡Empleado registrado exitosamente!</h2>
+            <h2 style="font-size: 32px; color: black;">¡Empleado registrado exitosamente!</h2>
             {% if employee %}
                 <p style="font-weight: bold; color: black; font-size: 20px;">Nombre de usuario asignado: {{ employee.username }}</p>
                 <p style="font-weight: bold; color: black; font-size: 20px;">Contrageña generada: {{ employee.password }}</p>
             {% endif %}
-            <a href="{% url 'employee_signup' %}">Registrar otro empleado</a>
+            <a href="{% url 'employee_signup' %}" style="text-decoration: none;">
+                <button>
+                    Registrar otro empleado
+                </button>
+            </a>
         </div>
     </div>
 {% endblock content %} 

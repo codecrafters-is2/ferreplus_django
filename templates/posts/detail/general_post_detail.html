@@ -1,5 +1,5 @@
 <!-- templates/general_post_detail.html -->
-{% extends "_base.html" %}
+{% extends "_base_wildcard_bootstrap.html" %}
 {% load static %}
 
 {% block content %}
@@ -23,7 +23,7 @@
                 </div>
             </div>
         </div>
-        {% block questions %}
+        {% block questions %} {# Se deja este general para el cliente visitante de la publicación (los otros deben redefinir el bloque)#}
             <div class="mt-4">
                 <div class="Questions">
                     <hr>
@@ -50,7 +50,9 @@
             </div>
         {% endblock questions %}
         {% block ask_question %}{% endblock ask_question %}
-        {% block additional_content %}{% endblock additional_content %}
+        {% block additional_content %}
+            <script src="{% static '/styles/products/toggleResponseForm.js' %}"></script>
+        {% endblock additional_content %}
         <div class="mt-4">
             <div class="buttons">
                 {% block additional_buttons %}{% endblock additional_buttons %}
@@ -59,9 +61,4 @@
     </div>
 </div>
 
-<script>
-function confirmDelete() {
-    return confirm('¿Estás seguro de que deseas eliminar esta pregunta?');
-}
-</script>
-{% endblock content %}
+{% endblock content %} 

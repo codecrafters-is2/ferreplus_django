@@ -1,6 +1,6 @@
 <!-- templates/account/user_detail.html -->
 <!DOCTYPE html>
-{% extends "_base.html" %} 
+{% extends "_base_wildcard_bootstrap.html" %} 
 {% load static %}
 
 {% block title %}Perfil de Usuario{% endblock title %}
@@ -15,8 +15,8 @@
 <div class="container">
 
     <div class="generic-container">
-        <h1 style="color:white; font-size: 48px">{{ user_post.username }}</h1>
-              <h1 style="color:white; font-size: 48px">Publicaciones</h1>
+        <h1 style="color:black; font-size: 48px">{{ user_post.username }}</h1>
+            <h1 style="color:black; font-size: 48px">Publicaciones</h1>
             <div class="products-wrapper">
                 <div class="grid-display">
                     {% for post in post_list %}
@@ -26,15 +26,15 @@
                             {% endif %} 
                             <div class="card-header">
                                 <h2>
-                                    <a href="{% url 'my_post_detail' post.pk %}">{{ post.title }}</a>
-                                </h2>                  
-                            </div>
-                            <div class="card-body">
-                                {% if post.status == 'paused' %}
-                                    <p class="paused-message"><strong>¡Atención, publicación pausada!</strong></p> <!-- Aquí agregamos <strong> para negrita -->
+                                {% if is_client %}
+                                    <a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a>
+                                {% else %}
+                                    {% if is_employeer %}
+                                        <a href="{% url 'post_detail_employee' post.pk %}">{{ post.title }}</a>
+                                    {% endif %}
                                 {% endif %}
+                                </h2>
                             </div>
-                        
                         </div>
                     {% endfor %}
                 <div>
@@ -42,8 +42,11 @@
         
     </div>
     
-    <p> <a href="{% url 'post_list' %}">Todas las publicaciones</a>.</p>
-    <p><a href="{% url 'go_back' %}" class="button">Volver</a></p>
-
+    <p><a href="{% url 'post_list' %}" class="btn btn-primary">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-return-left" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/>
+        </svg>
+            Todas las publicaciones
+    </a></p>
 </div>
 {% endblock content %}
