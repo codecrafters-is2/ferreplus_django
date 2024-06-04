@@ -22,6 +22,7 @@ class CustomUser(AbstractUser):
         default=None,
     )
     birthdate = models.DateField(default=None, null=True)
+    accepted_terms = models.BooleanField(default=False)
     groups = models.ManyToManyField(Group, related_name="customuser_set")
     user_permissions = models.ManyToManyField(
         Permission, related_name="customuser_permissions"

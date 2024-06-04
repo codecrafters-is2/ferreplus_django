@@ -3,7 +3,6 @@ from django.shortcuts import get_object_or_404
 from .models import CustomUser
 from django.views.generic import TemplateView
 from posts.models import Post
-from accounts.models import EmployeeUser
 
 
 class UserDetailWithPostsView(LoginRequiredMixin, TemplateView):
@@ -21,3 +20,5 @@ class UserDetailWithPostsView(LoginRequiredMixin, TemplateView):
         context["is_employeer"] = is_employeer
         context["is_client"] = is_client
         return context
+
+
