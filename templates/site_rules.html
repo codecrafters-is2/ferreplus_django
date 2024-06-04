@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Inicio</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Bienvenido a la Página de Inicio</h1>
+        <p>Contenido de la página de inicio...</p>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="termsModalLabel">Normas del Sitio</h5>
+                </div>
+                <div class="modal-body">
+                    <p>¡Atención! Por favor lea y acepte la siguiente norma del sitio:</p>
+                    <ul>
+                        <li>Al momento de hacer preguntas o respuestas sobre las publicaciones está terminantemente prohibido dar a conocer información personal como dirección, teléfono, redes sociales, etc. Si esta norma se infringe las mismas podrán ser eliminada del sitio.</li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <form method="post" id="acceptTermsForm">
+                        {% csrf_token %}
+                        <button type="submit" name="accept_terms" class="btn btn-primary">Aceptar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            {% if show_modal %}
+                $('#termsModal').modal('show');
+            {% endif %}
+
+            $('#acceptTermsForm').on('submit', function(e) {
+                e.preventDefault();
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url "accept_terms" %}',
+                    data: $(this).serialize(),
+                    success: function() {
+                        $('#termsModal').modal('hide');
+                        window.location.href = '/'; // Redirigir a la página de inicio
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error al aceptar términos:', error);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
+data-backdrop="static
