@@ -1,14 +1,15 @@
+# Django
 from django.views import View
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.db.models import Q
 from django.urls import reverse_lazy
+from django.urls import reverse
 from django.shortcuts import redirect,get_object_or_404
 from django.http import Http404,HttpResponseRedirect
-from django.urls import reverse
+# Local
 from accounts.mixins import ClientRequiredMixin
 from .forms import QuestionForm, AnswerForm
-
 from .models import Post, ImagePost, Question
 from .forms import PostForm
 from .services import get_active_posts
@@ -251,10 +252,10 @@ class PostDeleteView(ClientRequiredMixin,DeleteView): #Eliminación de la public
 class PostSearchView(ClientRequiredMixin,ListView):
     model = Post
     context_object_name = "post_list"
-    template_name = "posts/post_search.html"
+    template_name = "posts/list/post_list.html"
 
     def get_queryset(self):
-        queryset = get_active_posts().exclude(author=self.request.user) #Agregué esta linea para excluir su propia publicación
+        queryset = get_active_posts().exclude(author=self.request.user)
         query_params = self._get_query_params()
 
         title_query = query_params.get("title")
