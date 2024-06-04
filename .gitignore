@@ -18,6 +18,7 @@ ferreplus/__pycache__/
 pages/__pycache__/
 posts/__pycache__/
 media/post_images/*
+media
 # Node
 **node_modules
 package-lock.json
