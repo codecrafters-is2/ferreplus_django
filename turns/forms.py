@@ -1,5 +1,5 @@
 from django import forms
-from .models import Appointment, TurnProposal, Branch
+from .models import Appointment, TurnProposal, Branch, CancellationReport, Barter
 from datetime import date, timedelta
 
 class TurnProposalForm(forms.ModelForm):
@@ -78,10 +78,19 @@ class AppointmentForm(forms.ModelForm):
         end_hour = int(turn_proposal.end_time[:2])
         TIME_CHOICES_APPOINTMENT = [
             (f"{h:02d}:00", f"{h:02d}:00") 
-            for h in range(start_hour, end_hour+1)
+            for h in range(start_hour, end_hour)
         ]
         self.fields['time'].choices = TIME_CHOICES_APPOINTMENT
 
         self.instance.branch = branch
         self.instance.barter = barter
         self.instance.date = date 
+
+class CancelBarterForm(forms.ModelForm):
+    class Meta:
+        model = CancellationReport
+        fields = ['reason']
+        labels = {'reason':''}
+
+    def __init__(self, barter, *args, **kwargs):
+        super().__init__(*args, **kwargs)

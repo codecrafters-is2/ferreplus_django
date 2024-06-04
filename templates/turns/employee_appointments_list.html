@@ -5,17 +5,28 @@
     <link rel="stylesheet" href="{% static 'styles/generics/generic_list.css' %}">
 {% endblock custom_styles %}
 
-{% block title %}Mis Turnos{% endblock title %}
+{% block title %}Próximos Turnos{% endblock title %}
 
 {% block content %}
 <div class="list-container">
-    <h1>Mis Turnos</h1>
+    <h1>Próximos Trueques</h1>
     {% for appointment in appointments %}
         <div class="list-group-item">
             <div class="item-header">
                 <h5>Día {{ appointment.date }} a las {{ appointment.time }}</h5>
-                <p>{{ appointment.branch }}</p>
                 <p>{{ appointment.barter }}</p>
+                {% if appointment.barter.state == 'accepted' %}
+                <form method="post" action="{% url 'confirm_committed_barter' appointment.barter.id employee_id %}" class="register-barter-form" onsubmit="return confirmRegister();">
+                    {% csrf_token %}
+                    <input type="hidden" name="barter_id" value="{{ appointment.barter.id }}">
+                    <input type="hidden" name="employee_id" value="{{ employee_id }}">
+                    <button type="submit" class="btn btn-success register-barter-button">Registrar Trueque</button>
+                </form>
+                <form method="post" action="{% url 'employee_cancel_barter' appointment.barter.id employee_id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger" >Cancelar</button>
+                </form>
+                {% endif %}
             </div>
         </div>
     {% endfor %}
@@ -27,3 +38,4 @@
     </a></p>
 </div>
 {% endblock content %}
+

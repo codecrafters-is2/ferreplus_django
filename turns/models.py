@@ -23,3 +23,10 @@ class Appointment(models.Model):
 
     def __str__(self) :
         return f"{self.branch}\n Día: {self.date}\n {self.time} horas."
+    
+class CancellationReport(models.Model):
+    barter = models.ForeignKey(Barter, on_delete=models.CASCADE)
+    reason = models.TextField()
+
+    def __str__(self) :
+        return f"{self.barter}"

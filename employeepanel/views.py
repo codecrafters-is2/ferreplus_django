@@ -1,8 +1,12 @@
+# Django
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import ListView,DetailView, View
+from django.db.models import Q
+# Local
 from accounts.mixins import EmployeeRequiredMixin
-from posts.models import Post, Question
 from accounts.models import EmployeeUser
+from posts.models import Post, Question
+from .services import get_employee_post_list
 
 class PostListView(EmployeeRequiredMixin,ListView):
     model = Post
@@ -23,6 +27,7 @@ class PostListView(EmployeeRequiredMixin,ListView):
             # Manejar el caso donde no se encuentre un EmployeeUser relacionado
             queryset = queryset.none()
         return queryset
+
 
 class PostDetailView(EmployeeRequiredMixin,DetailView):
     model = Post
@@ -50,3 +55,32 @@ class DeleteAnswerView(EmployeeRequiredMixin, View):
         question.save()
         return redirect('post_detail_employee', pk=question.post.pk)
 
+
+class PostSearchView(EmployeeRequiredMixin, ListView):
+    model = Post
+    context_object_name = "post_list"
+    template_name = "posts/list/post_list_employee.html"
+
+    def get_queryset(self):
+        queryset = None
+        try:
+            employee = EmployeeUser.objects.filter(username=self.request.user.username)[0]
+            queryset = get_employee_post_list(employee)
+            title_query = self.request.GET.get("title")
+            print(title_query)
+            if title_query:
+                queryset = queryset.filter(
+                    Q(title__contains=title_query) | Q(body__contains=title_query)
+                )
+
+        except Exception as error:
+            print(error)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        """ Datos adicionales para los filtros """
+        context = super().get_context_data()
+        title_query = self.request.GET.get("title")
+        context["title_query"] = title_query
+        return context

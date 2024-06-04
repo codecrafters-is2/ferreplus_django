@@ -54,6 +54,10 @@ class Post(models.Model):
     
     def __str__(self):
         return self.title
+    
+    def complete_post(self):
+        self.status = 'completed'
+        self.save()
 
     def get_absolute_url(self):
         return reverse("post_detail", kwargs={"pk": self.pk})
@@ -73,6 +77,10 @@ class Post(models.Model):
         self.status = self.POST_STATUS_DELETED
         self.save()
         Barter.objects.filter(Q(requesting_post=self) | Q(requested_post=self)).exclude(state=Barter.BARTER_STATE_CANCELLED).update(state=Barter.BARTER_STATE_CANCELLED)
+    
+    def free_post(self):
+        self.status = 'available'
+        self.save()
 
 class Question(models.Model): 
     post = models.ForeignKey(Post, related_name='questions', on_delete=models.CASCADE)
