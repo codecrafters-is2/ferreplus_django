@@ -1,0 +1,87 @@
+{% load static %}
+
+
+<style>
+
+  .contenedor-principal {
+    padding: 6% 2%;
+    gap: 1em;
+    text-align: center;
+  }
+
+  .features-list{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 4em;
+    list-style-type: none;
+    padding: 3em 3em;
+    flex-wrap: wrap;
+  }
+
+  .feature {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1em;
+    padding: 12px 12px;
+    font-weight: 500;
+    transition: all 300ms ease-in;
+  }
+
+  .feature img {
+    width: 30px;
+  }
+
+  .feature:hover {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+
+  .feature-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 12px;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-image: linear-gradient(160deg, #0093E9 0%, #80D0C7 100%);
+    aspect-ratio: 1 / 1;
+  }
+
+  @media (min-width: 1024px) { 
+    /* Notebook --> Desktop */
+    .contenedor-principal {
+      padding: 6% 20%;
+    }
+
+    .features-list {
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 4em;
+      padding: 3em 3em;
+    }
+  }
+
+</style>
+
+<div class="d-flex flex-column align-items-center contenedor-principal">
+  <h3 style="font-size: 38px;">{{ title }}</h3>
+  <p style="font-size: 18px;">{{ subtitle }}</p>
+  <ul class="features-list">
+    {% for feature in features %}
+      <li class="feature">
+        <div class="feature-icon">
+          <img src="{% static feature.img_source %}" />
+        </div>
+        <p>{{ feature.name }}</p>
+      </li>
+    {% endfor %}
+  </ul>
+  <h4>{{ categories }}</h4>
+</div>
