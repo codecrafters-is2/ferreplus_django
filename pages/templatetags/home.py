@@ -24,3 +24,21 @@ def show_home_banner() -> dict:
         number += 1
 
     return {"banners": banners}
+
+
+@register.inclusion_tag("ui_components/home_site_features.html")
+def show_home_site_features() -> dict:
+    """ Por ahora es info estática pero me sirve para ordenar el código"""
+    features = [
+        { "name": "Jardín", "img_source": "img/icons/features/garden.png" },
+        { "name": "Herramientas", "img_source": "img/icons/features/tools.png" },
+        { "name": "Plomería", "img_source": "img/icons/features/plumbing.png" },
+        { "name": "Electricidad", "img_source": "img/icons/features/electricity.png" },
+        { "name": "Construcción", "img_source": "img/icons/features/build.png" },
+    ]
+    return {
+        "title": "Conocé nuestra plataforma de trueques",
+        "subtitle": "Tenemos un revolucionario sistema de trueques para que puedas intercambiar aquellos artículos que ya no te sirven por otros que estés necesitando",
+        "categories": "¡Contamos con productos de todas las categorías!",
+        "features": features
+    }

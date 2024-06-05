@@ -14,12 +14,34 @@
             color: red;
             font-weight: bold;
         }
+
+        .posts-banner {
+            min-width: 100vw;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 5% 2%;
+
+            background-image: url("/img/ferreplus_caja_banner.jpg");
+            background-color: aqua;
+        }
     </style>
 </head>
 
 {% block content %}
     <div class="list-layout" style="padding-top:4rem;">
-        <div>
+        <div style="min-width: 100vw;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    text-align: center;
+                    background-image: url('/static/img/ferreplus_caja_banner.jpg');
+                    background-position: center;
+                    padding: 6% 2%;"
+                    >
             {% block list_title %} {% endblock list_title %}
         </div>
         <div class="search-ui">
@@ -36,14 +58,16 @@
                     </button>
                 </div>
                 {% if user|belongs_to_group:"client" %}
-                    {% show_categories_selector %}
-                    {% show_branches_selector %}
+                    <div class="d-flex flex-column" style="padding-top: 2em;">
+                        {% show_categories_selector %}
+                        {% show_branches_selector %}    
+                    </div>
                 {% endif %}
             </form>
             
         </div>
         <div>
-        <div class="generic-container">
+        <div style="min-width: 100vw; padding: 0% 2% 6% 2%;">
             <div class="products-wrapper">
                 <div class="grid-display">
                     {% for post in post_list %}
