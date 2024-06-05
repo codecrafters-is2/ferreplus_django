@@ -80,11 +80,6 @@ class EmployeeUserCreationForm(forms.ModelForm):
                 "email",
                 ("¡Email inválido!"),
             )
-        if ".com" not in email_value:
-            self.add_error(
-                "email",
-                ("¡Email inválido!"),
-            )
 
     def save(self, commit=True):
         instance = super().save(commit=False)
