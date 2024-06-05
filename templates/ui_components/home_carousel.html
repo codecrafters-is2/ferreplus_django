@@ -9,38 +9,74 @@
     height: 100%;
     object-fit: cover;
   }
+
+  .banner-info {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    text-align: center;
+  }
+
+  .banner-info h2 {
+    font-size: 48px;
+    font-weight: 700;
+    color: white;
+    filter: drop-shadow(2px 2px 2px #444444);
+  }
+
+  .banner-info p {
+    font-size: 24px;
+    font-weight: 500;
+    color: white;
+    filter: drop-shadow(2px 2px 2px #444444);
+  }
+
 </style>
 
 <script>
   function moveSlide(direction="forwards") {
-      function getNext(current) {
-
-      }
       slidesWrapper = document.getElementById("carousel-container");
       activeSlide = document.querySelector(".active");
-      activeSlideNumber = Number(activeSlide.id)
+      activeSlideNumber = Number(activeSlide.id);
+
       if (direction == "forwards") {
         estimatedTarget = activeSlideNumber + 1;
         target = estimatedTarget >= slidesWrapper.children.length ? 0 : estimatedTarget;
       } else if (direction == "backwards") {
         target = activeSlideNumber == 0 ? (slidesWrapper.children.length - 1) : activeSlideNumber - 1;
       }
+
       targetSlide = document.getElementById(String(target));
       activeSlide.classList.remove("active");
       targetSlide.classList.add("active");
     }
 
+  function setTextPositions(){}
+
   window.addEventListener('DOMContentLoaded', () => {
     const firstSlide = document.getElementById("0");
     firstSlide.classList.add("active");
-  })
+  });
+
 </script>
 
 <div id="carouselExampleControls" class="carousel slide w-100" data-ride="carousel">
     <div class="carousel-inner" id="carousel-container">
       {% for banner in banners %}
-        <div class="carousel-item carousel-custom-item" id="{{ banner.number }}">
+        <div class="carousel-item carousel-custom-item" id="{{ banner.number }}" style="position: relative;">
           <img class="d-block w-100" src="{{ banner.image_widescreen.url }}" alt="{{banner.title}}">
+          <div class="banner-info">
+            <div class="banner-info-inner-container">
+              <h2>{{ banner.title }}</h2>
+              <p>{{ banner.description }}</p>
+            </div>
+          </div>
         </div>
       {% endfor %}
     </div>
