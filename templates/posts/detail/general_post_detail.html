@@ -38,10 +38,12 @@
                                 <p><strong>Respuesta:</strong> {{ question.answer }}</p>
                             </div>
                         {% endif %}
-                        <form method="post" action="{% url 'delete_question' question.id %}" onsubmit="return confirmDelete();">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-danger">Eliminar Pregunta</button>
-                        </form>
+                        {% if user == question.user %}
+                            <form method="post" action="{% url 'delete_question' question.id %}" onsubmit="return confirmDelete();">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Eliminar Pregunta</button>
+                            </form>
+                        {% endif %}
                     </div>
                     {% endfor %}
                     {% endblock for-questions %}
