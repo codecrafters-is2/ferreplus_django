@@ -28,9 +28,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-h_bgs@c!1=hf8lsu3e!baeq+tnzvc6fa@rheo#yn8b^9x@#s5-'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env("DEBUG_MODE", True)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [env("ALLOWED_HOST", '127.0.0.1')]
 
 
 # Application definition
@@ -143,6 +143,8 @@ STATICFILES_DIRS = [
     # Dirección adicional para estáticos globales
     BASE_DIR / "static",
 ]
+
+STATIC_ROOT = "/var/www/ferreplus/static"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
