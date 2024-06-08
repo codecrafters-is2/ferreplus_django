@@ -14,7 +14,7 @@ jobs:
 
     - name: Run Deployment
       run: |
-        ssh -i ${{ secrets.LS_SSH_KEY }} ubuntu@18.206.33.143 'bash -s' < home/ubuntu/ferreplus/deploy_script.sh
+        ssh -i ${{ secrets.LS_SSH_KEY }} ubuntu@18.206.33.143 'bash -s' < /home/ubuntu/ferreplus/deploy_script.sh
       env:
         ACTIONS_RUNNER_DEBUG: false
 
