@@ -1,25 +1,23 @@
-name: Ferreplus deployment
-
 on:
   push:
     branches:
       - main
-
+  workflow_dispatch:
+  
 jobs:
-  deploy:
+  run_pull:
+    name: run pull
     runs-on: ubuntu-latest
+    
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Run Deployment
+    - name: install ssh keys
+      # check this thread to understand why its needed:
+      # https://stackoverflow.com/a/70447517
       run: |
-        ssh -i ${{ secrets.LS_SSH_KEY }} ubuntu@18.206.33.143 'bash -s' < ~home/ubuntu/ferreplus/deploy_script.sh
-      env:
-        ACTIONS_RUNNER_DEBUG: false
-
-    - name: Dry Run Deployment
-      run: |
-        ssh -i ${{ secrets.LS_SSH_KEY }} ubuntu@18.206.33.143 'bash -s' < /home/ubuntu/ferreplus/deploy_script.sh true
-      env:
-        ACTIONS_RUNNER_DEBUG: true
+        install -m 600 -D /dev/null ~/.ssh/id_rsa
+        echo "${{ secrets.LS_SSH_KEY }}" > ~/.ssh/id_rsa
+        ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
+    - name: connect pull deploy
+      run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.WORK_DIR }} && sudo bash deploy_script.sh && exit"
+    - name: cleanup
+      run: rm -rf ~/.ssh
