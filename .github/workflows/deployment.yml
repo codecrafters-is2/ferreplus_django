@@ -1,0 +1,25 @@
+name: Ferreplus deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Run Deployment
+      run: |
+        ssh -i ${{ secrets.LS_SSH_KEY }} ubuntu@18.206.33.143 'bash -s' < ~home/ubuntu/ferreplus/deploy_script.sh
+      env:
+        ACTIONS_RUNNER_DEBUG: false
+
+    - name: Dry Run Deployment
+      run: |
+        ssh -i ${{ secrets.LS_SSH_KEY }} ubuntu@18.206.33.143 'bash -s' < /home/ubuntu/ferreplus/deploy_script.sh true
+      env:
+        ACTIONS_RUNNER_DEBUG: true

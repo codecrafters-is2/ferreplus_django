@@ -1,17 +1,25 @@
-{% extends '_base_admin.html' %}
+{% extends '_base_wildcard_bootstrap.html' %}
 
 {% block title %}Listado de sucursales{% endblock %}
 <div class="container">
 {% block content %}
-
-    <h1>Confirmar Eliminación de Sucursal</h1>
-
-    <form method="post">
-        {% csrf_token %}
-        <p>¿Está seguro de que desea eliminar la sucursal "{{ branch.city }}" - "{{ branch.address }}"?</p>
-        <button type="submit">Eliminar</button>
-        <p><a href="{% url 'go_back' %}" class="button">Cancelar</a></p>
-    </form>
-
-{% endblock %}
+<div class="container mt-5">
+    
+    {% if object.employees.exists %}
+        <h1>¡Atención!</h1>
+        <div class="alert alert-danger" role="alert">
+            No se puede eliminar la sucursal porque tiene empleados asociados.
+        </div>
+        <a href="{% url 'show_branches' %}" class="btn btn-secondary">Volver</a>
+    {% else %}
+        <h1>Confirmar eliminación de sucursal</h1>
+        <p>¿Estás seguro de que deseas eliminar esta sucursal?</p>
+        <form action="{% url 'delete_branch' branch.pk %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Eliminar</button>
+            <a href="{% url 'show_branches' %}" class="btn btn-secondary">Cancelar</a>
+        </form>
+    {% endif %}
+</div>
+{% endblock content %}
 </div>

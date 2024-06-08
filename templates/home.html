@@ -1,5 +1,6 @@
-{% extends "_base.html" %} 
+{% extends "_base_wildcard_bootstrap.html" %} 
 {% load static %}
+{% load home %}
 
 {% block title %}Ferreplus{% endblock title %} 
 <head>
@@ -8,17 +9,12 @@
     {% endblock custom_styles %}
 </head>
 {% block content %}
-    <div>
-        <div class="home-container">
-            <h1>Hello Word! Esta es nuestra Homepage.</h1>
-            <h2>Debe registrarse para poder utilizar la plataforma.</h2>
+    <div class="d-flex flex-column" style="min-width: 100vw; min-height: 100vh; margin: none;">
+        <div>
+            {% show_home_banner %}
         </div>
-        {% comment %} <div class="second-page">
-            <h1>Productos</h1> 
-            <div class="post-product">
-                <a href="{% url 'post_new' %}">+ Publicar producto</a>
-            </div>
-            <p> <a href="{% url 'post_list' %}">Todas las publicaciones</a>.</p>
-        </div> {% endcomment %}
+        <div class="d-flex flex-column" style="min-width: 100vw;"">
+            {% show_home_site_features %}
+        </div>
     </div>
 {% endblock content %}

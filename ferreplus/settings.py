@@ -54,6 +54,8 @@ INSTALLED_APPS = [
     "posts.apps.PostsConfig",
     "branches.apps.BranchesConfig",
     "adminpanel.apps.AdminpanelConfig",
+    "barter.apps.BarterConfig", 
+    "turns.apps.TurnsConfig",
 ]
 
 MIDDLEWARE = [
@@ -151,6 +153,7 @@ AUTH_USER_MODEL = "accounts.CustomUser"
 
 LOGIN_REDIRECT_URL = "home"
 ACCOUNT_LOGOUT_REDIRECT = "home"
+#ACCOUNT_SIGNUP_REDIRECT_URL = "/norms"
 
 ACCOUNT_FORMS = {
     "signup": "accounts.forms.CustomUserCreationForm",

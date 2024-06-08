@@ -1,0 +1,61 @@
+{% extends "_base_wildcard_bootstrap.html" %}
+{% load static %}
+
+{% block title %}Mis Trueques{% endblock title %}
+
+{% block custom_styles %}
+    <link rel="stylesheet" href="{% static 'styles/barters/barters_list.css' %}">
+{% endblock custom_styles %}
+
+{% block content %}
+<div class="barter-list-container">
+    <h1>Mis Trueques</h1>
+    {% for barter in object_list %}
+    <div class="barter-item">
+        <div class="barter-header">
+            <h2>
+                <a href="{% url 'post_detail' barter.requesting_post.pk %}">{{ barter.requesting_post.title }}</a> 
+                x 
+                <a href="{% url 'post_detail' barter.requested_post.pk %}">{{ barter.requested_post.title }}</a>
+            </h2>  
+            <p class="barter-state {% if barter.state == 'requested' %}requested-state{% elif barter.state == 'accepted' %}accepted-state{% elif barter.state == 'parcial_accepted' %}parcial_accepted-state{% elif barter.state == 'committed' %}committed-state{% elif barter.state == 'cancelled' %}cancelled-state{% endif %}">{{ barter.get_state_display }}</p>
+            {% if barter.state == 'accepted' %}
+            <p><a href="{% url 'appointments_list' %}" class="btn btn-light">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-check" viewBox="0 0 16 16">
+                    <path d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
+                    <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
+                </svg>
+                Mis turnos
+            </a>
+            {% endif %}
+            {% if barter.state == 'requested' or barter.state == 'parcial_accepted' %}
+                {% if barter.requested_post.author == request.user %}
+                    {% if barter.state == 'requested' %}
+                        <form method="post" action="{% url 'propose_turns' barter.id %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="barter_id" value="{{ barter.id }}">
+                            <button type="submit" class="btn btn-success">Aceptar Trueque</button>
+                        </form>
+                    {% else %}
+                        <a href="{% url 'turns_list' barter.id%}?barter_id={{ barter.id }}" class="btn btn-info">Proponer Turnos</a>
+                    {% endif %}
+                {% elif barter.state == 'parcial_accepted' %}
+                    <a href="{% url 'turns_list' barter.id%}?barter_id={{ barter.id }}" class="btn btn-info">Ver Propuestas de Turnos</a>
+                {% endif %}
+                <form method="post" action="{% url 'barter_cancel' barter.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Cancelar</button>
+                </form>
+            {% endif %}
+        
+        </div>
+    </div>
+    {% endfor %}
+    <p><a href="{% url 'home' %}" class="btn btn-light">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-return-left" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/>
+          </svg>
+            Volver
+    </a></p>
+</div>
+{% endblock content %}

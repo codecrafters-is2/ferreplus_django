@@ -1,5 +1,11 @@
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
+from django.http import Http404
+
+class ActiveManager(models.Manager):
+    def get_queryset(self) -> models.QuerySet:
+        return super().get_queryset().filter(is_active=True)
+    #self.fields['branch'].queryset = Branch.active_objects.all() para levantar sólo las activas en cualquier lugar
 
 class Branch(models.Model):
     city = models.CharField(max_length=100)
@@ -9,7 +15,17 @@ class Branch(models.Model):
         error_messages={'invalid': 'Por favor, introduce un número de teléfono válido.'},
         help_text='  Formato: +54 12345678'
         )
+    is_active = models.BooleanField(default=True)
 
+    objects = models.Manager()
+    active_objects = ActiveManager()
+
+    def delete(self):
+        if self.employees.exists():
+            raise Http404("No se puede eliminar la sucursal porque tiene empleados asignados.")
+        else:
+            self.is_active = False
+            self.save()
 
     def __str__(self):
-        return self.city
+        return f"{self.city} - {self.address} - CP {self.postal_code}"

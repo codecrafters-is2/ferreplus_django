@@ -1,0 +1,118 @@
+<!-- templates/_base.html-->
+<!DOCTYPE html>
+{% load static %}
+{% load users_extras  %}
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>{% block title %}Ferreplus{% endblock title %}</title>
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'styles/layout/base.css' %}">
+    {% comment %}
+      Dejo este bloque 'custom_styles' para hacerle override en cada página
+      y poner un link a sus estilos propios.
+    {% endcomment %}
+    {% block custom_styles %} {% endblock custom_styles %}
+    <script src="{% static 'styles/layout/layout.js' %}"></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg" style="background-color: #ebf1f8; box-shadow:rgba(0, 0, 0, 0.1) 0px 3px 8px;">
+      <div class="container-fluid">
+        <div style="width: 100%; display: flex; flex-direction: row; justify-content: space-around; align-items: center;">
+          <a class="img-container" href="/">
+            <img src="{% static 'img/logo-min.png' %}" />
+          </a>
+          <div style="display: flex; flex-direction: column;">
+            <button class="hamburguer-button">
+              <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 50 50" width="50px" height="50px">
+                <path d="M 3 9 A 1.0001 1.0001 0 1 0 3 11 L 47 11 A 1.0001 1.0001 0 1 0 47 9 L 3 9 z M 3 24 A 1.0001 1.0001 0 1 0 3 26 L 47 26 A 1.0001 1.0001 0 1 0 47 24 L 3 24 z M 3 39 A 1.0001 1.0001 0 1 0 3 41 L 47 41 A 1.0001 1.0001 0 1 0 47 39 L 3 39 z"/>
+              </svg>
+            </button>
+            <div class="navbar-navigation">
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-4">
+                {% if user|belongs_to_group:"client" %}
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Nosotros</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Contacto</a>
+                  </li>
+                {% endif %}
+                <li class="nav-item">
+                  <div class="auth-info">
+                    {% block authentication %}
+                      {% if user.is_authenticated %}
+                        <div class="d-flex flex-row gap-6 align-items-center" style="position:relative; width:100%;"> 
+                          <div class="d-flex flex-row align-items-center px-4" style="gap: 1em;">
+                            {{ user.username }}
+                            <button id="user-button" class="logged-user-button">
+                              {% if user|belongs_to_group:"client" %}
+                                <img src="{% static '/img/icons/user-icon.png' %}" alt="mi-cuenta" style="width: 30px;" />
+                              {% elif user|belongs_to_group:"employee" %}
+                                <img src="{% static '/img/icons/employee.png' %}" alt="mi-cuenta" style="width: 30px;" />
+                              {% elif user|belongs_to_group:"admi" %}
+                                <img src="{% static '/img/icons/admin.png' %}" alt="mi-cuenta" style="width: 30px;" />
+                              {% endif %}
+                            </button>
+                          </div>
+                          <div class="user-menu">
+                            {% if user|belongs_to_group:"employee" %}
+                              <p><a href="{% url 'account_change_password' %}">Cambiar contraseña</a></p>
+                            {% endif %}
+                            {% if user|belongs_to_group:"client" %}
+                              <p><a href="{% url 'my_post_list' %}">Mis publicaciones</a></p>
+                              <p><a href="{% url 'account_email' %}">Editar perfil</a></p>
+                              <p><a href="{% url 'account_change_password' %}">Cambiar contraseña</a></p>
+                              <p><a href="{% url 'appointments_list' %}">Mis turnos</a></p>
+                            {% endif %}
+                            <p><a href="{% url 'account_logout' %}">Log Out</a></p>
+                          </div>
+                        </div>
+                      {% else %}
+                        <div style="position:relative;display:flex;flex-direction:column;gap:1rem;align-items:center; width:100%;">
+                          <div class="login-buttons">
+                            <a href="{% url 'account_login' %}">Iniciar sesión</a>
+                            <a href="{% url 'account_signup' %}">Registrarse</a>
+                          </div>
+                        </div>
+                      {% endif %}
+                    {% endblock authentication %}
+                  <div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div class="d-flex flex-col justify-content-center align-items-center" style="min-width: 100vw; min-height: 100vh;">
+      {% block content %}
+      {% comment %}
+        Bloque para hacer override en subtemplates y escribir el contenido
+        de cada página
+      {% endcomment %}
+      {% endblock content %}
+    </div>
+    <div class="base-footer">
+      <div class="base-footer-inner-container">
+        <div class="footer-item">
+          <h2>Ferreplus</h2>
+        </div>
+        <div class="footer-item">
+          <p style="font-size:small">
+            2024 Ferreplus © todos los derechos reservados
+          </p>
+        </div>
+        <div class="footer-item">
+          <p style="font-size:small;letter-spacing:0.2px">Hecho por <span style="font-weight:bold">Codecrafters</span></p>
+        </div>
+      </div>
+    </div>
+    <!-- jQuery and Bootstrap scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
+</html>
