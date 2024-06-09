@@ -11,7 +11,8 @@ jobs:
     
     steps:
     - name: install ssh keys
-      # check this thread to understand why its needed:
+      # Levantamos la ssh y la guardamos en el directorio de keys de la vm
+      # Así evitamos que se confunda la key con el path
       # https://stackoverflow.com/a/70447517
       run: |
         install -m 600 -D /dev/null ~/.ssh/id_rsa
