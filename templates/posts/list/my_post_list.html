@@ -1,7 +1,10 @@
-{% extends "posts/list/_post_list_layout.html" %}
+{% extends "posts/list/_my_post_list_layout.html" %}
 {% load static %}
 
 {% block title %}Mis publicaciones{% endblock title %}
+
+{% block list_title %} <h1 style="color:#ffffff; font-size: 48px; filter: drop-shadow(1px 1px 12px #444444);">Mis publicaciones</h1> {% endblock list_title %}
+
 
 {% block results %}
     <div class="product-card">

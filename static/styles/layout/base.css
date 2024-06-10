@@ -53,7 +53,7 @@ body {
     display: none;
 }
 
-.visible {
+.custom-visible {
     display: flex;
     position: absolute;
     flex-direction: column;
@@ -64,6 +64,7 @@ body {
     margin: auto;
     padding-bottom: 1rem;
     background-color: #ebf1f8;
+    z-index: 100;
 }
 
 .nav-list {
@@ -140,12 +141,14 @@ button {
     justify-content: center;
     align-items: center;
     background-color: black;
+    padding-top: 2%;
+    padding-bottom: 2%;
 }
 
 .base-footer-inner-container {
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(1, minmax(0, 1fr));
 }
 
 .footer-item {
@@ -207,6 +210,10 @@ button {
         padding-bottom: 1em;
         padding-right: 6em;
         padding-left: 6em;
+    }
+
+    .base-footer-inner-container {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 }
 
