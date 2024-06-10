@@ -16,7 +16,7 @@ def get_active_products_by_category(category_name: str) -> QuerySet:
         category = ProductCategory.objects.get(name=category_name)
     except ObjectDoesNotExist:
         return None
-    return Product.objectis.filter(category=category)
+    return Product.objects.filter(category=category)
 
 
 def filter_products_by_query_params(query_params: Dict) -> QuerySet:
@@ -41,3 +41,6 @@ def filter_products_by_query_params(query_params: Dict) -> QuerySet:
             queryset = queryset.exclude(price__gt=max_price)
 
     return queryset
+
+def get_product_images(product: Product) -> QuerySet:
+    return ProductImage.objects.filter(product=product)

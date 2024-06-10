@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     "adminpanel.apps.AdminpanelConfig",
     "barter.apps.BarterConfig", 
     "turns.apps.TurnsConfig",
+    "catalogo.apps.CatalogoConfig"
 ]
 
 MIDDLEWARE = [

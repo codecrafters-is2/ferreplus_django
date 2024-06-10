@@ -4,13 +4,22 @@ from typing import Dict
 from django.views.generic import ListView
 # Local
 from .models import Product
-from .services import filter_products_by_query_params
+from .services import get_active_products, filter_products_by_query_params
+
+
+class ProductListView(ListView):
+    model = Product
+    context_object_name = "product_list"
+    template_name = "product_list.html"
+
+    def get_queryset(self):
+        return get_active_products()
 
 
 class ProductSearchView(ListView):
     model = Product
     context_object_name = "product_list"
-    template_name = ""
+    template_name = "product_list.html"
 
     def get_queryset(self):
         query_params = self._get_query_params()
@@ -36,3 +45,6 @@ class ProductSearchView(ListView):
                 "max_price": float(max_price)
             }
         }
+
+class PostCreateView():
+    pass

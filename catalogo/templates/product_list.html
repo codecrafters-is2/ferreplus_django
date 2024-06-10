@@ -1,0 +1,8 @@
+{% extends "_product_list_search_layout.html" %}
+{% load product_extras %}
+
+{% block results %}
+    {% for product in product_list %}
+        {% show_product_card product %}
+    {% endfor %}
+{% endblock results %}

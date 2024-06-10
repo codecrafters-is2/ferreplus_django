@@ -33,7 +33,8 @@ urlpatterns = [
     path("adminpanel/", include("adminpanel.urls")),
     path("barter/", include("barter.urls")),
     path("turns/", include("turns.urls")),
-    path("employee/", include("employeepanel.urls"))
+    path("employee/", include("employeepanel.urls")),
+    path("catalog/", include("catalogo.urls"))
 ]
 
 if settings.DEBUG: #Solo proyecto en desarrollo, falta para producción
