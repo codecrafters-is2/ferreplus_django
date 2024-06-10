@@ -1,85 +1,93 @@
-{% extends "_base.html" %}
+{% extends "_base_wildcard_bootstrap.html" %}
 {% load i18n %}
 {% load allauth %}
 {% block title %}
     {% trans "Editar perfil" %}
 {% endblock title %}
 {% block content %}
-    {% if form.non_field_errors %}
-    <ul class="errorlist">
-        {% for error in form.non_field_errors %}
-            <li>{{ error }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-    {% element h1 %}
-        {% trans "Email Address" %}
-    {% endelement %}
-    {% if not emailaddresses %}
-        {% include "account/snippets/warn_no_email.html" %}
-    {% endif %}
-    {% url 'account_email' as action_url %}
-    {% element form method="post" action=action_url %}
-        {% slot body %}
-            {% csrf_token %}
-            {% if current_emailaddress %}
-                {% element field id="current_email" disabled=True type="email" value=current_emailaddress.email %}
-                    {% slot label %}
-                        {% translate "Current email" %}:
-                    {% endslot %}
-                {% endelement %}
-            {% endif %}
-            {% if new_emailaddress %}
-                {% element field id="new_email" value=new_emailaddress.email disabled=True type="email" %}
-                    {% slot label %}
-                        {% if not current_emailaddress %}
-                            {% translate "Current email" %}:
-                        {% else %}
-                            {% translate "Changing to" %}:
-                        {% endif %}
-                    {% endslot %}
-                    {% slot help_text %}
-                        {% blocktranslate %}Your email address is still pending verification.{% endblocktranslate %}
-                        {% element button form="pending-email" type="submit" name="action_send" tags="minor,secondary" %}
-                            {% trans 'Re-send Verification' %}
-                        {% endelement %}
-                        {% if current_emailaddress %}
-                            {% element button form="pending-email" type="submit" name="action_remove" tags="danger,minor" %}
-                                {% trans 'Cancel Change' %}
-                            {% endelement %}
-                        {% endif %}
-                    {% endslot %}
-                {% endelement %}
-            {% endif %}
-            {% for field in form %}
-                {% if field.errors %}
-                    <ul class="errorlist">
-                        {% for error in field.errors %}
-                            <li>{{ error }}</li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
+    <div class="d-flex flex-column align-items-center" style="gap: 2em;">
+        {% if form.non_field_errors %}
+        <ul class="errorlist">
+            {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
             {% endfor %}
-            {% element field id=form.email.auto_id name="email" value=form.email.value errors=form.email.errors type="email" %}
-                {% slot label %}
-                    {% translate "Change to" %}:
-                {% endslot %}
-            {% endelement %}
-        {% endslot %}
-        {% slot actions %}
-            {% element button name="action_add" type="submit" %}
-                {% trans "Change Email" %}
-            {% endelement %}
-        {% endslot %}
-    {% endelement %}
-    {% if new_emailaddress %}
-        <form style="display: none"
-              id="pending-email"
-              method="post"
-              action="{% url 'account_email' %}">
-            {% csrf_token %}
-            <input type="hidden" name="email" value="{{ new_emailaddress.email }}">
-        </form>
-    {% endif %}
-    <p><a href="{% url 'go_back' %}" class="button">Volver</a></p>
+        </ul>
+        {% endif %}
+        {% element h1 %}
+            {% trans "Email Address" %}
+        {% endelement %}
+        {% if not emailaddresses %}
+            {% include "account/snippets/warn_no_email.html" %}
+        {% endif %}
+        {% url 'account_email' as action_url %}
+        {% element form method="post" action=action_url %}
+            {% slot body %}
+                {% csrf_token %}
+                {% if current_emailaddress %}
+                    {% element field id="current_email" disabled=True type="email" value=current_emailaddress.email %}
+                        {% slot label %}
+                            {% translate "Current email" %}:
+                        {% endslot %}
+                    {% endelement %}
+                {% endif %}
+                {% if new_emailaddress %}
+                    {% element field id="new_email" value=new_emailaddress.email disabled=True type="email" %}
+                        {% slot label %}
+                            {% if not current_emailaddress %}
+                                {% translate "Current email" %}:
+                            {% else %}
+                                {% translate "Changing to" %}:
+                            {% endif %}
+                        {% endslot %}
+                        {% slot help_text %}
+                            {% blocktranslate %}Your email address is still pending verification.{% endblocktranslate %}
+                            {% element button form="pending-email" type="submit" name="action_send" tags="minor,secondary" %}
+                                {% trans 'Re-send Verification' %}
+                            {% endelement %}
+                            {% if current_emailaddress %}
+                                {% element button form="pending-email" type="submit" name="action_remove" tags="danger,minor" %}
+                                    {% trans 'Cancel Change' %}
+                                {% endelement %}
+                            {% endif %}
+                        {% endslot %}
+                    {% endelement %}
+                {% endif %}
+                {% for field in form %}
+                    {% if field.errors %}
+                        <ul class="errorlist">
+                            {% for error in field.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% endfor %}
+                {% element field id=form.email.auto_id name="email" value=form.email.value errors=form.email.errors type="email" %}
+                    {% slot label %}
+                        {% translate "Change to" %}:
+                    {% endslot %}
+                {% endelement %}
+            {% endslot %}
+            {% slot actions %}
+                {% element button name="action_add" type="submit" %}
+                    {% trans "Change Email" %}
+                {% endelement %}
+            {% endslot %}
+        {% endelement %}
+        {% if new_emailaddress %}
+            <form 
+                id="pending-email"
+                method="post"
+                action="{% url 'account_email' %}"
+                >
+                {% csrf_token %}
+                <input type="hidden" name="email" value="{{ new_emailaddress.email }}">
+            </form>
+        {% endif %}
+        <a href="{% url 'home' %}" class="btn btn-light">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-return-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/>
+            </svg>
+            Volver
+        </a>
+    </div>
 {% endblock content %}

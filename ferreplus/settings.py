@@ -28,9 +28,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-h_bgs@c!1=hf8lsu3e!baeq+tnzvc6fa@rheo#yn8b^9x@#s5-'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env("DEBUG_MODE", True)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [env("ALLOWED_HOST", '127.0.0.1')]
 
 
 # Application definition
@@ -54,6 +54,8 @@ INSTALLED_APPS = [
     "posts.apps.PostsConfig",
     "branches.apps.BranchesConfig",
     "adminpanel.apps.AdminpanelConfig",
+    "barter.apps.BarterConfig", 
+    "turns.apps.TurnsConfig",
 ]
 
 MIDDLEWARE = [
@@ -142,6 +144,8 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
+STATIC_ROOT = "/var/www/ferreplus/static"
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
@@ -151,6 +155,7 @@ AUTH_USER_MODEL = "accounts.CustomUser"
 
 LOGIN_REDIRECT_URL = "home"
 ACCOUNT_LOGOUT_REDIRECT = "home"
+#ACCOUNT_SIGNUP_REDIRECT_URL = "/norms"
 
 ACCOUNT_FORMS = {
     "signup": "accounts.forms.CustomUserCreationForm",

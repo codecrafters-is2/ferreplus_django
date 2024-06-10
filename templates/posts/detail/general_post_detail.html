@@ -1,0 +1,66 @@
+<!-- templates/general_post_detail.html -->
+{% extends "_base_wildcard_bootstrap.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="generic-container">
+        {% block warning_sign_post %}{% endblock warning_sign_post %}
+        <div class="row">
+            <div class="col-md-8">
+                <h1 class="text-black text-center">{{ post.title }}</h1>
+                <p><strong>Descripción:</strong></p>
+                <p>{{ post.body }}</p>
+                {% block additional_fields %}{% endblock additional_fields %}
+                <p><strong>Sucursal de preferencia:</strong> {% if post.branch %} {{ post.branch }} {% else %} {% endif %}</p>
+                <p><strong>Categoría:</strong> {{ post.get_category_display }}</p>
+                <p><strong>Nuevo:</strong> {{ post.new|yesno:"Sí,No" }}</p>
+                <p><strong>Marca:</strong> {% if post.brand %} {{ post.brand }} {% else %} {% endif %}</p>
+            </div>
+            <div class="col-md-4">
+                <div class="shadow border border-dark rounded-lg p-3">
+                    <img src="{{ post.image.url }}" alt="Imagen de la publicación" class="img-thumbnail">
+                </div>
+            </div>
+        </div>
+        {% block questions %} {# Se deja este general para el cliente visitante de la publicación (los otros deben redefinir el bloque)#}
+            <div class="mt-4">
+                <div class="Questions">
+                    <hr>
+                    <h4> Preguntas: </h4>
+                    {% block for-questions %}
+                    {% for question in post.questions.all %}
+                    <div class="border p-3 mb-3 rounded bg-light">
+                        <p>{{ question.content }}</p>
+                        {% block answer %}{% endblock answer %}
+                        {% if question.answer %}
+                            <div class="bg-secondary text-white p-3 rounded mt-2">
+                                <p><strong>Respuesta:</strong> {{ question.answer }}</p>
+                            </div>
+                        {% endif %}
+                        {% if user == question.user %}
+                            <form method="post" action="{% url 'delete_question' question.id %}" onsubmit="return confirmDelete();">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Eliminar Pregunta</button>
+                            </form>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                    {% endblock for-questions %}
+                    <hr>
+                </div>
+            </div>
+        {% endblock questions %}
+        {% block ask_question %}{% endblock ask_question %}
+        {% block additional_content %}
+            <script src="{% static '/styles/products/toggleResponseForm.js' %}"></script>
+        {% endblock additional_content %}
+        <div class="mt-4">
+            <div class="buttons">
+                {% block additional_buttons %}{% endblock additional_buttons %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %} 

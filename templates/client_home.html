@@ -1,4 +1,4 @@
-{% extends "_base.html" %} 
+{% extends "_base_wildcard_bootstrap.html" %} 
 {% load static %}
 
 {% block title %}Ferreplus{% endblock title %} 
@@ -12,7 +12,7 @@
         <div class="home-container">
             <div class="client-dashboard">
                 <div>
-                    <h1>Hola {{ request.user.username }}!</h1>
+                    <h1>Hola <strong>{{ request.user.username }}</strong>!</h1>
                     <h2>Qué bueno verte de nuevo</h2>
                 </div>
                 <div class="productos-container">
@@ -20,14 +20,31 @@
                     <div class="post-product">
                         <a href="{% url 'post_new' %}">
                             <button class="menu-button">
-                                <img src={% static 'img/icons/add_product.png' %} %} />
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard-plus" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M8 7a.5.5 0 0 1 .5.5V9H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V10H6a.5.5 0 0 1 0-1h1.5V7.5A.5.5 0 0 1 8 7"/>
+                                    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"/>
+                                    <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"/>
+                                </svg>
+                                
                                 Publicar producto
                             </button>
                         </a>
                         <a href="{% url 'post_list' %}">
                             <button class="menu-button">
-                                <img src={% static 'img/icons/add_product.png' %} %} />
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard-check" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
+                                    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"/>
+                                    <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"/>
+                                </svg>
                                 Todas las publicaciones
+                            </button>
+                        </a>
+                        <a href="{% url 'my_barters' %}">
+                            <button class="menu-button">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-right" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M1 11.5a.5.5 0 0 0 .5.5h11.793l-3.147 3.146a.5.5 0 0 0 .708.708l4-4a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 11H1.5a.5.5 0 0 0-.5.5m14-7a.5.5 0 0 1-.5.5H2.707l3.147 3.146a.5.5 0 1 1-.708.708l-4-4a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H14.5a.5.5 0 0 1 .5.5"/>
+                                  </svg>
+                                Mis trueques
                             </button>
                         </a>
                     </div>
@@ -35,4 +52,37 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="termsModalLabel">Norma del Sitio</h5>
+                </div>
+                <div class="modal-body">
+                    <p>¡Atención! Por favor lea y acepte la siguiente norma del sitio:</p>
+                    <ul>
+                        <li>Al momento de hacer preguntas o respuestas sobre las publicaciones está terminantemente prohibido dar a conocer información personal como dirección, teléfono, redes sociales, etc. Si esta norma se infringe las preguntas o respuestas prodrán ser eliminadas del sitio. </li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <form method="post" id="acceptTermsForm">
+                        {% csrf_token %}
+                        <button type="submit" name="accept_terms" class="btn btn-primary">Aceptar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            {% if show_modal %}
+                $('#termsModal').modal('show');
+            {% endif %}
+        });
+
+    </script>
 {% endblock content %}
+

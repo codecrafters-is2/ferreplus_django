@@ -1,0 +1,20 @@
+{% extends "posts/list/_post_list_layout.html" %}
+{% load static %}
+
+{% block title %}Publicaciones{% endblock title %}
+
+{% block list_title %} <h1 style="color:#ffffff; font-size: 48px; filter: drop-shadow(1px 1px 12px #444444);">Publicaciones</h1> {% endblock list_title %}
+
+{% block results %}
+    <div class="product-card">
+        {% if post.image %}
+            <img src="{{post.image.url}}" alt="post image"> 
+        {% endif %} 
+        <div class="card-header">
+            <h2>
+                <a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a>
+            </h2> 
+            <a href="{% url 'barter_request' post.pk %}" class="btn btn-info">Solicitar Trueque</a>
+        </div>
+    </div>
+{% endblock results %}

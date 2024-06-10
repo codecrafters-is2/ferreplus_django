@@ -21,6 +21,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     # User management
@@ -30,6 +31,9 @@ urlpatterns = [
     path("", include("pages.urls")),
     path("posts/", include("posts.urls")),
     path("adminpanel/", include("adminpanel.urls")),
+    path("barter/", include("barter.urls")),
+    path("turns/", include("turns.urls")),
+    path("employee/", include("employeepanel.urls"))
 ]
 
 if settings.DEBUG: #Solo proyecto en desarrollo, falta para producción
