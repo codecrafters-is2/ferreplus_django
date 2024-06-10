@@ -1,12 +1,11 @@
 from django.shortcuts import redirect
 from django.shortcuts import render
-from django.views.generic import TemplateView
-#from accounts.models import CustomUser
-#from posts.models import Post
+from django.views.generic import TemplateView, ListView
 from accounts.mixins import ClientRequiredMixin,AdminRequiredMixin,EmployeeRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import reverse
 from django.views import View
+from branches.models import Branch
 
 class GoBack(View):
     def get(self, request, *args, **kwargs):
@@ -17,7 +16,6 @@ class GoBack(View):
         else:
             # Si no hay una página anterior, redirigir a una URL predeterminada
             return HttpResponseRedirect(reverse('home'))
-
 
 
 class HomePageView(TemplateView):
@@ -43,7 +41,7 @@ class HomePageView(TemplateView):
 class ClientHomeView(ClientRequiredMixin,TemplateView):
     #model = Post -> No es necesario por la redefinicion del metodo
     template_name = "client_home.html"
-    
+
 
 class AdmiHomeView(AdminRequiredMixin,TemplateView):
     template_name = "adminpanel.html"
@@ -55,7 +53,12 @@ class EmployeeHomeView(EmployeeRequiredMixin,TemplateView):
 
 class PasswordChangeSuccessView(TemplateView):
     template_name = "temp_messages/password_change_successful.html"
-    
+
 class EmailEditSuccessView(TemplateView):
     template_name = "temp_messages/email_change_successful.html"
-    
+
+
+class ShowContactInfo(ListView):
+    model = Branch
+    template_name = "contact_info.html"
+    context_object_name = "branches"

@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib.auth.decorators import login_required
-from .views import HomePageView,ClientHomeView,AdmiHomeView,EmployeeHomeView, GoBack, PasswordChangeSuccessView, EmailEditSuccessView
+from .views import HomePageView,ClientHomeView,AdmiHomeView,EmployeeHomeView, GoBack, PasswordChangeSuccessView, EmailEditSuccessView, ShowContactInfo
 from accounts.mixins import AdminRequiredMixin, ClientRequiredMixin
 
 
@@ -11,5 +11,6 @@ urlpatterns = [
     path("password/change/successful", PasswordChangeSuccessView.as_view(), name="password_change_success"),
     path("profile-edit-success", EmailEditSuccessView.as_view(), name="profile_edit_success"),
     path("", ClientHomeView.as_view(), name="client_home"),
-    path("", GoBack.as_view(), name='go_back')
+    path("", GoBack.as_view(), name='go_back'),
+    path('contact/', ShowContactInfo.as_view(), name='contact'),
 ]
