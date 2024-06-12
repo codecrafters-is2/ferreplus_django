@@ -1,11 +1,11 @@
 from django.shortcuts import redirect
 from django.shortcuts import render
-from django.views.generic import TemplateView
-# from posts.models import Post
+from django.views.generic import TemplateView, ListView
 from accounts.mixins import ClientRequiredMixin,AdminRequiredMixin,EmployeeRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import reverse, get_object_or_404
 from django.views import View
+from branches.models import Branch
 from accounts.models import EmployeeUser
 
 
@@ -49,8 +49,6 @@ class HomePageView(TemplateView):
     #    return context
 
 
-
-
 class ClientHomeView(ClientRequiredMixin,TemplateView):
     #model = Post -> No es necesario por la redefinicion del metodo
     template_name = "client_home.html"
@@ -72,3 +70,24 @@ class PasswordChangeSuccessView(TemplateView):
 
 class EmailEditSuccessView(TemplateView):
     template_name = "temp_messages/email_change_successful.html"
+
+
+class ShowContactInfo(ListView):
+    model = Branch
+    template_name = "contact_info.html"
+    context_object_name = "branches"
+
+
+def show_contact_info(request):
+    branches = Branch.objects.all()
+
+    branches_by_city = {}
+    for branch in branches:
+        city = branch.city
+        if city in branches_by_city:
+            branches_by_city[city].append(branch)
+        else:
+            branches_by_city[city] = [branch]
+
+    context = {'branches_by_city': branches_by_city}
+    return render(request, "contact_info.html", context)
