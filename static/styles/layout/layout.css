@@ -141,7 +141,7 @@ button {
 }
 
 .base-footer {
-    width: 100vw;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -151,7 +151,7 @@ button {
 .base-footer-inner-container {
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .footer-item {
@@ -161,6 +161,7 @@ button {
     justify-content: center;
     color: #ebf1f8;
 }
+
 
 .logged-user-button {
     transition: all 300ms ease;
