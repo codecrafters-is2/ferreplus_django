@@ -31,7 +31,7 @@ def filter_products_by_query_params(query_params: Dict) -> QuerySet:
         )
 
     if categories_query:
-        queryset = queryset.filter(category__in=categories_query)
+        queryset = queryset.filter(category__name__in=categories_query)
 
     if prices:
         min_price, max_price = prices.values()

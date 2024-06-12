@@ -41,8 +41,8 @@ class ProductSearchView(ListView):
             "name": name_query,
             "categories": categories_query,
             "prices": {
-                "min_price": float(min_price),
-                "max_price": float(max_price)
+                "min_price": float(min_price) if min_price is not None else min_price,
+                "max_price": float(max_price) if max_price is not None else max_price
             }
         }
 

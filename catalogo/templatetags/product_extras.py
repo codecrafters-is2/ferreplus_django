@@ -1,5 +1,5 @@
 from django import template
-from catalogo.models import Product
+from catalogo.models import Product, ProductCategory
 
 register = template.Library()
 
@@ -11,3 +11,18 @@ def show_product_card(product):
         "image": product.main_image
     }
     return displayable_product
+
+
+@register.inclusion_tag("ui_components/categories_selector.html")
+def show_catalog_categories_selector() -> dict:
+    categories_list = []
+    raw_categories = ProductCategory.objects.all()
+    for category in raw_categories:
+        categories_list.append({
+            "name": category.name,
+            "description": category.description,
+            "db_name": category.name,
+            "image": category.image
+        })
+
+    return { "categories": categories_list }
