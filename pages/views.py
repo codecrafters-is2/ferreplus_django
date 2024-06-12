@@ -49,8 +49,6 @@ class HomePageView(TemplateView):
     #    return context
 
 
-
-
 class ClientHomeView(ClientRequiredMixin,TemplateView):
     #model = Post -> No es necesario por la redefinicion del metodo
     template_name = "client_home.html"
@@ -78,3 +76,18 @@ class ShowContactInfo(ListView):
     model = Branch
     template_name = "contact_info.html"
     context_object_name = "branches"
+
+
+def show_contact_info(request):
+    branches = Branch.objects.all()
+
+    branches_by_city = {}
+    for branch in branches:
+        city = branch.city
+        if city in branches_by_city:
+            branches_by_city[city].append(branch)
+        else:
+            branches_by_city[city] = [branch]
+
+    context = {'branches_by_city': branches_by_city}
+    return render(request, "contact_info.html", context)
