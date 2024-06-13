@@ -1,5 +1,5 @@
 # Python
-from typing import Dict
+from typing import Dict, Optional
 # Django
 from django.views.generic import ListView
 # Local
@@ -33,18 +33,27 @@ class ProductSearchView(ListView):
             categories_query = raw_categories_query.split(",")
         else:
             categories_query = ""
-
-        min_price = self.request.GET.get("min-price")
-        max_price = self.request.GET.get("max-price")
+        
+        min_price = self._extract_float(self.request.GET.get("min_price"))
+        max_price = self._extract_float(self.request.GET.get("max_price"))
 
         return {
             "name": name_query,
             "categories": categories_query,
             "prices": {
-                "min_price": float(min_price) if min_price is not None else min_price,
-                "max_price": float(max_price) if max_price is not None else max_price
+                "min_price": min_price,
+                "max_price": max_price
             }
         }
+    
+    def _extract_float(self, str_value: str) -> Optional[str]:
+        converted_value = None
+        try:
+            converted_value = float(str_value)
+        except ValueError:
+            return None
+        return converted_value
+
 
 class PostCreateView():
     pass

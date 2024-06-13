@@ -23,7 +23,7 @@ def filter_products_by_query_params(query_params: Dict) -> QuerySet:
     queryset = get_active_products()
     name_query = query_params.get("name")
     categories_query = query_params.get("categories")
-    prices: Dict = query_params.get("price")
+    prices: Dict = query_params.get("prices")
 
     if name_query:
         queryset = queryset.filter(
@@ -32,8 +32,8 @@ def filter_products_by_query_params(query_params: Dict) -> QuerySet:
 
     if categories_query:
         queryset = queryset.filter(category__name__in=categories_query)
-
-    if prices:
+    
+    if prices is not None:
         min_price, max_price = prices.values()
         if min_price:
             queryset = queryset.exclude(price__lte=min_price)

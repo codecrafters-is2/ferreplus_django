@@ -8,7 +8,8 @@ def show_product_card(product):
     displayable_product = {
         "name": product.name,
         "description": product.description,
-        "image": product.main_image
+        "image": product.main_image,
+        "price": product.price
     }
     return displayable_product
 
