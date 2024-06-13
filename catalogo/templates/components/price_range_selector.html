@@ -1,0 +1,26 @@
+<style>
+    .price-selector-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    @media (min-width: 1024px) { 
+    .price-selector-container {
+        flex-direction: row;
+    }
+}
+
+</style>
+
+<div class="price-selector-container">
+    <div>
+        <label>Precio mínimo</label>
+        <input name="min_price" type="number" />
+    </div>
+    <div>
+        <label>Precio máximo</label>
+        <input name="max_price" type="number" />
+    </div>
+</div>

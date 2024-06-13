@@ -8,11 +8,17 @@
         align-items: center;
         box-shadow: -11px 11px 1px rgba(0, 0, 0, 0.3);
         border-radius: 25px;
-        background: #fa782e;
-        background: -webkit-linear-gradient(-45deg, #fa782e 8%, #c82930 83%);
-        background: linear-gradient(135deg, #fa782e 8%, #c82930 83%);
+        background: #4efff0;
+        background: -webkit-linear-gradient(-45deg, #4efff0 8%, #029c8f 83%);
+        background: linear-gradient(135deg, #4efff0 8%, #029c8f 83%);
         padding: 0 0;
         text-align: center;
+        transition: all 100ms ease-in;
+        color:rgba(0, 0, 0, 0.3)
+    }
+
+    .catalog-product-card:hover {
+        transform: scale(1.005);
     }
 
     .card-head {
@@ -33,14 +39,13 @@
 </style>
 
 
-<div>
+<a href="/" style="text-decoration: none;">
     <div class="catalog-product-card">
         <div class="card-head">
             <div>
                 <img src="{{ image.url }}" />
             </div>
             <h3>{{ name }}</h2>
-            <h3>{{ name }}</h2>
         </div>
     </div>
-</div>
+</a>
