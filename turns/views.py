@@ -9,7 +9,6 @@ from accounts.mixins import ClientRequiredMixin, EmployeeRequiredMixin
 from django.views.generic import TemplateView, CreateView, View, DeleteView
 from django.db.models import Q
 from django.views.decorators.http import require_POST
-from django.http import JsonResponse
 
 class ProposeTurnsView(ClientRequiredMixin, FormView):
     template_name = 'turns/propose_turns.html'
@@ -154,7 +153,8 @@ class RegisterBarterView(EmployeeRequiredMixin, View):
         barter = get_object_or_404(Barter, id=barter_id)
         employee_id = kwargs.get('employee_id')
         employee = get_object_or_404(EmployeeUser, id=employee_id)
-        barter.register(employee)
+        income = request.POST.get('income')
+        barter.register(employee, income)
         Appointment.objects.filter(barter=barter).delete()
         return redirect('barter_finished', employee_id)
     
