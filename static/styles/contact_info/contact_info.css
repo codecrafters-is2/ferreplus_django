@@ -1,0 +1,36 @@
+.accordion {
+    background: rgba(36, 166, 206, 0.27);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(7.6px);
+    -webkit-backdrop-filter: blur(7.6px);
+    border: 1px solid rgba(255, 255, 255, 0.36);
+    text-align: center;
+    padding: 1em 1em 2em 1em;
+    color: rgb(0, 0, 0);
+    font-family: 'Raleway';
+    src: url("/static/fonts/Raleway/Raleway-VariableFont_wght.ttf");
+    font-size: medium;
+}
+
+.accordion-button{
+    font-size: medium;
+    font-weight: 600;
+}
+
+.card{
+    background: rgba(36, 166, 206, 0.27);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(7.6px);
+    -webkit-backdrop-filter: blur(7.6px);
+    border: 1px solid rgba(255, 255, 255, 0.36);
+    text-align: center;
+    margin: 5px;
+    color: rgb(0, 0, 0);
+    font-family: 'Raleway';
+    src: url("/static/fonts/Raleway/Raleway-VariableFont_wght.ttf");
+    font-size: medium;
+    border-color: #E8E4E4
+
+}

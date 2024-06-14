@@ -30,7 +30,7 @@ SECRET_KEY = 'django-insecure-h_bgs@c!1=hf8lsu3e!baeq+tnzvc6fa@rheo#yn8b^9x@#s5-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env("DEBUG_MODE", True)
 
-ALLOWED_HOSTS = [env("ALLOWED_HOST", '127.0.0.1')]
+ALLOWED_HOSTS = [env("ALLOWED_HOST", '127.0.0.1'), 'localhost']
 
 
 # Application definition
@@ -188,4 +188,4 @@ ACCOUNT_CHANGE_EMAIL=True
 ACCOUNT_ADAPTER = "accounts.adapters.FerreplusAccountAdapter"
 
 MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR,"media")
+MEDIA_ROOT = env("MEDIA_ROOT", os.path.join(BASE_DIR,"media"))
