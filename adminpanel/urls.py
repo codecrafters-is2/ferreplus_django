@@ -7,6 +7,7 @@ from .views import (
     AdminPanelView,
     EmployeeSignupView,
     EmployeeSuccessView,
+    MetricsAnalysis
 )
 
 urlpatterns = [
@@ -21,4 +22,5 @@ urlpatterns = [
         EmployeeSuccessView.as_view(),
         name="employee_success",
     ),
+    path("metrics/", MetricsAnalysis.as_view(), name="metrics_analysis")
 ]

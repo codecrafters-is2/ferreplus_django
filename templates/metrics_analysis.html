@@ -1,0 +1,18 @@
+{% extends "_base_wildcard_bootstrap.html" %} 
+{% load static %}
+
+{% block title %}Ferreplus{% endblock title %} 
+<head>
+    {% block custom_styles %}
+        <link rel="stylesheet" href="{% static 'styles/home/client_home.css' %}">
+    {% endblock custom_styles %}
+</head>
+{% block content %}
+    <div>
+        {% for barter in barters %}
+            <p>Date {{barter.finished_date}}</p>
+        {% endfor %}
+        
+    </div>
+{% endblock content %}
+

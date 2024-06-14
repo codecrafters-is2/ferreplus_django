@@ -11,6 +11,7 @@ from accounts.models import EmployeeUser
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404
+from barter.models import Barter
 
 class AdminPanelView(AdminRequiredMixin, TemplateView):
     template_name = 'adminpanel.html'
@@ -73,3 +74,11 @@ class EmployeeSuccessView(AdminRequiredMixin, View):
     def get(self, request, employee_id):
         employee = get_object_or_404(EmployeeUser, id=employee_id)
         return render(request, "account/employee_success.html", {"employee": employee})
+
+
+class MetricsAnalysis(AdminRequiredMixin, View):
+    def get(self, request):
+        barters = Barter.objects.all()
+        return render(request, "metrics_analysis.html",{
+            "barters": barters          
+        })
