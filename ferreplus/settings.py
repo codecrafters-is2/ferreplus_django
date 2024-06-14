@@ -188,4 +188,4 @@ ACCOUNT_CHANGE_EMAIL=True
 ACCOUNT_ADAPTER = "accounts.adapters.FerreplusAccountAdapter"
 
 MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR,"media")
+MEDIA_ROOT = env("MEDIA_ROOT", os.path.join(BASE_DIR,"media"))
