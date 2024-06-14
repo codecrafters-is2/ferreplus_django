@@ -21,6 +21,7 @@ class Barter(models.Model):
     branch = models.ForeignKey(Branch, related_name='barter_branch', on_delete=models.SET_NULL, null=True)
     state = models.CharField(max_length=20, choices=BARTER_STATE_CHOICES, default=BARTER_STATE_REQUESTED,) 
     employee = models.ForeignKey(EmployeeUser, related_name='barter_employee', on_delete=models.SET_NULL, null=True)
+    income = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     
     def delete(self):
         self.state = self.BARTER_STATE_CANCELLED
@@ -39,9 +40,10 @@ class Barter(models.Model):
         self.requesting_post.reserve_post()
         self.save()
     
-    def register(self, employee):
+    def register(self, employee, income=0):
         self.change_state('committed')
         self.employee = employee
+        self.income = income
         self.requested_post.complete_post()
         self.requesting_post.complete_post()
         self.save()
