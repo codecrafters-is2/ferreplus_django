@@ -1,4 +1,6 @@
+# Django
 from django import template
+# Local
 from catalogo.models import Product, ProductCategory
 
 register = template.Library()

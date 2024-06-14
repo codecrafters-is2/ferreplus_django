@@ -1,7 +1,8 @@
 # Python
 from typing import Dict, Optional
 # Django
-from django.views.generic import ListView
+from django.views.generic import View, ListView
+from django.views.generic.edit import CreateView
 # Local
 from .models import Product
 from .services import get_active_products, filter_products_by_query_params
@@ -55,5 +56,7 @@ class ProductSearchView(ListView):
         return converted_value
 
 
-class PostCreateView():
-    pass
+class ProductCreateView(CreateView):
+    model = Product
+    def post():
+        pass

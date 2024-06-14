@@ -1,5 +1,5 @@
 # Python
-from typing import Dict
+from typing import Dict, Optional
 # Django
 from django.db.models import QuerySet, Q
 from django.core.exceptions import ObjectDoesNotExist
@@ -44,3 +44,11 @@ def filter_products_by_query_params(query_params: Dict) -> QuerySet:
 
 def get_product_images(product: Product) -> QuerySet:
     return ProductImage.objects.filter(product=product)
+
+
+def get_category_by_name(category_name: str) -> Optional[ProductCategory]:
+    try:
+        category = ProductCategory.objects.get(name=category_name)
+    except ObjectDoesNotExist:
+        return None
+    return category
