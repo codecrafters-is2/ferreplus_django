@@ -6,8 +6,7 @@ from .views import (
     BranchDeleteView,
     AdminPanelView,
     EmployeeSignupView,
-    EmployeeSuccessView,
-    MetricsAnalysis
+    EmployeeSuccessView
 )
 
 urlpatterns = [
@@ -21,6 +20,5 @@ urlpatterns = [
         "success/<int:employee_id>/",
         EmployeeSuccessView.as_view(),
         name="employee_success",
-    ),
-    path("metrics/", MetricsAnalysis.as_view(), name="metrics_analysis")
+    )
 ]

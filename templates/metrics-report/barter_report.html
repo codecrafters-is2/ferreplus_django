@@ -1,0 +1,47 @@
+{% extends "_base_wildcard_bootstrap.html" %}
+{% load static %}
+{% block title %}Ferreplus{% endblock title %}
+<head>
+    {% block custom_styles %}
+    <link rel="stylesheet" href="{% static 'styles/home/adminpanel.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    {% endblock custom_styles %}
+</head>
+{% block content %}
+<div>
+    <h1>Ver Métricas</h1>
+    <h2>Gráfico de Barras: Trueques por Año</h2>
+    <form method="post" action="{% url 'barter_chart' %}">
+        {% csrf_token %}
+        <label for="year">Selecciona un año:</label>
+        <input type="number" id="year" name="year" min="2000" max="2024" value="{{ selected_year|default_if_none:'' }}">
+        <button type="submit">Generar Gráfico</button>
+    </form>
+    {% if labels and data %}
+    <canvas id="barChart"></canvas>
+    <script>
+        var ctx = document.getElementById('barChart').getContext('2d');
+        var barChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: {{ labels|safe }},
+                datasets: [{
+                    label: 'Cantidad de Trueques',
+                    data: {{ data }},
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+    {% endif %}
+</div>
+{% endblock content %}
