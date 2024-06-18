@@ -13,16 +13,16 @@
     <div>
         <div>
             <h2>Cantidad de trueques finalizados por año: </h2>
-            <form method="post" action="{% url 'barter_chart' %}">
+            <form method="post" action="{% url 'income_charts' %}">
                 {% csrf_token %}
                 <label for="year">Selecciona un año:</label>
                 <input type="number" id="year" name="year" min="2000" max="2024" value="{{ selected_year|default_if_none:'' }}">
                 <button type="submit">Generar Gráfico</button>
             </form>
             {% if chart_1.labels and chart_1.data %}
-            <canvas id="barChart"></canvas>
+            <canvas id="barChartIncome"></canvas>
             <script>
-                var ctx = document.getElementById('barChart').getContext('2d');
+                var ctx = document.getElementById('barChartIncome').getContext('2d');
                 var barChart = new Chart(ctx, {
                     type: 'bar',
                     data: {
@@ -68,46 +68,8 @@
             </script>
             {% endif %}
         </div>
-        <div>
-            <h3>Estado actual de los trueques: </h3>
-            <canvas id="pieChart"></canvas>
-            <script>
-                var ctx = document.getElementById('pieChart').getContext('2d');
-                var barChart = new Chart(ctx, {
-                    type: 'pie',
-                    data: {
-                        labels: {{ chart_2.labels|safe }},
-                        datasets: [{
-                            label: 'Cantidad de Trueques',
-                            data: {{ chart_2.data }},
-                            
-                            borderWidth: 1
-                        }]
-                    }
-                });
-
-            </script>
-        </div>
-        <div>
-            <h3>Cantidad de trueques por sucursal: </h3>
-            <canvas id="doughnutChart"></canvas>
-            <script>
-                var ctx = document.getElementById('doughnutChart').getContext('2d');
-                var barChart = new Chart(ctx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: {{ chart_3.labels|safe }},
-                        datasets: [{
-                            label: 'Cantidad de Trueques',
-                            data: {{ chart_3.data }},
-                            
-                            borderWidth: 1
-                        }]
-                    }
-                });
-
-            </script>
-        </div>
     </div>
+        
+
 </div>
 {% endblock content %}

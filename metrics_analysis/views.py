@@ -4,16 +4,10 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Count, F, Sum, Avg
 from django.db.models.functions import ExtractYear, ExtractMonth, TruncMonth
 from django.http import JsonResponse
-
 from barter.models import Barter
-from .utils import (
-    months,
-    colorPrimary,
-    colorSuccess,
-    colorDanger,
-    generate_color_palette,
-    get_year_dict,
-)
+from accounts.models import EmployeeUser
+from branches.models import Branch
+from .utils import BarterCharts, IncomeCharts
 
 
 class MetricsView(TemplateView):
@@ -21,25 +15,60 @@ class MetricsView(TemplateView):
 
 
 def barter_chart_view(request):
+    barter_charts = BarterCharts()
+    labels_2, data_2 = barter_charts.info_chart_2()
+    labels_3, data_3 = barter_charts.info_chart_3()
+    context = {
+        "chart_2": {
+            "labels": labels_2,
+            "data": data_2,
+        },
+        "chart_3":{
+            "labels": labels_3,
+            "data": data_3,
+        }
+    }
+
     if request.method == "POST":
         year = request.POST.get("year")
         if year:
-            # Obtener la cantidad de trueques por mes para el año seleccionado
-            barters_per_month = list(
-                Barter.objects.filter(finished_date__year=year)
-                .annotate(month=TruncMonth("finished_date"))
-                .values("month")
-                .annotate(count=Count("id"))
-                .order_by("month")
-                .values("month", "count")
-            )
+            labels, values = barter_charts.info_chart_1(year=year)
 
-            # Preparar los datos para el gráfico
-            labels = [barter["month"].strftime("%B") for barter in barters_per_month]
-            data = [barter["count"] for barter in barters_per_month]
+            context["chart_1"] = {
+                "labels": labels,
+                "data": values,
+                "selected_year": year,
+            }
 
-            context = {"labels": labels, "data": data, "selected_year": year}
-            return render(request, "metrics-report/barter_report.html", context)
+    return render(request, "metrics-report/barter_report.html", context)
 
-    # Renderizar la plantilla sin datos si no se ha seleccionado un año
-    return render(request, "metrics-report/barter_report.html")
+
+def income_chart_view(request):
+    income_charts = IncomeCharts()
+
+    context={}
+    ## labels_2, data_2 = info_chart_2()
+    ## labels_3, data_3 = info_chart_3()
+    ## context = {
+    ##    "chart_2": {
+    ##        "labels": labels_2,
+    ##        "data": data_2,
+    ##    },
+    ##    "chart_3": {
+    ##        "labels": labels_3,
+    ##        "data": data_3,
+    ##    },
+    ## }
+    #
+    if request.method == "POST":
+        year = request.POST.get("year")
+        if year:
+            labels, values = income_charts.info_chart_1(year=year)
+
+            context["chart_1"] = {
+                "labels": labels,
+                "data": values,
+                "selected_year": year,
+            }
+
+    return render(request, "metrics-report/income_report.html", context)

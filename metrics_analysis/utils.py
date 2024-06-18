@@ -1,29 +1,103 @@
-months = [
-    "January", "February", "March", "April",
-    "May", "June", "July", "August",
-    "September", "October", "November", "December"
+from django.views.generic import TemplateView
+from django.shortcuts import render
+from django.contrib.admin.views.decorators import staff_member_required
+from django.db.models import Count, F, Sum, Avg
+from django.db.models.functions import ExtractYear, ExtractMonth, TruncMonth
+from django.http import JsonResponse
+from barter.models import Barter
+from accounts.models import EmployeeUser
+from branches.models import Branch
+
+MONTHS_NAMES = [
+    "enero",
+    "febrero",
+    "marzo",
+    "abril",
+    "mayo",
+    "junio",
+    "julio",
+    "agosto",
+    "septiembre",
+    "octubre",
+    "noviembre",
+    "diciembre",
 ]
-colorPalette = ["#55efc4", "#81ecec", "#a29bfe", "#ffeaa7", "#fab1a0", "#ff7675", "#fd79a8"]
-colorPrimary, colorSuccess, colorDanger = "#79aec8", colorPalette[0], colorPalette[5]
+
+class BarterCharts:
+    def info_chart_1(self, year):
+        values = [0] * 12
+        barters_per_month = list(
+            Barter.objects.filter(finished_date__year=year)
+            .annotate(month=TruncMonth("finished_date"))
+            .values("month")
+            .annotate(count=Count("id"))
+            .order_by("month")
+            .values("month", "count")
+        )
+        # Preparar los datos para el gráfico
+        month_nums = [barter["month"].month for barter in barters_per_month]
+        for i in range(len(month_nums)):
+            values[month_nums[i]] = barters_per_month[i]["count"]
+        return MONTHS_NAMES, values
+
+    def info_chart_2(self):
+        states_names = {
+            "accepted": "Aceptados",
+            "cancelled":"Cancelados",
+            "committed":"Finalizados",
+            "requested":"Solicitados",
+            "parcial_accepted":"Parcialmente Aceptados"
+        }
+        barter_states_count = list(
+            Barter.objects.values("state").annotate(count=Count("id")).order_by("state")
+        )
+
+        labels = []
+        data = []
+        for state_count in barter_states_count:
+            state_name = states_names[state_count["state"]]
+            # state_name = dict(BARTER_STATE_CHOICES).get(state_value, "Unknown")
+            labels.append(state_name)
+            data.append(state_count["count"])
+
+        return labels, data
+
+    def info_chart_3(self):
+        barter_branch_count = list(
+            Barter.objects.values("branch").annotate(count=Count("id"))
+        )
+
+        labels = []
+        data = []
+        for branch_count in barter_branch_count:
+            branch = branch_count["branch"]
+            if branch is not None:
+                branch_obj = Branch.objects.get(id=branch)
+                labels.append(str(branch_obj))
+            else:
+                labels.append("No branch")
+            data.append(branch_count["count"])
+
+        return labels, data
 
 
-def get_year_dict():
-    year_dict = dict()
+class IncomeCharts:
+    def info_chart_1(self, year):
+        values = [0] * 12
+        barters_per_month = list(
+            Barter.objects.filter(finished_date__year=year)
+            .annotate(month=TruncMonth("finished_date"))
+            .values("month")
+            .annotate(total_income=Sum("income"))
+            .order_by("month")
+            .values("month", "total_income")
+        )
 
-    for month in months:
-        year_dict[month] = 0
+        # Preparar los datos para el gráfico
+        for barter in barters_per_month:
+            month = barter["month"].month - 1  # Subtract 1 to convert to 0-indexed
+            values[month] = (
+                float(barter["total_income"]) if barter["total_income"] else 0.0
+            )
 
-    return year_dict
-
-
-def generate_color_palette(amount):
-    palette = []
-
-    i = 0
-    while i < len(colorPalette) and len(palette) < amount:
-        palette.append(colorPalette[i])
-        i += 1
-        if i == len(colorPalette) and len(palette) < amount:
-            i = 0
-
-    return palette
+        return MONTHS_NAMES, values
