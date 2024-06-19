@@ -2,7 +2,7 @@
 from django.views import View
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
-from django.db.models import Q
+from django.db.models import Q,F,Case, When, Value, IntegerField
 from django.urls import reverse_lazy
 from django.urls import reverse
 from django.shortcuts import redirect,get_object_or_404
@@ -11,7 +11,7 @@ from django.http import Http404,HttpResponseRedirect
 from accounts.mixins import ClientRequiredMixin
 from .forms import QuestionForm, AnswerForm
 from .models import Post, ImagePost, Question
-from .forms import PostForm
+from .forms import PostForm, ChangePackageForm
 from .services import get_active_posts
 
 #Preguntas de las publicaciones:
@@ -47,14 +47,28 @@ class DeleteAnswerView(ClientRequiredMixin, View):
 
 
 #Publicaciones:
+class ChangePackageView(ClientRequiredMixin,UpdateView):
+    model = Post
+    template_name = "posts/change_package.html"
+    form_class = ChangePackageForm
+    
+    def get_success_url(self):
+        return reverse_lazy('my_post_detail', kwargs={'pk': self.object.pk})
+    
+    def form_valid(self, form):
+        form.save()  # Utiliza el método de save en el formulario para hacer el cambio de paquete y registrar la transacción.
+        return super().form_valid(form)
+
 class PostListView(ClientRequiredMixin,ListView):
     model = Post
     template_name = "posts/list/post_list.html"
     
     def get_queryset(self):
         # Obtener todas las publicaciones
-        queryset = super().get_queryset()
-        queryset = queryset.filter(status="available").exclude(author=self.request.user) #Por defecto -> queryset = Model.objects.all()
+        queryset = super().get_queryset().filter(status="available").exclude(author=self.request.user) #Por defecto -> queryset = Model.objects.all()
+        queryset = queryset.annotate(
+            package_priority=F('package__priority')  # Anotar con el valor del campo `priority` de `package`
+        ).order_by('package_priority', 'title')
         return queryset
 
 
@@ -239,14 +253,6 @@ class PostDeleteView(ClientRequiredMixin,DeleteView): #Eliminación de la public
             raise Http404("No tienes permiso para eliminar esta publicación.")
         post.delete_post()
         return redirect("my_post_list")
-    #def delete(self, request, *args, **kwargs):
-    #    from .models import Barter #Importación diferida
-    #    # Obtener la publicación antes de eliminarla
-    #    post = self.get_object()
-    #    # Cancelar todos los trueques donde la publicación estaba involucrada
-    #    Barter.objects.filter(Q(requesting_post=post) | Q(requested_post=post)).exclude(state=Barter.BARTER_STATE_CANCELLED).update(state=Barter.BARTER_STATE_CANCELLED)
-    #    # Llamar al método delete de la superclase para eliminar la publicación
-    #    return super().delete(request, *args, **kwargs)
 
 
 class PostSearchView(ClientRequiredMixin,ListView):
@@ -272,6 +278,9 @@ class PostSearchView(ClientRequiredMixin,ListView):
         if branch_query:
             queryset = queryset.filter(branch__id=branch_query)
 
+        queryset = queryset.annotate(
+            package_priority=F('package__priority')  
+        ).order_by('package_priority', 'title')
         return queryset
 
     def get_context_data(self, **kwargs):

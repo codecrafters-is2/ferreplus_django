@@ -1,5 +1,20 @@
 from django import forms
-from .models import Post,ImagePost, Question
+from .models import Post,ImagePost, Question, Package
+
+class ChangePackageForm(forms.ModelForm):
+    package = forms.ModelChoiceField(queryset=Package.objects.all(), required=True)
+
+    class Meta:
+        model = Post
+        fields = ['package']
+    
+    def save(self, commit=True):
+        post_instance = super().save(commit=False)
+        post_instance.change_package(self.cleaned_data['package'])
+        if commit:
+            post_instance.save()
+        return post_instance
+
 
 class PostForm(forms.ModelForm):
 

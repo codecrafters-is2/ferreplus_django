@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Post, ImagePost, Question
+from .models import Post, ImagePost, Question, Package, PackagePurchase
 
 #Registro de nuestros modelos:
 
@@ -24,3 +24,5 @@ class PostAdmin(admin.ModelAdmin): #Exclusivamente para el panel del administrad
 
 admin.site.register(Post, PostAdmin)
 admin.site.register(Question)
+admin.site.register(Package)
+admin.site.register(PackagePurchase)
