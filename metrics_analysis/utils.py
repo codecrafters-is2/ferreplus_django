@@ -25,6 +25,7 @@ MONTHS_NAMES = [
 
 class BarterCharts:
     def info_chart_1(self, year):
+        """Number of barters per month"""
         values = [0] * 12
         barters_per_month = list(
             Barter.objects.filter(finished_date__year=year)
@@ -40,7 +41,29 @@ class BarterCharts:
             values[month_nums[i]] = barters_per_month[i]["count"]
         return MONTHS_NAMES, values
 
+    def number_finished_barters(self, year):
+        """Number of finished barters per branch."""
+        barter_branch_count = list(
+            Barter.objects.filter(finished_date__year=year)
+            .values("branch")
+            .annotate(count=Count("id"))
+        )
+
+        labels = []
+        data = []
+        for branch_count in barter_branch_count:
+            branch = branch_count["branch"]
+            if branch is not None:
+                branch_obj = Branch.objects.get(id=branch)
+                labels.append(str(branch_obj))
+            else:
+                labels.append("No branch")
+            data.append(branch_count["count"])
+
+        return labels, data
+
     def info_chart_2(self):
+        """Number of barters by state."""
         states_names = {
             "accepted": "Aceptados",
             "cancelled":"Cancelados",
@@ -63,6 +86,7 @@ class BarterCharts:
         return labels, data
 
     def info_chart_3(self):
+        """Number of barters per branch."""
         barter_branch_count = list(
             Barter.objects.values("branch").annotate(count=Count("id"))
         )
@@ -82,7 +106,8 @@ class BarterCharts:
 
 
 class IncomeCharts:
-    def info_chart_1(self, year):
+    def barter_income_per_month(self, year):
+        """Income per month"""
         values = [0] * 12
         barters_per_month = list(
             Barter.objects.filter(finished_date__year=year)
@@ -101,3 +126,27 @@ class IncomeCharts:
             )
 
         return MONTHS_NAMES, values
+
+    def barter_income_per_branch(self, year):
+        """Income per branche"""
+        income_per_branch = list(
+            Barter.objects.filter(finished_date__year=year)
+            .values("branch")
+            .annotate(total_income=Sum("income"))
+            .values("branch", "total_income")
+        )
+
+        labels = []
+        data = []
+        for income in income_per_branch:
+            branch = income["branch"]
+            if branch is not None:
+                branch_obj = Branch.objects.get(id=branch)
+                labels.append(str(branch_obj))
+            else:
+                labels.append("No branch")
+            data.append(
+                float(income["total_income"]) if income["total_income"] else 0.0
+            )
+
+        return labels, data

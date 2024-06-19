@@ -9,27 +9,28 @@
 </head>
 {% block content %}
 <div>
-    <h1>Ver Métricas</h1>
+    <h1>Ganancias por trueques</h1>
     <div>
         <div>
-            <h2>Cantidad de trueques finalizados por año: </h2>
+            <h3>Ganancias obtenidas por mes y por sucursal: </h3>
             <form method="post" action="{% url 'income_charts' %}">
                 {% csrf_token %}
                 <label for="year">Selecciona un año:</label>
                 <input type="number" id="year" name="year" min="2000" max="2024" value="{{ selected_year|default_if_none:'' }}">
-                <button type="submit">Generar Gráfico</button>
+                <button type="submit">Generar Gráficos</button>
             </form>
-            {% if chart_1.labels and chart_1.data %}
-            <canvas id="barChartIncome"></canvas>
+            {% if barter_income_month.labels and barter_income_month.data %}
+            <canvas id="barChartIncomeMonth"></canvas>
+            <canvas id="pieChartIncomeBranches"></canvas>
             <script>
-                var ctx = document.getElementById('barChartIncome').getContext('2d');
-                var barChart = new Chart(ctx, {
+                var ctx_1 = document.getElementById('barChartIncomeMonth').getContext('2d');
+                var barChart = new Chart(ctx_1, {
                     type: 'bar',
                     data: {
-                        labels: {{ chart_1.labels|safe }},
+                        labels: {{ barter_income_month.labels|safe }},
                         datasets: [{
-                            label: 'Cantidad de Trueques',
-                            data: {{ chart_1.data }},
+                            label: 'Monto $',
+                            data: {{ barter_income_month.data }},
                             backgroundColor: [
                               'rgba(255, 99, 132, 0.8)',
                               'rgba(255, 205, 86, 0.8)',
@@ -65,6 +66,48 @@
                     }
                 });
 
+                var ctx_2 = document.getElementById('pieChartIncomeBranches').getContext('2d');
+                var barChart = new Chart(ctx_2, {
+                    type: 'bar',
+                    data: {
+                        labels: {{ barter_income_branches.labels|safe }},
+                        datasets: [{
+                            label: 'Monto $',
+                            data: {{ barter_income_branches.data }},
+                            backgroundColor: [
+                              'rgba(255, 99, 132, 0.8)',
+                              'rgba(255, 205, 86, 0.8)',
+                              'rgba(75, 192, 192, 0.8)',
+                              'rgba(54, 162, 235, 0.8)',
+                              'rgba(153, 102, 255, 0.8)',
+                              'rgba(201, 203, 207, 0.8)', 
+                              'rgba(255, 159, 64, 0.8)',                    
+                              "rgba(186, 85, 211, 0.8)",
+                              "rgba(238, 232, 170, 0.8)",
+                              "rgba(144, 238, 144, 0.8)",
+                              "rgba(255, 127, 80, 0.8)",
+                              "rgba(128, 128, 0, 0.8)",
+                            ],
+                            borderColor: [
+                              'rgb(255, 99, 132)',
+                              'rgb(255, 159, 64)',
+                              'rgb(255, 205, 86)',
+                              'rgb(75, 192, 192)',
+                              'rgb(54, 162, 235)',
+                              'rgb(153, 102, 255)',
+                              'rgb(201, 203, 207)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
             </script>
             {% endif %}
         </div>
