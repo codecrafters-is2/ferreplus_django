@@ -2,11 +2,12 @@
 from typing import Dict, Optional
 # Django
 from django.views.generic import View, ListView
-from django.views.generic.edit import CreateView
+from django.shortcuts import render
+from django.http import HttpResponse
 # Local
 from .models import Product
 from .services import get_active_products, filter_products_by_query_params
-
+from .forms import ProductCreationForm, ProductImageCreationForm
 
 class ProductListView(ListView):
     model = Product
@@ -56,7 +57,30 @@ class ProductSearchView(ListView):
         return converted_value
 
 
-class ProductCreateView(CreateView):
-    model = Product
-    def post():
-        pass
+class ProductCreateView(View):
+    
+    template_name = "product_creation.html"
+
+    def get(self, request, *args, **kwargs):
+        creation_form = ProductCreationForm()
+        image_form = ProductImageCreationForm()
+        context = {
+            "product_form": creation_form,
+            "image_form": image_form
+        }
+        return render(
+            request,
+            template_name="product_create.html",
+            context=context
+        )
+
+    def post(self, request, *args, **kwargs):
+        form = ProductCreationForm(request.POST)
+        response = HttpResponse()
+        if form.is_valid():
+            print("Es válido")
+            response.status_code = 200
+            response["id"] = 1
+        else: 
+            response.status_code(400)
+        return response

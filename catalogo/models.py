@@ -4,6 +4,8 @@ from django.db import models
 class Product(models.Model):
     code = models.IntegerField()
     name = models.CharField(max_length=150, null=False)
+    brand = models.CharField(max_length=150, null=True)
+    model = models.CharField(max_length=150, null=True)
     description = models.TextField(max_length=1000, null=False)
     price = models.FloatField()
     category = models.ForeignKey(to="ProductCategory", null=False, on_delete=models.CASCADE)

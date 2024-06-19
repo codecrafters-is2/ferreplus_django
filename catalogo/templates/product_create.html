@@ -1,0 +1,81 @@
+{% extends "_base_wildcard_bootstrap.html" %}
+{% load static %}
+
+{% block content %}
+    <style>
+        .product-creation-container {
+            min-width: 100vw;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2% 2%;
+        }
+
+        .creation-form {
+            font-size: 18px;
+            color: red;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .product-creation-input {
+            -webkit-appearance: none;
+        }
+
+        input[type=number]{
+            -moz-appearance: textfield;
+        }
+    </style>
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const productForm = document.getElementById("product-form");
+
+            const getProductData = () => {
+                return {
+                    code: document.getElementsByName("code")[0].value,
+                    name: document.getElementsByName("name")[0].value,
+                    brand: document.getElementsByName("brand")[0].value,
+                    model: document.getElementsByName("model")[0].value,
+                    description: document.getElementsByName("description")[0].value,
+                    price: document.getElementsByName("price")[0].value,
+                    category: document.getElementsByName("category")[0].value,
+                    stock: document.getElementsByName("stock")[0].value,
+                    main_image: document.getElementsByName("main_image")[0].value
+                }
+            }
+
+            productForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                let productData = getProductData();
+                console.log(productData);
+                try {
+                    let response = await fetch("/catalog/create/", {
+                        method: "POST",
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(productData)
+                        
+                    });
+                } catch (err) {
+                    alert(err)
+                }
+                
+            })
+
+        })
+    </script>
+
+    <div class="product-creation-container">
+        <h2 style="padding: 2% 2%;">Agregar nuevo producto</h2>
+        <form class="creation-form" id="product-form" method="POST" action="">
+            {% csrf_token %}
+            {{ product_form }}
+            <button type="submit" onclick="">
+                Crear
+            </button>
+        </form>
+    </div>
+{% endblock content %}
