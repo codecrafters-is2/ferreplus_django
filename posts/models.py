@@ -106,31 +106,17 @@ class Post(models.Model):
         """
         Cambia el paquete asociado a la publicación y guarda la transacción en la tabla de PackagePurchase.
         """
-        print("Funcion cambiar paquete")
-        print(self.package, new_package)
-        print(self.package != new_package)
-        if self.package != new_package:
-            # Guardar la fecha de inicio del nuevo paquete
-            self.package_start_date = timezone.now()
-            print("Set horario")
-            # Registrar la transacción de compra
-            PackagePurchase.objects.create(
-                post=self,
-                package=new_package,
-                price=new_package.price  
-            )
-            # Actualizar el paquete
-            
-            print("Creacion paquete")
-            self.package = new_package
-            self.save()
-
-    def check_package_expiry(self):
-        if self.package and self.package_start_date:
-            expiry_date = self.package_start_date + timezone.timedelta(days=7)
-            if timezone.now() > expiry_date:
-                self.package = None  # Cambia al paquete "Ninguno"
-                self.save()
+        # Guardar la fecha de inicio del nuevo paquete
+        self.package_start_date = timezone.now()
+        # Registrar la transacción de compra
+        PackagePurchase.objects.create(
+            post=self,
+            package=new_package,
+            price=new_package.price  
+        )
+        # Actualizar el paquete
+        self.package = new_package
+        self.save() 
 
 class Question(models.Model): 
     post = models.ForeignKey(Post, related_name='questions', on_delete=models.CASCADE)
@@ -145,10 +131,10 @@ class Question(models.Model):
 
 
 class PackagePurchase(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    package = models.ForeignKey(Package, on_delete=models.CASCADE)
-    purchase_date = models.DateTimeField(auto_now_add=True)
-    price = models.DecimalField(max_digits=6, decimal_places=2)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE,verbose_name="Publicación")
+    package = models.ForeignKey(Package, on_delete=models.CASCADE,verbose_name="Paquete")
+    purchase_date = models.DateTimeField(auto_now_add=True,verbose_name="Fecha")
+    price = models.DecimalField(max_digits=6, decimal_places=2,verbose_name="Precio")
 
     def __str__(self):
         return f"{self.post.title} - {self.package.name} - {self.price}"

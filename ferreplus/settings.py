@@ -59,7 +59,6 @@ INSTALLED_APPS = [
     "adminpanel.apps.AdminpanelConfig",
     "barter.apps.BarterConfig", 
     "turns.apps.TurnsConfig",
-    #'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -193,11 +192,3 @@ ACCOUNT_ADAPTER = "accounts.adapters.FerreplusAccountAdapter"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = env("MEDIA_ROOT", os.path.join(BASE_DIR,"media"))
-"""
-#Configuración de Celery
-from .beat_schedule import CELERY_BEAT_SCHEDULE
-from celery import Celery
-
-app = Celery('ferreplus')
-app.config_from_object('django.conf:settings', namespace='CELERY')
-app.autodiscover_tasks()"""

@@ -54,10 +54,6 @@ class ChangePackageView(ClientRequiredMixin,UpdateView):
     
     def get_success_url(self):
         return reverse_lazy('my_post_detail', kwargs={'pk': self.object.pk})
-    
-    def form_valid(self, form):
-        form.save()  # Utiliza el método de save en el formulario para hacer el cambio de paquete y registrar la transacción.
-        return super().form_valid(form)
 
 class PostListView(ClientRequiredMixin,ListView):
     model = Post
