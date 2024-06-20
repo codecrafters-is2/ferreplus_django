@@ -11,7 +11,7 @@
 {% endblock custom_styles %}
 {% block content %}
 <div style="width: 90%;">
-    <h1 style="margin-bottom:25px; margin-top:25px; font-family: 'Raleway'; ">Ver Métricas</h1>
+    <h1 style="margin-bottom:25px; margin-top:25px; font-family: 'Raleway'; ">Análisis de Trueques</h1>
     <div>
         <div class="card" style="width: 100%;">
             <div class="card-body">
@@ -24,14 +24,14 @@
                 </form>
                 {% if chart_1.labels and chart_1.data %}
                 <div style="display:flex">
-                    <div class="card" style="width:49%; background:#F9FAFB;">
+                    <div class="card" style="width:80%; background:#F9FAFB;">
                         <div class="card-body" >
                             <canvas id="barChartMonths"></canvas>
                         </div>
                     </div>
-                    <div class="card" style="width:49%; background:#F9FAFB;">
+                    <div class="card" style="width:45%; background:#F9FAFB;">
                         <div class="card-body">
-                            <canvas id="barChartBranches"></canvas>
+                            <canvas id="doughnutChartBranches"></canvas>
                         </div>
                     </div>       
                 </div>       
@@ -44,29 +44,19 @@
                             datasets: [{
                                 label: 'Cantidad de Trueques',
                                 data: {{ chart_1.data }},
-                                backgroundColor: [
-                                  'rgba(255, 99, 132, 0.8)',
-                                  'rgba(255, 205, 86, 0.8)',
-                                  'rgba(75, 192, 192, 0.8)',
-                                  'rgba(54, 162, 235, 0.8)',
-                                  'rgba(153, 102, 255, 0.8)',
-                                  'rgba(201, 203, 207, 0.8)', 
-                                  'rgba(255, 159, 64, 0.8)',                    
-                                  "rgba(186, 85, 211, 0.8)",
-                                  "rgba(238, 232, 170, 0.8)",
-                                  "rgba(144, 238, 144, 0.8)",
-                                  "rgba(255, 127, 80, 0.8)",
-                                  "rgba(128, 128, 0, 0.8)",
-                                ],
-                                borderColor: [
-                                  'rgb(255, 99, 132)',
-                                  'rgb(255, 159, 64)',
-                                  'rgb(255, 205, 86)',
-                                  'rgb(75, 192, 192)',
-                                  'rgb(54, 162, 235)',
-                                  'rgb(153, 102, 255)',
-                                  'rgb(201, 203, 207)'
-                                ],
+                                backgroundColor: ['rgba(255, 99, 132, 0.7)',
+                                  'rgba(255, 205, 86, 0.7)',
+                                  'rgba(75, 192, 192, 0.7)',
+                                  'rgba(54, 162, 235, 0.7)',
+                                  'rgba(153, 102, 255, 0.7)',
+                                  'rgba(201, 203, 207, 0.7)', 
+                                  'rgba(255, 159, 64, 0.7)',                    
+                                  "rgba(186, 85, 211, 0.7)",
+                                  "rgba(238, 232, 170, 0.7)",
+                                  "rgba(144, 238, 144, 0.7)",
+                                  "rgba(255, 127, 80, 0.7)",
+                                  "rgba(128, 128, 0, 0.7)"],
+                                
                                 borderWidth: 1
                             }]
                         },
@@ -78,37 +68,26 @@
                             }
                         }
                     });
-                    var ctx_branches = document.getElementById('barChartBranches').getContext('2d');
+                    var ctx_branches = document.getElementById('doughnutChartBranches').getContext('2d');
                     var barChart = new Chart(ctx_branches, {
-                        type: 'bar',
+                        type: 'doughnut',
                         data: {
                             labels: {{ chart_4.labels|safe }},
                             datasets: [{
                                 label: 'Cantidad de Trueques',
                                 data: {{ chart_4.data }},
-                                backgroundColor: [
-                                  'rgba(255, 99, 132, 0.8)',
-                                  'rgba(255, 205, 86, 0.8)',
-                                  'rgba(75, 192, 192, 0.8)',
-                                  'rgba(54, 162, 235, 0.8)',
-                                  'rgba(153, 102, 255, 0.8)',
-                                  'rgba(201, 203, 207, 0.8)', 
-                                  'rgba(255, 159, 64, 0.8)',                    
-                                  "rgba(186, 85, 211, 0.8)",
-                                  "rgba(238, 232, 170, 0.8)",
-                                  "rgba(144, 238, 144, 0.8)",
-                                  "rgba(255, 127, 80, 0.8)",
-                                  "rgba(128, 128, 0, 0.8)",
-                                ],
-                                borderColor: [
-                                  'rgb(255, 99, 132)',
-                                  'rgb(255, 159, 64)',
-                                  'rgb(255, 205, 86)',
-                                  'rgb(75, 192, 192)',
-                                  'rgb(54, 162, 235)',
-                                  'rgb(153, 102, 255)',
-                                  'rgb(201, 203, 207)'
-                                ],
+                                backgroundColor:['rgba(255, 99, 132, 0.7)',
+                                  'rgba(255, 205, 86, 0.7)',
+                                  'rgba(75, 192, 192, 0.7)',
+                                  'rgba(54, 162, 235, 0.7)',
+                                  'rgba(153, 102, 255, 0.7)',
+                                  'rgba(201, 203, 207, 0.7)', 
+                                  'rgba(255, 159, 64, 0.7)',                    
+                                  "rgba(186, 85, 211, 0.7)",
+                                  "rgba(238, 232, 170, 0.7)",
+                                  "rgba(144, 238, 144, 0.7)",
+                                  "rgba(255, 127, 80, 0.7)",
+                                  "rgba(128, 128, 0, 0.7)"],
                                 borderWidth: 1
                             }]
                         },
@@ -125,49 +104,75 @@
                 {% endif %}
             </div>
         </div>
-        <div style="display:flex">
-            <div class="card" style="width: 50%;">
-                <div class="card-body">
-                    <h3>Estado actual de los trueques: </h3>
-                    <canvas id="pieChart"></canvas>
-                    <script>
-                        var ctx = document.getElementById('pieChart').getContext('2d');
-                        var barChart = new Chart(ctx, {
-                            type: 'pie',
-                            data: {
-                                labels: {{ chart_2.labels|safe }},
-                                datasets: [{
-                                    label: 'Cantidad de Trueques',
-                                    data: {{ chart_2.data }},
+        <div class="card" style="width: 100%;">
+            <div class="card-body" style="display: flex; justify-content:space-evenly">
+                <div class="card" style="width: 45%; background:#F9FAFB;">
+                    <div class="card-body">
+                        <h3>Estado actual de los trueques: </h3>
+                        <canvas id="pieChart"></canvas>
+                        <script>
+                            var ctx = document.getElementById('pieChart').getContext('2d');
+                            var barChart = new Chart(ctx, {
+                                type: 'pie',
+                                data: {
+                                    labels: {{ chart_2.labels|safe }},
+                                    datasets: [{
+                                        label: 'Cantidad de Trueques',
+                                        data: {{ chart_2.data }},
+                                        backgroundColor: ['rgba(255, 99, 132, 0.7)',
+                                            'rgba(255, 205, 86, 0.7)',
+                                            'rgba(75, 192, 192, 0.7)',
+                                            'rgba(54, 162, 235, 0.7)',
+                                            'rgba(153, 102, 255, 0.7)',
+                                            'rgba(201, 203, 207, 0.7)', 
+                                            'rgba(255, 159, 64, 0.7)',                    
+                                            "rgba(186, 85, 211, 0.7)",
+                                            "rgba(238, 232, 170, 0.7)",
+                                            "rgba(144, 238, 144, 0.7)",
+                                            "rgba(255, 127, 80, 0.7)",
+                                            "rgba(128, 128, 0, 0.7)"],
+                                        borderWidth: 1
+                                    }]
+                                }
+                            });
 
-                                    borderWidth: 1
-                                }]
-                            }
-                        });
-
-                    </script>
+                        </script>
+                    </div>
                 </div>
-            </div>
-            <div class="card" style="width: 50%;">
-                <div class="card-body">
-                    <h3>Cantidad de trueques por sucursal (en cualquier estado): </h3>
-                    <canvas id="doughnutChart"></canvas>
-                    <script>
-                        var ctx = document.getElementById('doughnutChart').getContext('2d');
-                        var barChart = new Chart(ctx, {
-                            type: 'doughnut',
-                            data: {
-                                labels: {{ chart_3.labels|safe }},
-                                datasets: [{
-                                    label: 'Cantidad de Trueques',
-                                    data: {{ chart_3.data }},
+                <div class="card" style="width: 45%; background:#F9FAFB;">
+                    <div class="card-body">
+                        <h3>Cantidad de trueques por sucursal: </h3>
+                        <p>(en cualquier estado)</p>
+                        <canvas id="doughnutChart"></canvas>
+                        <script>
+                            var ctx = document.getElementById('doughnutChart').getContext('2d');
+                            var barChart = new Chart(ctx, {
+                                type: 'doughnut',
+                                data: {
+                                    labels: {{ chart_3.labels|safe }},
+                                    datasets: [{
+                                        label: 'Cantidad de Trueques',
+                                        data: {{ chart_3.data }},
+                                        backgroundColor: ['rgba(255, 99, 132, 0.7)',
+                                            'rgba(255, 205, 86, 0.7)',
+                                            'rgba(75, 192, 192, 0.7)',
+                                            'rgba(54, 162, 235, 0.7)',
+                                            'rgba(153, 102, 255, 0.7)',
+                                            'rgba(201, 203, 207, 0.7)', 
+                                            'rgba(255, 159, 64, 0.7)',                    
+                                            "rgba(186, 85, 211, 0.7)",
+                                            "rgba(238, 232, 170, 0.7)",
+                                            "rgba(144, 238, 144, 0.7)",
+                                            "rgba(255, 127, 80, 0.7)",
+                                            "rgba(128, 128, 0, 0.7)"],
 
-                                    borderWidth: 1
-                                }]
-                            }
-                        });
+                                        borderWidth: 1
+                                    }]
+                                }
+                            });
 
-                    </script>
+                        </script>
+                    </div>
                 </div>
             </div>
         </div>

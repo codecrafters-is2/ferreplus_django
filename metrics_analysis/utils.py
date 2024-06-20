@@ -1,12 +1,8 @@
-from django.views.generic import TemplateView
-from django.shortcuts import render
-from django.contrib.admin.views.decorators import staff_member_required
-from django.db.models import Count, F, Sum, Avg
-from django.db.models.functions import ExtractYear, ExtractMonth, TruncMonth
-from django.http import JsonResponse
+from django.db.models import Count, Sum
+from django.db.models.functions import  TruncMonth
 from barter.models import Barter
-from accounts.models import EmployeeUser
 from branches.models import Branch
+
 
 MONTHS_NAMES = [
     "enero",
@@ -22,6 +18,14 @@ MONTHS_NAMES = [
     "noviembre",
     "diciembre",
 ]
+
+def cut_address(address):
+    index = address.find(" - CP")
+    if index != -1:
+        return address[:index]
+    else:
+        return address
+
 
 class BarterCharts:
     def info_chart_1(self, year):
@@ -55,7 +59,8 @@ class BarterCharts:
             branch = branch_count["branch"]
             if branch is not None:
                 branch_obj = Branch.objects.get(id=branch)
-                labels.append(str(branch_obj))
+                branch_name = cut_address(str(branch_obj))
+                labels.append(branch_name)
             else:
                 labels.append("No branch")
             data.append(branch_count["count"])
@@ -97,7 +102,8 @@ class BarterCharts:
             branch = branch_count["branch"]
             if branch is not None:
                 branch_obj = Branch.objects.get(id=branch)
-                labels.append(str(branch_obj))
+                branch_name = cut_address(str(branch_obj))
+                labels.append(branch_name)
             else:
                 labels.append("No branch")
             data.append(branch_count["count"])
@@ -142,7 +148,8 @@ class IncomeCharts:
             branch = income["branch"]
             if branch is not None:
                 branch_obj = Branch.objects.get(id=branch)
-                labels.append(str(branch_obj))
+                branch_name = cut_address(str(branch_obj))
+                labels.append(branch_name)
             else:
                 labels.append("No branch")
             data.append(
