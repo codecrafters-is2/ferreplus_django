@@ -7,6 +7,18 @@ class ChangePackageForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['package']
+        
+    def __init__(self, *args, **kwargs):
+        super(ChangePackageForm, self).__init__(*args, **kwargs)
+        self.post_instance = kwargs.get('instance')  # Guarda la instancia del post actual
+
+    def clean(self):
+        cleaned_data = super().clean()
+        new_package = cleaned_data.get('package')
+        # Compara el nuevo paquete con el paquete actual del post
+        if self.post_instance and new_package == self.post_instance.package:
+            raise forms.ValidationError("No puedes elegir el mismo paquete que ya está asignado.")
+        return cleaned_data
     
     def save(self, commit=True):
         post_instance = super().save(commit=False)
