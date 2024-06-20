@@ -1,4 +1,4 @@
-from celery.schedules import crontab
+"""from celery.schedules import crontab
 
 CELERY_BEAT_SCHEDULE = {
     'check-posts-package-expiry': {
@@ -6,3 +6,4 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': crontab(hour=0, minute=0),  # Ejecutar a medianoche todos los días
     },
 }
+"""
