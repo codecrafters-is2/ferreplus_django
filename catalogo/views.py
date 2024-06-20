@@ -76,11 +76,13 @@ class ProductCreateView(View):
 
     def post(self, request, *args, **kwargs):
         form = ProductCreationForm(request.POST)
+        print(request.POST)
         response = HttpResponse()
         if form.is_valid():
             print("Es válido")
             response.status_code = 200
             response["id"] = 1
         else: 
-            response.status_code(400)
+            print(form.errors)
+            response.status_code = 200
         return response

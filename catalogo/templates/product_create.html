@@ -20,6 +20,10 @@
             gap: 1rem;
         }
 
+        .hide {
+          display: none;
+        }
+
         .product-creation-input {
             -webkit-appearance: none;
         }
@@ -29,43 +33,53 @@
         }
     </style>
     <script>
-        window.addEventListener('DOMContentLoaded', () => {
-            const productForm = document.getElementById("product-form");
+      window.addEventListener('DOMContentLoaded', () => {
+        const productForm = document.getElementById("product-form");
 
-            const getProductData = () => {
-                return {
-                    code: document.getElementsByName("code")[0].value,
-                    name: document.getElementsByName("name")[0].value,
-                    brand: document.getElementsByName("brand")[0].value,
-                    model: document.getElementsByName("model")[0].value,
-                    description: document.getElementsByName("description")[0].value,
-                    price: document.getElementsByName("price")[0].value,
-                    category: document.getElementsByName("category")[0].value,
-                    stock: document.getElementsByName("stock")[0].value,
-                    main_image: document.getElementsByName("main_image")[0].value
-                }
-            }
+        const getProductData = () => {
+          return {
+              code: document.getElementsByName("code")[0].value,
+              name: document.getElementsByName("name")[0].value,
+              brand: document.getElementsByName("brand")[0].value,
+              model: document.getElementsByName("model")[0].value,
+              description: document.getElementsByName("description")[0].value,
+              price: document.getElementsByName("price")[0].value,
+              category: document.getElementsByName("category")[0].value,
+              stock: document.getElementsByName("stock")[0].value,
+              main_image: document.getElementsByName("main_image")[0].value
+          }
+        }
 
-            productForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                let productData = getProductData();
-                console.log(productData);
-                try {
-                    let response = await fetch("/catalog/create/", {
-                        method: "POST",
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(productData)
-                        
-                    });
-                } catch (err) {
-                    alert(err)
-                }
-                
-            })
+        const getProductForm = () => {
+          const formData = new FormData();
+          const productData = getProductData();
+          for(let [key, value] of Object.entries(productData)) {
+              formData.append(key, value);
+          }
+          return formData;
+        }
 
+        productForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const productDataForm = getProductForm();
+          const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+          console.log(csrftoken)
+          try {
+              const response = await fetch("/catalog/create/", {
+                method: "POST",
+                headers: {
+                    'X-CSRFToken': csrftoken
+                },
+                mode: 'same-origin',
+                body: productDataForm
+              }).then(
+                productForm.classList.add("hide")
+              );
+          } catch (err) {
+              alert(err)
+          }
         })
+      })
     </script>
 
     <div class="product-creation-container">
