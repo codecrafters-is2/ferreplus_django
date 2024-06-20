@@ -15,7 +15,7 @@ class ProductCreationForm(forms.ModelForm):
             "category",
             "stock",
             "main_image",
-            ]
+        ]
         widgets = PRODUCT_CREATION_FORM_WIDGETS
 
 
