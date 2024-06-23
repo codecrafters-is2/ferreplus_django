@@ -55,5 +55,4 @@ PRODUCT_CREATION_FORM_WIDGETS = {
             "placeholder": "Imagen",
         }
     )
-
 }

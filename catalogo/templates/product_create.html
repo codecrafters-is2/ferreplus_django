@@ -6,132 +6,173 @@
 
 
 {% block content %}
-    <style>
-      .product-creation-container {
-          position: relative;
-          min-width: 100vw;
-          min-height: 100vh;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          padding: 2% 2%;
-          transition: all 1s ease-in;
-      }
+  <style>
+    .product-creation-container {
+        position: relative;
+        min-width: 100vw;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 2% 2%;
+        transition: all 500ms ease-in;
+        overflow: hidden;
+    }
 
-      .creation-form {
-          font-size: 10px;
-          color: rgb(0, 0, 0);
-          display: flex;
-          flex-direction: column;
-          gap: 10px;
-      }
+    .form-wrapper {
+      background: rgba(255, 255, 255, 0.27);
+      border-radius: 16px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(7.6px);
+      -webkit-backdrop-filter: blur(7.6px);
+      border: 1px solid rgba(255, 255, 255, 0.36);
+      padding: 1% 2%;
+      transition: all 500ms ease-in;
+    }
 
-      .creation-form button {
-          width: 100%;
-          text-align: center;
-          font-size: 18px;
-          color: rgb(0, 187, 255);
-          display: flex;
-          flex-direction: column;
-          gap: 1rem;
-          background-color: goldenrod;
-      }
+    .creation-form {
+        font-size: 10px;
+        color: rgb(0, 0, 0);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        transition: all 300ms ease-in;
+    }
 
-      .creation-form div {
-          padding: none;
-      }
+    .creation-form button {
+        width: 100%;
+        text-align: center;
+        font-size: 18px;
+        color: rgb(0, 187, 255);
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        background-color: goldenrod;
+    }
 
-      .hide {
-        opacity: 0;
-        transform: translateX(100vh);
-      }
+    .creation-form div {
+        padding: none;
+    }
 
-      .product-creation-input {
-          -webkit-appearance: none;
-          font-size: 12px;
-      }
+    .success-menu {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.27);
+      border-radius: 16px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(7.6px);
+      -webkit-backdrop-filter: blur(7.6px);
+      border: 1px solid rgba(255, 255, 255, 0.36);
+      padding: 1% 2%;
+      transition: all 500ms ease-in;
+      color: black;
+      transform: translateX(-100vw)
+    }
 
-      input[type=number]{
-          -moz-appearance: textfield;
-      }
-    </style>
-    <script>
-      window.addEventListener('DOMContentLoaded', () => {
-        const productForm = document.getElementById("product-form");
+    .show {
+      display: flex;
+      opacity: 1;
+      transform: translateX(0vw);
+    }
 
-        const getProductData = () => {
-          return {
-              code: document.getElementsByName("code")[0].value,
-              name: document.getElementsByName("name")[0].value,
-              brand: document.getElementsByName("brand")[0].value,
-              model: document.getElementsByName("model")[0].value,
-              description: document.getElementsByName("description")[0].value,
-              price: document.getElementsByName("price")[0].value,
-              category: document.getElementsByName("category")[0].value,
-              stock: document.getElementsByName("stock")[0].value,
-              main_image: document.getElementsByName("main_image")[0].value
-          }
+    .hide {
+      opacity: 0;
+      transform: translateX(100vh);
+    }
+
+    .out {
+      display: none;
+    }
+
+    .product-creation-input {
+        -webkit-appearance: none;
+        font-size: 12px;
+    }
+
+    input[type=number]{
+        -moz-appearance: textfield;
+    }
+
+
+
+  </style>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const productForm = document.getElementById("product-form");
+
+      const formTransition = () => {
+        const formWrapper = document.getElementById("form-wrapper");
+        const successMenu = document.getElementById("success-menu");
+        formWrapper.classList.add("hide");
+        setTimeout(
+          () => {
+            console.log("hola")
+            console.log(successMenu.classList)
+            formWrapper.classList.add("out");
+            successMenu.classList.add("show");
+            console.log(successMenu.classList)
+
         }
+        , 1000);
+      }
 
-        const getProductForm = () => {
-          const formData = new FormData();
-          const productData = getProductData();
-          for(let [key, value] of Object.entries(productData)) {
-              formData.append(key, value);
-          }
-          return formData;
+      const testbutton = document.getElementById("testing")
+      testbutton.addEventListener("click", formTransition)
+
+      productForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const productDataForm = new FormData(e.currentTarget);
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        try {
+            const response = await fetch("/catalog/create/", {
+              method: "POST",
+              headers: {
+                'X-CSRFToken': csrftoken
+              },
+              mode: 'same-origin',
+              body: productDataForm
+            });
+            if (response.ok) {
+              const content = await response.json();
+            } else {
+              alert("Algo malio sal")
+            }
+        } catch (err) {
+            alert(err)
         }
-
-        const formTransition = () => {
-          productForm.classList.add("hide");
-
-        }
-
-        productForm.addEventListener('submit', async (e) => {
-          e.preventDefault();
-          const productDataForm = getProductForm();
-          const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-          console.log(csrftoken)
-          try {
-              const response = await fetch("/catalog/create/", {
-                method: "POST",
-                headers: {
-                    'X-CSRFToken': csrftoken
-                },
-                mode: 'same-origin',
-                body: productDataForm
-              }).then( () => {
-                  if(response.status == 200) {
-                    formTransition();
-                  }
-                  else {
-                    alert("Algo salió mal");
-                  }
-                }
-              );
-          } catch (err) {
-              alert(err)
-          }
-        })
       })
-    </script>
-
-    <div class="product-creation-container">
-        <h2 style="padding: 2% 2%;">Agregar nuevo producto</h2>
-        <div style="background-color: blue; padding: 1% 2%; border-radius: 12px;">
-          <form class="creation-form" id="product-form" method="POST" action="">
-              {% csrf_token %}
-              {{ product_form }}
-              <button type="submit" onclick="">
-                  Crear
-              </button>
-          </form>
+    })
+  </script>
+  
+  <div class="product-creation-container" id="product-creation-container">
+      <div class="form-wrapper" id="form-wrapper">
+        <h2 style="width: 100%; text-align: center; padding: 2% 2%">Agregar nuevo producto</h2>
+        <form class="creation-form" id="product-form" method="POST" action="" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ product_form }}
+            <button type="submit" onclick="">
+                Crear
+            </button>
+        </form>
+      </div>
+      <div class="success-menu" id="success-menu">
+        <h2 style="color: black;">Producto agregado!</h2>
+        <button>agregar imágenes</button>
+        <button>continuar</button>
+        <div class="img-preview">
+          <img style="width: 100%;" />
         </div>
-        <button onclick="formTransition()">
-          tr
-        </button>
         <div class="images-selector-wraper">
-          {}
+          {{ image_form }}
+          
         </div>
-    </div>
+      </div>
+      <div class="status-wrapper">
+        <h2 id="status-indicator"></h2>
+      </div>
+      <div>
+        <button id="testing">test</button>
+      </div>
+  </div>
 {% endblock content %}

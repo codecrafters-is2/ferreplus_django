@@ -48,7 +48,8 @@ class ProductSearchView(ListView):
             }
         }
     
-    def _extract_float(self, str_value: str) -> Optional[str]:
+    @staticmethod
+    def _extract_float(str_value: str) -> Optional[str]:
         converted_value = None
         try:
             converted_value = float(str_value)
@@ -75,14 +76,20 @@ class ProductCreateView(View):
         )
 
     def post(self, request, *args, **kwargs):
-        form = ProductCreationForm(request.POST)
-        print(request.POST)
         response = HttpResponse()
+        form = ProductCreationForm(request.POST, request.FILES)
         if form.is_valid():
-            print("Es válido")
+            new_product = form.save()
             response.status_code = 200
-            response["id"] = 1
+            response["product_code"] = new_product.code
         else: 
             print(form.errors)
             response.status_code = 200
         return response
+
+
+class ProductImageUploadView(View):
+    
+    def post(self, request, *args, **kwargs):
+        form = ProductImageCreationForm(request.POST, request.FILES)
+        
