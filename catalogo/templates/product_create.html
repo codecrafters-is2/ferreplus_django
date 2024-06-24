@@ -11,9 +11,41 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: center;
         padding: 2% 2%;
         transition: all 500ms ease-in;
         overflow: hidden;
+        gap: 1rem;
+    }
+
+    .product-creation-container a {
+      width: 100%;
+      text-decoration: none;
+    }
+
+    .product-creation-container button {
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+      background: rgba(47, 195, 205, 0.74);
+      border-radius: 16px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(14.1px);
+      -webkit-backdrop-filter: blur(14.1px);
+      border: 1px solid rgba(47, 195, 205, 0.28);
+      padding: 0.5rem 1rem;
+      transition: all 300ms ease;
+      white-space: nowrap;
+      color: #FAFAFA;
+      width: 100%;
+      text-align: center;
+    }
+
+    .product-creation-container button:hover {
+      opacity: 0.8;
+      transform: scale(1.01);
     }
 
     .form-wrapper {
@@ -36,17 +68,6 @@
       transition: all 300ms ease-in;
     }
 
-    .creation-form button {
-      width: 100%;
-      text-align: center;
-      font-size: 18px;
-      color: rgb(0, 187, 255);
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      background-color: goldenrod;
-    }
-
     .creation-form div {
         padding: none;
     }
@@ -55,6 +76,7 @@
       display: none;
       flex-direction: column;
       align-items: center;
+      gap: 2rem;
       background: rgba(255, 255, 255, 0.27);
       border-radius: 16px;
       box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -64,7 +86,8 @@
       padding: 1% 2%;
       transition: all 500ms ease-in;
       color: black;
-      transform: translateX(-100vw)
+      transform: translateX(-100vw);
+      overflow: hidden;
     }
 
     .show {
@@ -91,7 +114,35 @@
       -moz-appearance: textfield;
     }
 
+    .images-selector-wraper {
+      display: none;
+      min-width: 20vw;
+      opacity: 0;
+      padding: 2rem 1rem;
+      transform: translateY(100%);
+      transition: all 500ms ease;
+    }
 
+    .images-display {
+      display: flex;
+    }
+
+    .images-show {
+      opacity: 1;
+      transform: translateY(0%);
+    }
+
+    .images-hide {
+      display: none;
+      opacity: 0;
+      transform: translateY(-100%);
+    }
+
+    @media (min-width: 768px) {
+    .success-menu {
+        flex-direction: row;
+    }
+}
 
   </style>
   <script>
@@ -138,7 +189,23 @@
           alert(err); 
         }
       })
-    })
+
+      const toggleImagesButton = document.getElementById("images-toggle");
+      toggleImagesButton.addEventListener("click", () => {
+        // Toggle para el form de agregar imágenes adicionales
+        const imagesFormWrapper = document.getElementById("images-form-wraper");
+        if (imagesFormWrapper.classList.contains("images-display")) {
+          imagesFormWrapper.classList.remove("images-display");
+          imagesFormWrapper.classList.remove("images-show");
+          toggleImagesButton.style.opacity = 0.5;
+        } else {
+          imagesFormWrapper.classList.add("images-display");
+          setTimeout(() => imagesFormWrapper.classList.add("images-show"), 100);
+          toggleImagesButton.style.opacit = 0.5;
+        }
+      })
+
+    });
   </script>
   
   <div class="product-creation-container" id="product-creation-container">
@@ -152,13 +219,24 @@
             </button>
         </form>
       </div>
+
       <div class="success-menu" id="success-menu">
-        <h2 style="color: black;">Producto agregado!</h2>
-        <button>agregar imágenes</button>
-        <button>continuar</button>
-        
-        <div class="images-selector-wraper">
+        <div style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 1rem">
+          <h2 style="color: black;">Producto agregado!</h2>
+          <button id="images-toggle">
+            agregar imágenes
+          </button>
+          <a href="#">
+            <button>continuar</button>
+          </a>
+          <a href="{% url 'product_list' %}">
+            <button>catálogo</button>
+          </a>
+        </div>
+        <div class="images-selector-wraper" id="images-form-wraper">
+          
           {% show_product_images_add_widget '/catalog/images/add/' %}
+          
         </div>
       </div>
       <div class="status-wrapper">
