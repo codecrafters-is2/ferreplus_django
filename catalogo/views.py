@@ -3,11 +3,12 @@ from typing import Dict, Optional
 # Django
 from django.views.generic import View, ListView
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest, HttpResponseServerError
 # Local
 from .models import Product
 from .services import get_active_products, filter_products_by_query_params
 from .forms import ProductCreationForm, ProductImageCreationForm
+
 
 class ProductListView(ListView):
     model = Product
@@ -49,7 +50,7 @@ class ProductSearchView(ListView):
         }
     
     @staticmethod
-    def _extract_float(str_value: str) -> Optional[str]:
+    def _extract_float(str_value: str) -> Optional[float]:
         converted_value = None
         try:
             converted_value = float(str_value)
@@ -76,20 +77,40 @@ class ProductCreateView(View):
         )
 
     def post(self, request, *args, **kwargs):
-        response = HttpResponse()
-        form = ProductCreationForm(request.POST, request.FILES)
-        if form.is_valid():
-            new_product = form.save()
-            response.status_code = 200
-            response["product_code"] = new_product.code
-        else: 
-            print(form.errors)
-            response.status_code = 200
-        return response
+        try:
+            form = ProductCreationForm(request.POST, request.FILES)
+            if form.is_valid():
+                new_product = form.save()
+                response = JsonResponse({
+                    "product_code": new_product.code,
+                    "product_id": new_product.id
+                })
+                response.status_code = 200
+            else:
+                return HttpResponseBadRequest()
+            return response
+        except Exception as e:
+            return HttpResponseServerError()
 
 
 class ProductImageUploadView(View):
     
     def post(self, request, *args, **kwargs):
-        form = ProductImageCreationForm(request.POST, request.FILES)
-        
+        try:
+            form = ProductImageCreationForm(request.POST, request.FILES)
+            if form.is_valid():
+                print("es válido")
+                new_image = form.save()
+                response = JsonResponse({
+                    "id": new_image.id,
+                    "product": new_image.product.code,
+                    "image": new_image.image.url,
+                    "title": new_image.title
+                })
+                response.status_code = 200
+            else:
+                response = HttpResponseBadRequest()
+            return response
+        except Exception as e:
+            print(e)
+            return HttpResponseServerError()

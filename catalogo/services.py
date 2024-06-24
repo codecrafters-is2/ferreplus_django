@@ -10,6 +10,12 @@ from .models import Product, ProductCategory
 def get_active_products() -> QuerySet:
     return Product.objects.filter(active=True)
 
+def get_product_by_code(code: int) -> Optional[Product]:
+    try:
+        product = Product.objects.get(code=code)
+    except ObjectDoesNotExist:
+        return None
+    return product
 
 def get_active_products_by_category(category_name: str) -> QuerySet:
     try:

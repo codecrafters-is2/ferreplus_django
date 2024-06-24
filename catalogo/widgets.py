@@ -56,3 +56,26 @@ PRODUCT_CREATION_FORM_WIDGETS = {
         }
     )
 }
+
+IMAGE_CREATION_FORM_WIDGETS = {
+    "image": forms.FileInput(
+        attrs={
+            "class": "form-control image-creation-input",
+            "placeholder": "imagen",
+        }
+    ),
+    "title": forms.TextInput(
+        attrs={
+            "class": "form-control image-creation-input",
+            "placeholder": "Título"
+        }
+    ),
+    "product": forms.NumberInput(
+        attrs={
+            "class": "form-control image-creation-input",
+            "id": "product-code",
+            "placeholder": "producto",
+            "style": "display: none;"
+        }
+    )
+}
