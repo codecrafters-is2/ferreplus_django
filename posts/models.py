@@ -68,6 +68,7 @@ class Post(models.Model):
     status = models.CharField(max_length=20, choices=POST_STATUS_CHOICES, default=POST_STATUS_AVAILABLE,) 
     package = models.ForeignKey(Package, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Paquete")
     package_start_date = models.DateTimeField(null=True, blank=True)  # Fecha de inicio del paquete
+    deletion_reason = models.TextField(null=True, blank=True, verbose_name="Razón de eliminación")
     
     def has_unanswered_questions(self):
         return self.questions.filter(Q(answer__isnull=True) | Q(answer='')).exists()
@@ -92,9 +93,10 @@ class Post(models.Model):
         self.requesting_barters.filter(~Q(state=Barter.BARTER_STATE_CANCELLED)).update(state=Barter.BARTER_STATE_CANCELLED)
         self.requested_barters.filter(~Q(state=Barter.BARTER_STATE_CANCELLED)).update(state=Barter.BARTER_STATE_CANCELLED)
     
-    def delete_post(self):
+    def delete_post(self, reason=None):
         Barter = apps.get_model('barter', 'Barter')
         self.status = self.POST_STATUS_DELETED
+        self.deletion_reason = reason
         self.save()
         Barter.objects.filter(Q(requesting_post=self) | Q(requested_post=self)).exclude(state=Barter.BARTER_STATE_CANCELLED).update(state=Barter.BARTER_STATE_CANCELLED)
     

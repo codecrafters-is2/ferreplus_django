@@ -3,26 +3,35 @@
 {% load static %}
 
 {% block warning_sign_post %}
-    {% if post.status == 'paused' %}
+    {% if post.status == 'deleted' %}
     <div class="alert alert-danger mt-3">
         <p class="font-weight-bold">¡Atención!</p>
-        <p>La publicación se encuentra en <strong>estado PAUSADO</strong> (no es visible a los demás usuarios) debido a que se eliminó la sucursal a la que correspondía. Para solucionar esto, edite la publicación y seleccione una sucursal disponible.</p>
+        <p>Esta publicación ha sido eliminada por el empleado por el siguiente motivo: <strong>{{ post.deletion_reason }}</strong></p>
     </div>
-    {% endif %}
-    {% if post.has_unanswered_questions %}
-    <div class="alert alert-warning mt-3">
-        <p class="font-weight-bold">¡Atención!</p>
-        <p>Esta publicación tiene preguntas sin responder. Por favor, revisa y responde las preguntas pendientes.</p>
-    </div>
+    {% else %}
+        {% if post.status == 'paused' %}
+        <div class="alert alert-danger mt-3">
+            <p class="font-weight-bold">¡Atención!</p>
+            <p>La publicación se encuentra en <strong>estado PAUSADO</strong> (no es visible a los demás usuarios) debido a que se eliminó la sucursal a la que correspondía. Para solucionar esto, edite la publicación y seleccione una sucursal disponible.</p>
+        </div>
+        {% endif %}
+        {% if post.has_unanswered_questions %}
+        <div class="alert alert-warning mt-3">
+            <p class="font-weight-bold">¡Atención!</p>
+            <p>Esta publicación tiene preguntas sin responder. Por favor, revisa y responde las preguntas pendientes.</p>
+        </div>
+        {% endif %}
     {% endif %}
 {% endblock warning_sign_post %}
 
 {% block additional_fields %}
     <p><strong>Paquete actual:</strong> {{ post.package }}</p> 
-    {% if post.package.name == 'none' %}
-        <p><a href="{% url 'change_package' post.pk %}" class="btn btn-info">Aumentar visibilidad</a></p>
-    {% else %}
-        <p><a href="{% url 'change_package' post.pk %}" class="btn btn-info">Cambiar paquete</a></p>
+    {% if post.status != 'deleted' %}
+        {% if post.package.name == 'none' %}
+            <p><a href="{% url 'change_package' post.pk %}" class="btn btn-info">Aumentar visibilidad</a></p>
+        {% else %}
+            <p><a href="{% url 'change_package' post.pk %}" class="btn btn-info">Cambiar paquete</a></p>
+        {% endif %}
     {% endif %}
 {% endblock additional_fields %}
 
@@ -31,35 +40,39 @@
     <div class="border p-3 mb-3 rounded bg-light">
         <p>{{ question.content }}</p>
         {% block answer %}
-        {% if not question.answer %}
-            <button class="btn btn-primary toggle-response-form" data-question-id="{{ question.id }}">Responder</button>
-        {% else %}
-            <div class="bg-secondary text-white p-3 rounded mt-2">
-                <p><strong>Respuesta:</strong> {{ question.answer }}</p>
-            </div>
-            {% if request.user == post.author %}
-                <form method="post" action="{% url 'delete_answer' question.id %}" onsubmit="return confirmDeleteAnswer();">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-danger">Eliminar Respuesta</button>
-                </form>
+            {% if not question.answer %}
+                {% if post.status != 'deleted' %}
+                    <button class="btn btn-primary toggle-response-form" data-question-id="{{ question.id }}">Responder</button>
+                {% endif %}
+            {% else %}
+                <div class="bg-secondary text-white p-3 rounded mt-2">
+                    <p><strong>Respuesta:</strong> {{ question.answer }}</p>
+                </div>
+                {% if request.user == post.author and post.status != 'deleted'%}
+                    <form method="post" action="{% url 'delete_answer' question.id %}" onsubmit="return confirmDeleteAnswer();">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Eliminar Respuesta</button>
+                    </form>
+                {% endif %}
             {% endif %}
-        {% endif %}
-        <div id="response-form-{{ question.id }}" class="response-form" style="display: none;">
-            <form method="post" action="{% url 'my_post_detail' post.pk %}">
-                {% csrf_token %}
-                {{ answer_form.as_p }}
-                <button type="submit" class="btn btn-success mt-2">Enviar respuesta</button>
-            </form>
-        </div>
+            <div id="response-form-{{ question.id }}" class="response-form" style="display: none;">
+                <form method="post" action="{% url 'my_post_detail' post.pk %}">
+                    {% csrf_token %}
+                    {{ answer_form.as_p }}
+                    <button type="submit" class="btn btn-success mt-2">Enviar respuesta</button>
+                </form>
+            </div>
         {% endblock answer %}
     </div>
     {% endfor %}
 {% endblock for-questions %}
 
 {% block additional_buttons %}
-    <p><a href="{% url 'post_edit' post.pk %}"class="btn btn-warning">Editar publicación</a></p>
-    <p><a href="{% url 'post_delete' post.pk %}" class="btn btn-danger" id="delete-post-button" data-post-status="{{ post.status }}">Eliminar publicación</a></p>
-    <p><a href="{% url 'post_list' %}" class="btn btn-primary">Todas las publicaciones</a></p>
+    {% if post.status != 'deleted' %}
+        <p><a href="{% url 'post_edit' post.pk %}"class="btn btn-warning">Editar publicación</a></p>
+        <p><a href="{% url 'post_delete' post.pk %}" class="btn btn-danger" id="delete-post-button" data-post-status="{{ post.status }}">Eliminar publicación</a></p>
+        <p><a href="{% url 'post_list' %}" class="btn btn-primary">Todas las publicaciones</a></p>
+    {% endif %}
     <p><a href="{% url 'my_post_list' %}" class="btn btn-light">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-return-left" viewBox="0 0 16 16">
             <path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/>
