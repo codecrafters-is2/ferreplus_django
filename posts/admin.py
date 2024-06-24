@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Post, ImagePost, Question
+from .models import Post, ImagePost, Question, Package, PackagePurchase
 
 #Registro de nuestros modelos:
 
@@ -21,6 +21,12 @@ class PostAdmin(admin.ModelAdmin): #Exclusivamente para el panel del administrad
         QuestionInLine,
         #ImagePostAdmin        
     ]
+    
+
+class PackagePurchaseAdmin(admin.ModelAdmin): #Exclusivamente para el panel del administrador
+    list_display = ["post", "package","purchase_date","price"]
 
 admin.site.register(Post, PostAdmin)
 admin.site.register(Question)
+admin.site.register(Package)
+admin.site.register(PackagePurchase,PackagePurchaseAdmin)

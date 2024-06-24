@@ -1,5 +1,78 @@
 from django import forms
-from .models import Post,ImagePost, Question
+from .models import Post,ImagePost, Question, Package
+
+class ChangePackageForm(forms.ModelForm):
+    package = forms.ModelChoiceField(queryset=Package.objects.all(), required=True)
+
+    class Meta:
+        model = Post
+        fields = ['package']
+        
+    def __init__(self, *args, **kwargs):
+        super(ChangePackageForm, self).__init__(*args, **kwargs)
+        self.post_instance = kwargs.get('instance')  # Guarda la instancia del post actual
+
+    def clean(self):
+        cleaned_data = super().clean()
+        new_package = cleaned_data.get('package')
+        # Compara el nuevo paquete con el paquete actual del post
+        if self.post_instance and new_package == self.post_instance.package:
+            raise forms.ValidationError("No puedes elegir el mismo paquete que ya está asignado.")
+        return cleaned_data
+    
+    def save(self, commit=True):
+        post_instance = super().save(commit=False)
+        post_instance.change_package(self.cleaned_data['package'])
+        if commit:
+            post_instance.save()
+        return post_instance
+
+
+class UpdatePackageForm(forms.ModelForm):
+    class Meta:
+        model = Package
+        fields = ['price']
+    
+    def __init__(self, *args, **kwargs):
+        self.post_instance = kwargs.get('instance')  # Almacena la instancia del post
+        super(UpdatePackageForm, self).__init__(*args, **kwargs)
+        self.fields["price"].label = "Precio"
+
+    def clean(self):
+        cleaned_data = super().clean()
+        new_price = cleaned_data.get('price')
+        package_instance = self.instance
+        
+        # Compara el nuevo paquete con el paquete actual del post
+        if self.post_instance and new_price == self.post_instance.price:
+            raise forms.ValidationError("No puedes elegir el mismo precio que ya está asignado.")
+        
+        # Mapa de restricciones para validar diferencias de precios entre paquetes
+        price_restrictions = {
+            'oro': {'min_price': Package.objects.get(name='plata').price},
+            'plata': {'min_price': Package.objects.get(name='bronce').price, 'max_price': Package.objects.get(name='oro').price},
+            'bronce': {'min_price': Package.objects.get(name='none').price, 'max_price': Package.objects.get(name='plata').price}, 
+        }
+
+        # Validar restricciones
+        if package_instance.name in price_restrictions:  # Usa el nombre de la instancia del objeto para obtener el nombre del paquete
+            # Validación de no igualdad y restricciones de mínimo y máximo
+            if 'min_price' in price_restrictions[package_instance.name]:
+                if new_price == price_restrictions[package_instance.name]['min_price']:
+                    raise forms.ValidationError(f"El precio del paquete '{package_instance.get_name_display()}' no puede ser igual al del paquete anterior.")
+
+                if new_price < price_restrictions[package_instance.name]['min_price']:
+                    raise forms.ValidationError(f"El precio del paquete '{package_instance.get_name_display()}' debe ser mayor que el del paquete anterior.")
+
+            if 'max_price' in price_restrictions[package_instance.name]:
+                if new_price == price_restrictions[package_instance.name]['max_price']:
+                    raise forms.ValidationError(f"El precio del paquete '{package_instance.get_name_display()}' no puede ser igual al del siguiente paquete.")
+
+                if new_price > price_restrictions[package_instance.name]['max_price']:
+                    raise forms.ValidationError(f"El precio del paquete '{package_instance.get_name_display()}' debe ser menor que el del siguiente paquete.")
+
+        return cleaned_data
+
 
 class PostForm(forms.ModelForm):
 

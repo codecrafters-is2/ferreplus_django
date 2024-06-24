@@ -17,6 +17,15 @@
     {% endif %}
 {% endblock warning_sign_post %}
 
+{% block additional_fields %}
+    <p><strong>Paquete actual:</strong> {{ post.package }}</p> 
+    {% if post.package.name == 'none' %}
+        <p><a href="{% url 'change_package' post.pk %}" class="btn btn-info">Aumentar visibilidad</a></p>
+    {% else %}
+        <p><a href="{% url 'change_package' post.pk %}" class="btn btn-info">Cambiar paquete</a></p>
+    {% endif %}
+{% endblock additional_fields %}
+
 {% block for-questions %}
     {% for question, answer_form in questions_with_forms %}
     <div class="border p-3 mb-3 rounded bg-light">
