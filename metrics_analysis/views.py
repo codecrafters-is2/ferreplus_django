@@ -52,21 +52,8 @@ def barter_chart_view(request):
 
 def income_chart_view(request):
     income_charts = IncomeCharts()
-
     context={}
-    ## labels_2, data_2 = info_chart_2()
-    ## labels_3, data_3 = info_chart_3()
-    ## context = {
-    ##    "chart_2": {
-    ##        "labels": labels_2,
-    ##        "data": data_2,
-    ##    },
-    ##    "chart_3": {
-    ##        "labels": labels_3,
-    ##        "data": data_3,
-    ##    },
-    ## }
-    #
+
     if request.method == "POST":
         year = request.POST.get("year")
         if year:
@@ -81,6 +68,18 @@ def income_chart_view(request):
                 "labels": labels_2,
                 "data": values_2,
                 "selected_year": year
+            }
+            labels_3, values_3 = income_charts.package_income_per_month(year=year)
+            context["package_income_month"] = {
+                "labels": labels_3,
+                "data": values_3,
+                "selected_year": year,
+            }
+            labels_4, values_4 = income_charts.income_per_package(year=year)
+            context["package_name_income"] = {
+                "labels": labels_4,
+                "data": values_4,
+                "selected_year": year,
             }
 
     return render(request, "metrics-report/income_report.html", context)

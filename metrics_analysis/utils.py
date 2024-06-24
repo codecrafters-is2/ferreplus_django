@@ -2,6 +2,7 @@ from django.db.models import Count, Sum
 from django.db.models.functions import  TruncMonth
 from barter.models import Barter
 from branches.models import Branch
+from posts.models import PackagePurchase, Package
 
 
 MONTHS_NAMES = [
@@ -152,6 +153,51 @@ class IncomeCharts:
                 labels.append(branch_name)
             else:
                 labels.append("No branch")
+            data.append(
+                float(income["total_income"]) if income["total_income"] else 0.0
+            )
+
+        return labels, data
+
+    def package_income_per_month(self, year):
+        """Income per month"""
+        values = [0] * 12
+        package_per_month = list(
+            PackagePurchase.objects.filter(purchase_date__year=year)
+            .annotate(month=TruncMonth("purchase_date"))
+            .values("month")
+            .annotate(total_income=Sum("price"))
+            .order_by("month")
+            .values("month", "total_income")
+        )
+
+        # Preparar los datos para el gráfico
+        for package in package_per_month:
+            month = package["month"].month - 1  # Subtract 1 to convert to 0-indexed
+            values[month] = (
+                float(package["total_income"]) if package["total_income"] else 0.0
+            )
+
+        return MONTHS_NAMES, values
+
+    def income_per_package(self, year):
+        """Income per package"""
+        income_per_package = list(
+            PackagePurchase.objects.filter(purchase_date__year=year)
+            .values("package")
+            .annotate(total_income=Sum("price"))
+            .values("package", "total_income")
+        )
+
+        labels = []
+        data = []
+        for income in income_per_package:
+            package = income["package"]
+            if package is not None:
+                package_obj = Package.objects.get(id=package)
+                labels.append(str(package_obj))
+            else:
+                labels.append("No package")
             data.append(
                 float(income["total_income"]) if income["total_income"] else 0.0
             )
