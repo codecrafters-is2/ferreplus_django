@@ -21,7 +21,6 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 
-
 urlpatterns = [
     path("admin/", admin.site.urls),
     # User management
@@ -34,6 +33,7 @@ urlpatterns = [
     path("barter/", include("barter.urls")),
     path("turns/", include("turns.urls")),
     path("employee/", include("employeepanel.urls")),
+    path("metrics_analysis/", include("metrics_analysis.urls")),
     path("catalog/", include("catalogo.urls"))
 ]
 

@@ -1,0 +1,15 @@
+{% extends "_base_wildcard_bootstrap.html" %}
+
+{% block content %}
+    <div>
+    <h2>Cambiar Paquete</h2>
+    <div>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+        </form>
+    </div>
+    <a href="{% url 'my_post_detail' post.pk %}" class="btn btn-secondary">Cancelar</a>
+    </div>
+{% endblock %}

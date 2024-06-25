@@ -1,0 +1,231 @@
+{% extends "_base_wildcard_bootstrap.html" %}
+{% load static %}
+{% block title %}Ferreplus{% endblock title %}
+<head>
+    {% block custom_styles %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'styles/home/adminpanel.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/contact_info/contact_info.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    {% endblock custom_styles %}
+</head>
+{% block content %}
+<div style="width: 95%;">
+    <h1 style="margin-bottom:25px; margin-top:25px; font-family: 'Raleway'; ">Análisis de Ganancias</h1>
+    <form method="post" action="{% url 'income_charts' %}">
+        {% csrf_token %}
+        <label for="year">Selecciona un año:</label>
+        <input type="number" id="year" name="year" min="2000" max="2024" value="{{ selected_year|default_if_none:'' }}">
+        <button type="submit">Generar Gráficos</button>
+    </form>
+    <div class="accordion" id="accordionIncome" style="width:100%;">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="2">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="false" aria-controls="collapse1" style="font-size: 26px">
+                        Ganancias obtenidas por Trueques
+                </button>
+            </h2>
+            <div id="collapse1" class="accordion-collapse collapse show" data-bs-parent="#accordionIncome">
+                <div class="accordion-body d-flex flex-wrap">
+                    <div class="card" style="width: 100%;">
+                        <div class="card-body">
+                            <h3>Ganancias obtenidas por mes y por sucursal: </h3>
+                            {% if barter_income_month.labels and barter_income_month.data %}
+                            <div style="display:flex">
+                                <div class="card" style="width:50%; background:#F9FAFB;">
+                                    <div class="card-body" >
+                                        <canvas id="barChartIncomeMonth"></canvas>
+                                    </div>
+                                </div>
+                                <div class="card" style="width:50%; background:#F9FAFB;">
+                                    <div class="card-body">
+                                        <canvas id="pieChartIncomeBranches"></canvas>
+                                    </div>
+                                </div>                         
+                                <script>
+                                    
+                                    var ctx_1 = document.getElementById('barChartIncomeMonth').getContext('2d');
+                                    var barChart = new Chart(ctx_1, {
+                                        type: 'bar',
+                                        data: {
+                                            labels: {{ barter_income_month.labels|safe }},
+                                            datasets: [{
+                                                label: 'Monto $',
+                                                data: {{ barter_income_month.data }},
+                                                backgroundColor: ['rgba(255, 99, 132, 0.7)',
+                                                    'rgba(255, 205, 86, 0.7)',
+                                                    'rgba(75, 192, 192, 0.7)',
+                                                    'rgba(54, 162, 235, 0.7)',
+                                                    'rgba(153, 102, 255, 0.7)',
+                                                    'rgba(201, 203, 207, 0.7)', 
+                                                    'rgba(255, 159, 64, 0.7)',                    
+                                                    "rgba(186, 85, 211, 0.7)",
+                                                    "rgba(238, 232, 170, 0.7)",
+                                                    "rgba(144, 238, 144, 0.7)",
+                                                    "rgba(255, 127, 80, 0.7)",
+                                                    "rgba(128, 128, 0, 0.7)"],
+                                                
+                                                borderWidth: 1
+                                            }]
+                                        },
+                                        options: {
+                                            scales: {
+                                                y: {
+                                                    beginAtZero: true
+                                                }
+                                            }
+                                        }
+                                    });
+                                
+                                    var ctx_2 = document.getElementById('pieChartIncomeBranches').getContext('2d');
+                                    var barChart = new Chart(ctx_2, {
+                                        type: 'bar',
+                                        data: {
+                                            labels: {{ barter_income_branches.labels|safe }},
+                                            datasets: [{
+                                                label: 'Monto $',
+                                                data: {{ barter_income_branches.data }},
+                                                backgroundColor: ['rgba(255, 99, 132, 0.7)',
+                                                    'rgba(255, 205, 86, 0.7)',
+                                                    'rgba(75, 192, 192, 0.7)',
+                                                    'rgba(54, 162, 235, 0.7)',
+                                                    'rgba(153, 102, 255, 0.7)',
+                                                    'rgba(201, 203, 207, 0.7)', 
+                                                    'rgba(255, 159, 64, 0.7)',                    
+                                                    "rgba(186, 85, 211, 0.7)",
+                                                    "rgba(238, 232, 170, 0.7)",
+                                                    "rgba(144, 238, 144, 0.7)",
+                                                    "rgba(255, 127, 80, 0.7)",
+                                                    "rgba(128, 128, 0, 0.7)"],                                                
+                                                borderWidth: 1
+                                            }]
+                                        },
+                                        options: {
+                                            scales: {
+                                                y: {
+                                                    beginAtZero: true
+                                                }
+                                            }
+                                        }
+                                    });
+                                </script>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="heading2">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse2" style="font-size: 26px">
+                        Ganancias obtenidas por compras de Paquetes
+                </button>
+            </h2>
+            <div id="collapse2" class="accordion-collapse collapse show" data-bs-parent="#accordionIncome">
+                <div class="accordion-body d-flex flex-wrap">
+                    <div class="card" style="width: 100%;">
+                        <div class="card-body">
+                            <h3>Ganancias obtenidas por mes y por paquete: </h3>
+                            {% if package_income_month.labels and package_income_month.data %}
+                            <div style="display:flex">
+                                <div class="card" style="width:50%; background:#F9FAFB;">
+                                    <div class="card-body" >
+                                        <canvas id="barChartIncomePackageMonth"></canvas>
+                                    </div>
+                                </div>
+                                <div class="card" style="width:50%; background:#F9FAFB;">
+                                    <div class="card-body">
+                                        <canvas id="pieChartIncomePackages"></canvas>
+                                    </div>
+                                </div>                         
+                                <script>
+                                    
+                                    var ctx_1 = document.getElementById('barChartIncomePackageMonth').getContext('2d');
+                                    var barChart = new Chart(ctx_1, {
+                                        type: 'bar',
+                                        data: {
+                                            labels: {{ package_income_month.labels|safe }},
+                                            datasets: [{
+                                                label: 'Monto $',
+                                                data: {{ package_income_month.data }},
+                                                backgroundColor: ['rgba(255, 99, 132, 0.7)',
+                                                    'rgba(255, 205, 86, 0.7)',
+                                                    'rgba(75, 192, 192, 0.7)',
+                                                    'rgba(54, 162, 235, 0.7)',
+                                                    'rgba(153, 102, 255, 0.7)',
+                                                    'rgba(201, 203, 207, 0.7)', 
+                                                    'rgba(255, 159, 64, 0.7)',                    
+                                                    "rgba(186, 85, 211, 0.7)",
+                                                    "rgba(238, 232, 170, 0.7)",
+                                                    "rgba(144, 238, 144, 0.7)",
+                                                    "rgba(255, 127, 80, 0.7)",
+                                                    "rgba(128, 128, 0, 0.7)"],
+                                                
+                                                borderWidth: 1
+                                            }]
+                                        },
+                                        options: {
+                                            scales: {
+                                                y: {
+                                                    beginAtZero: true
+                                                }
+                                            }
+                                        }
+                                    });
+                                
+                                    var ctx_2 = document.getElementById('pieChartIncomePackages').getContext('2d');
+                                    var barChart = new Chart(ctx_2, {
+                                        type: 'bar',
+                                        data: {
+                                            labels: {{ package_name_income.labels|safe }},
+                                            datasets: [{
+                                                label: 'Monto $',
+                                                data: {{ package_name_income.data }},
+                                                backgroundColor: ['rgba(255, 99, 132, 0.7)',
+                                                    'rgba(255, 205, 86, 0.7)',
+                                                    'rgba(75, 192, 192, 0.7)',
+                                                    'rgba(54, 162, 235, 0.7)',
+                                                    'rgba(153, 102, 255, 0.7)',
+                                                    'rgba(201, 203, 207, 0.7)', 
+                                                    'rgba(255, 159, 64, 0.7)',                    
+                                                    "rgba(186, 85, 211, 0.7)",
+                                                    "rgba(238, 232, 170, 0.7)",
+                                                    "rgba(144, 238, 144, 0.7)",
+                                                    "rgba(255, 127, 80, 0.7)",
+                                                    "rgba(128, 128, 0, 0.7)"],                                                
+                                                borderWidth: 1
+                                            }]
+                                        },
+                                        options: {
+                                            scales: {
+                                                y: {
+                                                    beginAtZero: true
+                                                }
+                                            }
+                                        }
+                                    });
+                                </script>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="width: 54%;">
+        <div class="mt-4 d-flex justify-content-start">
+            <a href="{% url 'metrics' %}" class="btn btn-light">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-return-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/>
+                </svg>
+                Volver
+            </a>
+        </div>
+    </div>
+        
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+{% endblock content %}

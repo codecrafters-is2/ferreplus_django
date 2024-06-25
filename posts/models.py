@@ -1,13 +1,31 @@
 from django.db import models
+from django.utils import timezone
 from django.apps import apps
 from django.urls import reverse
 from django.db.models import Q
 from django.contrib.auth import get_user_model
-from django.core.validators import MinValueValidator, MaxValueValidator
 from django.core.validators import MaxLengthValidator
 from branches.models import Branch
 
 User = get_user_model()
+
+class Package(models.Model):
+    PACKAGE_NONE = 'none'
+    PACKAGE_BRONCE = 'bronce'
+    PACKAGE_PLATA = 'plata'
+    PACKAGE_ORO = 'oro'
+    PACKAGE_CHOICES = [
+        (PACKAGE_NONE, 'Ninguno'),
+        (PACKAGE_BRONCE, 'Bronce'),
+        (PACKAGE_PLATA, 'Plata'),
+        (PACKAGE_ORO, 'Oro'),
+    ]
+    name = models.CharField(max_length=10, choices=PACKAGE_CHOICES, unique=True,default=PACKAGE_NONE)
+    price = models.DecimalField(max_digits=6, decimal_places=2)  # Precio del paquete
+    priority = models.IntegerField(default=5) #Para ordenamiento de publicaciones
+
+    def __str__(self):
+        return self.get_name_display()
 
 class Post(models.Model):
     POST_STATUS_AVAILABLE = 'available'
@@ -48,7 +66,9 @@ class Post(models.Model):
     new = models.BooleanField(blank=True, null=True,)
     brand = models.CharField(max_length=30,blank=True, null=True,verbose_name="Marca") #marca
     status = models.CharField(max_length=20, choices=POST_STATUS_CHOICES, default=POST_STATUS_AVAILABLE,) 
-
+    package = models.ForeignKey(Package, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Paquete")
+    package_start_date = models.DateTimeField(null=True, blank=True)  # Fecha de inicio del paquete
+    
     def has_unanswered_questions(self):
         return self.questions.filter(Q(answer__isnull=True) | Q(answer='')).exists()
     
@@ -81,6 +101,22 @@ class Post(models.Model):
     def free_post(self):
         self.status = 'available'
         self.save()
+    
+    def change_package(self, new_package):
+        """
+        Cambia el paquete asociado a la publicación y guarda la transacción en la tabla de PackagePurchase.
+        """
+        # Guardar la fecha de inicio del nuevo paquete
+        self.package_start_date = timezone.now()
+        # Registrar la transacción de compra
+        PackagePurchase.objects.create(
+            post=self,
+            package=new_package,
+            price=new_package.price  
+        )
+        # Actualizar el paquete
+        self.package = new_package
+        self.save() 
 
 class Question(models.Model): 
     post = models.ForeignKey(Post, related_name='questions', on_delete=models.CASCADE)
@@ -93,6 +129,15 @@ class Question(models.Model):
     def __str__(self):
         return f'Question by {self.user.username} on {self.post.title}'
 
+
+class PackagePurchase(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE,verbose_name="Publicación")
+    package = models.ForeignKey(Package, on_delete=models.CASCADE,verbose_name="Paquete")
+    purchase_date = models.DateTimeField(auto_now_add=True,verbose_name="Fecha")
+    price = models.DecimalField(max_digits=6, decimal_places=2,verbose_name="Precio")
+
+    def __str__(self):
+        return f"{self.post.title} - {self.package.name} - {self.price}"
 
 
 
