@@ -3,10 +3,10 @@ from typing import Dict, Optional
 # Django
 from django.views.generic import View, ListView
 from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest, HttpResponseServerError
+from django.http import JsonResponse, HttpResponseBadRequest, HttpResponseServerError, HttpResponseNotFound
 # Local
 from .models import Product
-from .services import get_active_products, filter_products_by_query_params
+from .services import get_active_products, get_product_by_code, filter_products_by_query_params, get_product_images
 from .forms import ProductCreationForm, ProductImageCreationForm
 
 
@@ -51,7 +51,6 @@ class ProductSearchView(ListView):
     
     @staticmethod
     def _extract_float(str_value: str) -> Optional[float]:
-        converted_value = None
         try:
             converted_value = float(str_value)
         except ValueError:
@@ -111,6 +110,31 @@ class ProductImageUploadView(View):
             else:
                 response = HttpResponseBadRequest()
             return response
+        except Exception as e:
+            print(e)
+            return HttpResponseServerError()
+
+
+class ProductDetailView(View):
+    template_name = "product_detail.html"
+
+    def get(self, request, *args, **kwargs):
+        try:
+            code = kwargs.get("code")
+            product = get_product_by_code(code)
+            if product is not None:
+                images = get_product_images(product)
+                context = {
+                    "product": product,
+                    "product_images": images
+                }
+                return render(
+                    request,
+                    template_name="product_detail.html",
+                    context=context
+                )
+            else:
+                return HttpResponseNotFound()
         except Exception as e:
             print(e)
             return HttpResponseServerError()

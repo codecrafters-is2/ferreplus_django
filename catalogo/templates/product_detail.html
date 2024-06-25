@@ -1,0 +1,55 @@
+{% extends "_base_wildcard_bootstrap.html" %}
+{% load static %}
+{% load product_extras %}
+
+{% block content %}
+<style>
+  .product-detail-container {
+    min-width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 4rem 1rem;
+  }
+
+  .product-widget {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .carousel-external-container {
+    max-width: 400px;
+    width: 400px;
+    max-height: 400px;
+    height: 400px;
+  }
+
+  @media (min-width: 768px) {
+    .product-widget {
+        flex-direction: row;
+        align-items: start;
+        gap: 4rem;
+    }
+  }  
+
+</style>
+
+<div class="product-detail-container">
+  <div class="product-widget">
+    <div class="carousel-external-container">
+      {% show_product_carousel product_images %}
+    </div>
+    <div>
+      <h1>{{ product.name }}</h1>
+      <p>{{ product.brand }}</p>
+      <p>{{ product.model }}</p>
+      <p>{{ product.description }}</p>
+      <p>{{ product.category.name }}</p>
+      <p>${{ product.price }}</p>
+    </div>
+  </div>
+</div>
+{% endblock content %}

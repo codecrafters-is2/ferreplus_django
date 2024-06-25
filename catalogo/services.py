@@ -1,14 +1,15 @@
 # Python
-from typing import Dict, Optional
+from typing import Dict, Optional, List
 # Django
 from django.db.models import QuerySet, Q
 from django.core.exceptions import ObjectDoesNotExist
 # Local
-from .models import Product, ProductCategory
+from .models import Product, ProductCategory, ProductImage
 
 
 def get_active_products() -> QuerySet:
     return Product.objects.filter(active=True)
+
 
 def get_product_by_code(code: int) -> Optional[Product]:
     try:
@@ -16,6 +17,7 @@ def get_product_by_code(code: int) -> Optional[Product]:
     except ObjectDoesNotExist:
         return None
     return product
+
 
 def get_active_products_by_category(category_name: str) -> QuerySet:
     try:
@@ -48,8 +50,16 @@ def filter_products_by_query_params(query_params: Dict) -> QuerySet:
 
     return queryset
 
-def get_product_images(product: Product) -> QuerySet:
-    return ProductImage.objects.filter(product=product)
+
+def get_product_images(product: Product) -> List[ProductImage]:
+    main_image = ProductImage(
+        product=product,
+        title=product.name,
+        image=product.main_image
+    )
+    additional_images = [image for image in ProductImage.objects.filter(product=product)]
+    additional_images.append(main_image)
+    return additional_images
 
 
 def get_category_by_name(category_name: str) -> Optional[ProductCategory]:
