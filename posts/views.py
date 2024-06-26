@@ -12,7 +12,7 @@ from django.http import Http404,HttpResponseRedirect
 from accounts.mixins import ClientRequiredMixin, AdminRequiredMixin
 from .forms import QuestionForm, AnswerForm
 from .models import Post, ImagePost, Question, Package
-from .forms import PostForm, ChangePackageForm, UpdatePackageForm
+from .forms import PostForm, UpdatePackageForm
 from .services import get_active_posts
 
 #Preguntas de las publicaciones:
@@ -48,14 +48,6 @@ class DeleteAnswerView(ClientRequiredMixin, View):
 
 
 #Paquetes de las publicaciones:
-class ChangePackageView(ClientRequiredMixin,UpdateView):
-    model = Post
-    template_name = "posts/change_package.html"
-    form_class = ChangePackageForm
-    
-    def get_success_url(self):
-        return reverse_lazy('my_post_detail', kwargs={'pk': self.object.pk})
-
 
 class PackageListView(AdminRequiredMixin, ListView):
     model = Package
