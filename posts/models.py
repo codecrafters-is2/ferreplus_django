@@ -14,6 +14,7 @@ class Package(models.Model):
     PACKAGE_BRONCE = 'Bronce'
     PACKAGE_PLATA = 'Plata'
     PACKAGE_ORO = 'Oro'
+    
     PACKAGE_CHOICES = [
         (PACKAGE_NONE, 'Ninguno'),
         (PACKAGE_BRONCE, 'Bronce'),

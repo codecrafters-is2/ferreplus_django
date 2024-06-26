@@ -2,16 +2,17 @@
 from django.views import View
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
-from django.db.models import Q,F,Case, When, Value, IntegerField
+from django.db.models import Q,F
+
 from django.urls import reverse_lazy
 from django.urls import reverse
 from django.shortcuts import redirect,get_object_or_404
 from django.http import Http404,HttpResponseRedirect
 # Local
-from accounts.mixins import ClientRequiredMixin
+from accounts.mixins import ClientRequiredMixin, AdminRequiredMixin
 from .forms import QuestionForm, AnswerForm
-from .models import Post, ImagePost, Question
-from .forms import PostForm
+from .models import Post, ImagePost, Question, Package
+from .forms import PostForm, ChangePackageForm, UpdatePackageForm
 from .services import get_active_posts
 
 #Preguntas de las publicaciones:
@@ -44,6 +45,29 @@ class DeleteAnswerView(ClientRequiredMixin, View):
 
         # Redirige a la página de detalle de la publicación
         return redirect('post_detail', pk=question.post.pk)
+
+
+#Paquetes de las publicaciones:
+class ChangePackageView(ClientRequiredMixin,UpdateView):
+    model = Post
+    template_name = "posts/change_package.html"
+    form_class = ChangePackageForm
+    
+    def get_success_url(self):
+        return reverse_lazy('my_post_detail', kwargs={'pk': self.object.pk})
+
+
+class PackageListView(AdminRequiredMixin, ListView):
+    model = Package
+    template_name = "packages/package_list.html"
+    context_object_name = 'packages'
+
+
+class UpdatePackageView(AdminRequiredMixin, UpdateView):
+    model = Package
+    form_class = UpdatePackageForm
+    template_name = "packages/update_package.html"
+    success_url = reverse_lazy('package_list')  
 
 
 #Publicaciones:
@@ -79,7 +103,7 @@ class MyPostListView(ClientRequiredMixin,ListView):
         return queryset
 
 
-class PostDetailView(ClientRequiredMixin,DetailView): # Visualización de la publicación
+class PostDetailView(ClientRequiredMixin,DetailView): 
     model = Post
     template_name = "posts/detail/post_detail.html"
 
