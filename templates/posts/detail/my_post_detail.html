@@ -20,9 +20,9 @@
 {% block additional_fields %}
     <p><strong>Paquete actual:</strong> {{ post.package }}</p> 
     {% if post.package.name == 'none' %}
-        <p><a href="{% url 'change_package' post.pk %}" class="btn btn-info">Aumentar visibilidad</a></p>
+        <p><a href="{% url 'payments:package-selection' post.pk %}" class="btn btn-info">Aumentar visibilidad</a></p>
     {% else %}
-        <p><a href="{% url 'change_package' post.pk %}" class="btn btn-info">Cambiar paquete</a></p>
+        <p><a href="{% url 'payments:package-selection' post.pk %}" class="btn btn-info">Cambiar paquete</a></p>
     {% endif %}
 {% endblock additional_fields %}
 

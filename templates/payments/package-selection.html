@@ -1,0 +1,47 @@
+{% extends "_base_wildcard_bootstrap.html" %}
+
+{% block content %}
+<div class="container" style="text-align: center;">
+    <h1>Comprar un Paquete</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div>
+            {{ form.as_p }}
+            <label for="card_holder_name">Titular de la Tarjeta:</label>
+            <input type="text" id="card_holder_name" name="card_holder_name" maxlength="100" required="true">
+        </div>
+        <button class="btn btn-success" type="submit">Pagar</button>
+    </form>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const cardNumberInput = document.querySelector('input[name="card_number"]');
+        const expirationDateInput = document.querySelector('input[name="expiration_date"]');
+
+        // Format card number with dashes
+        cardNumberInput.addEventListener('input', function (e) {
+            let value = e.target.value.replace(/\D/g, '');
+            let formattedValue = '';
+
+            for (let i = 0; i < value.length; i++) {
+                if (i > 0 && i % 4 === 0) {
+                    formattedValue += '-';
+                }
+                formattedValue += value[i];
+            }
+            
+            e.target.value = formattedValue.slice(0, 19); // Limit to 19 characters (16 digits + 3 dashes)
+        });
+
+        // Format expiration date with slash
+        expirationDateInput.addEventListener('input', function (e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 2) {
+                value = value.slice(0, 2) + '/' + value.slice(2, 4);
+            }
+            e.target.value = value.slice(0, 5); // Limit to 5 characters (MM/YY)
+        });
+    });
+</script>
+{% endblock %}

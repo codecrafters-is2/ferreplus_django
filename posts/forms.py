@@ -1,33 +1,6 @@
 from django import forms
 from .models import Post,ImagePost, Question, Package
 
-class ChangePackageForm(forms.ModelForm):
-    package = forms.ModelChoiceField(queryset=Package.objects.all(), required=True)
-
-    class Meta:
-        model = Post
-        fields = ['package']
-        
-    def __init__(self, *args, **kwargs):
-        super(ChangePackageForm, self).__init__(*args, **kwargs)
-        self.post_instance = kwargs.get('instance')  # Guarda la instancia del post actual
-
-    def clean(self):
-        cleaned_data = super().clean()
-        new_package = cleaned_data.get('package')
-        # Compara el nuevo paquete con el paquete actual del post
-        if self.post_instance and new_package == self.post_instance.package:
-            raise forms.ValidationError("No puedes elegir el mismo paquete que ya está asignado.")
-        return cleaned_data
-    
-    def save(self, commit=True):
-        post_instance = super().save(commit=False)
-        post_instance.change_package(self.cleaned_data['package'])
-        if commit:
-            post_instance.save()
-        return post_instance
-
-
 class PostForm(forms.ModelForm):
 
     class Meta:
