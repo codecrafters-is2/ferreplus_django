@@ -3,6 +3,7 @@ from django.views import View
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.db.models import Q,F
+
 from django.urls import reverse_lazy
 from django.urls import reverse
 from django.shortcuts import redirect,get_object_or_404
@@ -70,6 +71,7 @@ class UpdatePackageView(AdminRequiredMixin, UpdateView):
 
 
 #Publicaciones:
+
 class PostListView(ClientRequiredMixin,ListView):
     model = Post
     template_name = "posts/list/post_list.html"
