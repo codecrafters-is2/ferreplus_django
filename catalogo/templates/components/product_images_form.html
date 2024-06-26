@@ -57,10 +57,8 @@
       e.preventDefault();
 
       const imageFormData = new FormData(e.currentTarget);
-      const productCode = document.getElementById("product-code").dataset.productCode;
-      imageFormData.append("product_code", productCode);
-
       const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
       try {
         // Hacemos un fetch a la url provista por parámetro en el custom tag
         const response = await fetch(imagesUploadForm.dataset.submitUrl, {
@@ -75,6 +73,8 @@
         if (response.ok) {
           alert("Imagen subida");
           imagesUploadForm.reset();
+          const idField = document.getElementById("product-id");
+          idField.value = imageFormData.get("product");
         } else {
           alert("Algo malio sal");
         }

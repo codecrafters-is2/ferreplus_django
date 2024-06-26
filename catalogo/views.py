@@ -98,7 +98,6 @@ class ProductImageUploadView(View):
         try:
             form = ProductImageCreationForm(request.POST, request.FILES)
             if form.is_valid():
-                print("es válido")
                 new_image = form.save()
                 response = JsonResponse({
                     "id": new_image.id,

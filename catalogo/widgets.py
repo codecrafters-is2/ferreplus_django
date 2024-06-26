@@ -73,7 +73,7 @@ IMAGE_CREATION_FORM_WIDGETS = {
     "product": forms.NumberInput(
         attrs={
             "class": "form-control image-creation-input",
-            "id": "product-code",
+            "id": "product-id",
             "placeholder": "producto",
             "style": "display: none;"
         }

@@ -146,6 +146,10 @@
 
   </style>
   <script>
+    addEventListener("pageshow", (event) => {
+      event.persisted && window.location.reload();
+    });
+
     window.addEventListener('DOMContentLoaded', () => {
       const productForm = document.getElementById("product-form");
 
@@ -164,6 +168,9 @@
       const testbutton = document.getElementById("testing");
       testbutton.addEventListener("click", formTransition);
 
+      /*
+        Setea el form de creación y hace el request
+      */
       productForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const productDataForm = new FormData(e.currentTarget);
@@ -179,8 +186,10 @@
           });
           if (response.ok) {
             const content = await response.json();
-            const codeState = document.getElementById("product-code");
+            const codeState = document.getElementById("product-id");
             codeState.value = content.product_id; // invento horrible para pasar éste parámetro
+            const productDetailLink = document.getElementById("product-detail-link");
+            productDetailLink.href = `/catalog/product/${content.product_code}`
             formTransition();
           } else {
             alert("Algo malió sal");
@@ -197,11 +206,9 @@
         if (imagesFormWrapper.classList.contains("images-display")) {
           imagesFormWrapper.classList.remove("images-display");
           imagesFormWrapper.classList.remove("images-show");
-          toggleImagesButton.style.opacity = 0.5;
         } else {
           imagesFormWrapper.classList.add("images-display");
           setTimeout(() => imagesFormWrapper.classList.add("images-show"), 100);
-          toggleImagesButton.style.opacit = 0.5;
         }
       })
 
@@ -214,7 +221,7 @@
         <form class="creation-form" id="product-form" method="POST" action="" enctype="multipart/form-data">
             {% csrf_token %}
             {{ product_form }}
-            <button class="btn btn-success" type="submit" onclick="">
+            <button type="submit" style="font-size: 16px;">
               Crear
             </button>
         </form>
@@ -222,11 +229,11 @@
 
       <div class="success-menu" id="success-menu">
         <div style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 1rem">
-          <h2 style="color: black;">Producto agregado!</h2>
+          <h2 style="color: black;">¡Producto agregado!</h2>
           <button id="images-toggle">
             agregar imágenes
           </button>
-          <a href="#">
+          <a id="product-detail-link" href="#">
             <button>continuar</button>
           </a>
           <a href="{% url 'product_list' %}">
