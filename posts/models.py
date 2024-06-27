@@ -14,6 +14,7 @@ class Package(models.Model):
     PACKAGE_BRONCE = 'bronce'
     PACKAGE_PLATA = 'plata'
     PACKAGE_ORO = 'oro'
+    
     PACKAGE_CHOICES = [
         (PACKAGE_NONE, 'Ninguno'),
         (PACKAGE_BRONCE, 'Bronce'),
@@ -131,7 +132,6 @@ class Question(models.Model):
     def __str__(self):
         return f'Question by {self.user.username} on {self.post.title}'
 
-
 class PackagePurchase(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE,verbose_name="Publicación")
     package = models.ForeignKey(Package, on_delete=models.CASCADE,verbose_name="Paquete")
@@ -140,9 +140,6 @@ class PackagePurchase(models.Model):
 
     def __str__(self):
         return f"{self.post.title} - {self.package.name} - {self.price}"
-
-
-
 
 #Para cuando podamos cargar mas imagenes
 class ImagePost(models.Model):#

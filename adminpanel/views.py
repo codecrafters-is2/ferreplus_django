@@ -12,6 +12,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404
 
+
 class AdminPanelView(AdminRequiredMixin, TemplateView):
     template_name = 'adminpanel.html'
 
@@ -73,3 +74,5 @@ class EmployeeSuccessView(AdminRequiredMixin, View):
     def get(self, request, employee_id):
         employee = get_object_or_404(EmployeeUser, id=employee_id)
         return render(request, "account/employee_success.html", {"employee": employee})
+
+

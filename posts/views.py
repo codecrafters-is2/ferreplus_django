@@ -3,6 +3,7 @@ from django.views import View
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.db.models import Q,F
+
 from django.urls import reverse_lazy
 from django.urls import reverse
 from django.shortcuts import redirect,get_object_or_404
@@ -11,7 +12,7 @@ from django.http import Http404,HttpResponseRedirect
 from accounts.mixins import ClientRequiredMixin, AdminRequiredMixin
 from .forms import QuestionForm, AnswerForm
 from .models import Post, ImagePost, Question, Package
-from .forms import PostForm, ChangePackageForm, UpdatePackageForm
+from .forms import PostForm, UpdatePackageForm
 from .services import get_active_posts
 
 #Preguntas de las publicaciones:
@@ -47,19 +48,15 @@ class DeleteAnswerView(ClientRequiredMixin, View):
 
 
 #Paquetes de las publicaciones:
-class ChangePackageView(ClientRequiredMixin,UpdateView):
-    model = Post
-    template_name = "posts/change_package.html"
-    form_class = ChangePackageForm
-    
-    def get_success_url(self):
-        return reverse_lazy('my_post_detail', kwargs={'pk': self.object.pk})
-
 
 class PackageListView(AdminRequiredMixin, ListView):
     model = Package
     template_name = "packages/package_list.html"
     context_object_name = 'packages'
+
+    def get_queryset(self):
+        queryset = super().get_queryset().exclude(name='Ninguno')
+        return queryset
 
 
 class UpdatePackageView(AdminRequiredMixin, UpdateView):
@@ -70,6 +67,7 @@ class UpdatePackageView(AdminRequiredMixin, UpdateView):
 
 
 #Publicaciones:
+
 class PostListView(ClientRequiredMixin,ListView):
     model = Post
     template_name = "posts/list/post_list.html"
@@ -214,6 +212,7 @@ class PostCreateView(ClientRequiredMixin,CreateView): #Creación de la publicaci
         #        image_post = ImagePost(post=self.object, image=image)
                 # Guarda la instancia en la base de datos
         #        image_post.save()
+        form.instance.package = Package.objects.get(name="none")
         return super().form_valid(form)
         #else:
         #    return self.form_invalid(form)
