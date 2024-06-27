@@ -11,9 +11,7 @@
                         <strong>{{ package.get_name_display }}</strong>
                         <p class="mb-0">Precio: ${{ package.price }}</p>
                     </div>
-                    {% if package.name != "none" %}
                         <a href="{% url 'update_package' package.id %}" class="btn btn-warning">Editar Precio</a>
-                    {% endif %}
                 </li>
             {% endfor %}
         </ul>

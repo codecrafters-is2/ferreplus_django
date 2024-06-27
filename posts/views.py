@@ -54,6 +54,10 @@ class PackageListView(AdminRequiredMixin, ListView):
     template_name = "packages/package_list.html"
     context_object_name = 'packages'
 
+    def get_queryset(self):
+        queryset = super().get_queryset().exclude(name='Ninguno')
+        return queryset
+
 
 class UpdatePackageView(AdminRequiredMixin, UpdateView):
     model = Package
@@ -207,6 +211,7 @@ class PostCreateView(ClientRequiredMixin,CreateView): #Creación de la publicaci
         #        image_post = ImagePost(post=self.object, image=image)
                 # Guarda la instancia en la base de datos
         #        image_post.save()
+        form.instance.package = Package.objects.get(name="none")
         return super().form_valid(form)
         #else:
         #    return self.form_invalid(form)

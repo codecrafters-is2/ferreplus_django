@@ -23,7 +23,7 @@ class PaymentForm(forms.ModelForm):
     )
 
     package = forms.ModelChoiceField(
-        queryset=Package.objects.exclude(name='Ninguno'),
+        queryset=Package.objects.exclude(name='none'),
         widget=forms.Select,
         label="Seleccione un paquete",
     )
