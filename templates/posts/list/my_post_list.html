@@ -17,8 +17,12 @@
             </h2>                  
         </div>
         <div class="card-body">
-            {% if post.status == 'paused' %}
-                <p class="paused-message"><strong>¡Atención, publicación pausada!</strong></p> <!-- Aquí agregamos <strong> para negrita -->
+            {% if post.status == 'deleted' %}
+                <p class="paused-message"><strong>¡Atención, publicación eliminada! Haga clic sobre la misma para visualizar la razón</strong></p> 
+            {% else %}
+                {% if post.status == 'paused' %}
+                    <p class="paused-message"><strong>¡Atención, publicación pausada!</strong></p> 
+                {% endif %}
             {% endif %}
         </div>
         <div class="card-footer text-center text-muted">
