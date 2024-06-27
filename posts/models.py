@@ -10,10 +10,10 @@ from branches.models import Branch
 User = get_user_model()
 
 class Package(models.Model):
-    PACKAGE_NONE = 'Ninguno'
-    PACKAGE_BRONCE = 'Bronce'
-    PACKAGE_PLATA = 'Plata'
-    PACKAGE_ORO = 'Oro'
+    PACKAGE_NONE = 'none'
+    PACKAGE_BRONCE = 'bronce'
+    PACKAGE_PLATA = 'plata'
+    PACKAGE_ORO = 'oro'
     
     PACKAGE_CHOICES = [
         (PACKAGE_NONE, 'Ninguno'),
