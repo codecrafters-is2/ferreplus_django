@@ -19,11 +19,15 @@
             <p>
                 <button type="button" class="btn btn-light" data-toggle="modal" data-target="#reportModal{{ barter.id }}">Ver reporte</button>
             </p>
+            {% else %}
+            <p>
+                <button type="button" class="btn btn-light" data-toggle="modal" data-target="#profitModal{{ barter.id }}">Ver reporte</button>
+            </p>
             {% endif %}
             <p class="barter-state {% if barter.state == 'requested' %}requested-state{% elif barter.state == 'accepted' %}accepted-state{% elif barter.state == 'parcial_accepted' %}parcial_accepted-state{% elif barter.state == 'committed' %}committed-state{% elif barter.state == 'cancelled' %}cancelled-state{% endif %}">{{ barter.get_state_display }}</p>
         </div>
     
-        <!-- Modal -->
+        <!-- Modal para reporte de cancelación -->
         <div class="modal fade" id="reportModal{{ barter.id }}" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel{{ barter.id }}" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -38,6 +42,23 @@
                                 <p><strong>Empleado:</strong> {{ barter.employee }}</p>
                                 <p><strong>Motivo:</strong> {{ report.reason }}</p>
                         {% endwith %}
+                    </div>
+                </div>
+            </div>
+        </div>
+         <!-- Modal para ganancia de trueque cometido -->
+        <div class="modal fade" id="profitModal{{ barter.id }}" tabindex="-1" role="dialog" aria-labelledby="profitModalLabel{{ barter.id }}" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="profitModalLabel{{ barter.id }}">Ganancia del Trueque</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p><strong>Empleado:</strong> {{ barter.employee }}</p>
+                        <p><strong>Ganancia:</strong> ${{ barter.income }}</p>
                     </div>
                 </div>
             </div>
