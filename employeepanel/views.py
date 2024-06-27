@@ -1,12 +1,29 @@
 # Django
 from django.shortcuts import get_object_or_404, redirect
-from django.views.generic import ListView,DetailView, View
+from django.views.generic import ListView,DetailView, View, FormView
 from django.db.models import Q
 # Local
 from accounts.mixins import EmployeeRequiredMixin
 from accounts.models import EmployeeUser
 from posts.models import Post, Question
 from .services import get_employee_post_list
+from .forms import DeletionReasonForm
+
+class PostDeleteView(EmployeeRequiredMixin,FormView):
+    template_name = 'posts/delete_post_employee.html'
+    form_class = DeletionReasonForm
+
+    def form_valid(self, form):
+        post = get_object_or_404(Post, pk=self.kwargs['pk'])
+        reason = form.cleaned_data['reason']
+        post.delete_post(reason=reason)
+        return redirect('post_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['post'] = get_object_or_404(Post, pk=self.kwargs['pk'])
+        return context
+
 
 class PostListView(EmployeeRequiredMixin,ListView):
     model = Post
@@ -84,3 +101,5 @@ class PostSearchView(EmployeeRequiredMixin, ListView):
         title_query = self.request.GET.get("title")
         context["title_query"] = title_query
         return context
+
+

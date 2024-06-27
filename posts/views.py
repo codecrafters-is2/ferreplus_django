@@ -93,7 +93,8 @@ class MyPostListView(ClientRequiredMixin,ListView):
             status__in=[
                 Post.POST_STATUS_AVAILABLE,
                 Post.POST_STATUS_PAUSED,
-                Post.POST_STATUS_RESERVED
+                Post.POST_STATUS_RESERVED,
+                Post.POST_STATUS_DELETED
             ]
         )
         return queryset
