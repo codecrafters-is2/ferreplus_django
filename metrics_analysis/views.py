@@ -17,7 +17,9 @@ class MetricsView(TemplateView):
 def barter_chart_view(request):
     barter_charts = BarterCharts()
     labels_2, data_2 = barter_charts.info_chart_2()
-    labels_3, data_3 = barter_charts.info_chart_3()
+    labels_3, data_3 = barter_charts.info_chart_3()  
+    labels_5, data_5 = barter_charts.info_chart_5()
+
     context = {
         "chart_2": {
             "labels": labels_2,
@@ -26,6 +28,9 @@ def barter_chart_view(request):
         "chart_3":{
             "labels": labels_3,
             "data": data_3,
+        },
+        "chart_5":{
+        "labels": labels_5, "data": data_5
         }
     }
 
@@ -44,6 +49,13 @@ def barter_chart_view(request):
             context["chart_4"] = {
                 "labels": labels_4,
                 "data": values_4,
+                "selected_year": year,
+            }
+
+            labels_6, values_6 = barter_charts.info_chart_6(year=year)
+            context["chart_6"] = {
+                "labels": labels_6,
+                "data": values_6,
                 "selected_year": year,
             }
 

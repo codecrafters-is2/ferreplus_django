@@ -14,9 +14,9 @@
     <h1 style="margin-bottom:25px; margin-top:25px; font-family: 'Raleway'; ">Análisis de Ganancias</h1>
     <form method="post" action="{% url 'income_charts' %}">
         {% csrf_token %}
-        <label for="year">Selecciona un año:</label>
+        <label for="year" style="font-size:18px; font-weight: 500">Ingresa un año:</label>
         <input type="number" id="year" name="year" min="2000" max="2024" value="{{ selected_year|default_if_none:'' }}">
-        <button type="submit">Generar Gráficos</button>
+        <button type="submit" class="btn btn-outline-primary">Generar Gráficos</button>
     </form>
     <div class="accordion" id="accordionIncome" style="width:100%;">
         <div class="accordion-item">
@@ -30,6 +30,9 @@
                     <div class="card" style="width: 100%;">
                         <div class="card-body">
                             <h3>Ganancias obtenidas por mes y por sucursal: </h3>
+                            {% if not barter_income_month.labels and not barter_income_month.data %}
+                                <p style="color:red; font-weight:bold">ATENCIÓN: Debe ingresar un año para ver la información</p>
+                            {% endif %}
                             {% if barter_income_month.labels and barter_income_month.data %}
                             <div style="display:flex">
                                 <div class="card" style="width:50%; background:#F9FAFB;">
@@ -127,6 +130,9 @@
                     <div class="card" style="width: 100%;">
                         <div class="card-body">
                             <h3>Ganancias obtenidas por mes y por paquete: </h3>
+                            {% if not package_income_month.labels and not package_income_month.data %}
+                                <p style="color:red; font-weight:bold">ATENCIÓN: Debe ingresar un año para ver la información</p>
+                            {% endif %}
                             {% if package_income_month.labels and package_income_month.data %}
                             <div style="display:flex">
                                 <div class="card" style="width:50%; background:#F9FAFB;">
