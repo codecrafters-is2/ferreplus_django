@@ -2,11 +2,23 @@
 from typing import Dict, Optional
 # Django
 from django.views.generic import View, ListView
-from django.shortcuts import render
-from django.http import JsonResponse, HttpResponseBadRequest, HttpResponseServerError, HttpResponseNotFound
+from django.shortcuts import render, redirect
+from django.http import (
+     JsonResponse,
+     HttpResponse,
+     HttpResponseBadRequest,
+     HttpResponseServerError,
+     HttpResponseNotFound
+)
 # Local
 from .models import Product
-from .services import get_active_products, get_product_by_code, filter_products_by_query_params, get_product_images
+from .services import (
+    get_active_products,
+    get_product_by_code,
+    filter_products_by_query_params,
+    get_product_images,
+    delete_product_by_code
+)
 from .forms import ProductCreationForm, ProductImageCreationForm
 
 
@@ -137,3 +149,23 @@ class ProductDetailView(View):
         except Exception as e:
             print(e)
             return HttpResponseServerError()
+
+
+class ProductDeleteView(View):
+
+    def post(self, request, *args, **kwargs):
+        try:
+            code = kwargs.get("code")
+            result = delete_product_by_code(code)
+            if result:
+                redirect("product_delete_success")
+            else:
+                return HttpResponseNotFound()
+        except Exception as e:
+            print(e)
+            return HttpResponseServerError()
+
+
+class ProductDeleteSuccessMessageView(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, "messages/product_delete_success.html")

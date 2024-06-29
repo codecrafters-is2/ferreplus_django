@@ -2,6 +2,7 @@
 from typing import Dict, List
 # Django
 from django import template
+from django.urls import reverse
 # Local
 from catalogo.models import Product, ProductCategory
 from catalogo.forms import ProductImageCreationForm
@@ -9,9 +10,12 @@ from catalogo.forms import ProductImageCreationForm
 register = template.Library()
 
 @register.inclusion_tag("components/product_card.html")
-def show_product_card(product):
+def show_product_card(product) -> Dict:
+    detail_url = reverse("product_detail", kwargs={"code":product.code})
     displayable_product = {
         "name": product.name,
+        "code": product.code,
+        "detail_url": detail_url,
         "description": product.description,
         "image": product.main_image,
         "price": product.price
@@ -54,3 +58,16 @@ def show_product_carousel(images: List) -> Dict:
         })
         number += 1
     return {"images": displayable_images}
+
+@register.inclusion_tag("components/delete_button.html")
+def show_product_delete_button(product_code: int, size: str) -> Dict:
+    delete_url = reverse("product_delete", kwargs={"code": product_code})
+    return {
+        "url": delete_url,
+        "product_code": product_code,
+        "size": size
+    }
+
+@register.inclusion_tag("components/delete_modal.html")
+def show_product_delete_modal() -> Dict:
+    pass

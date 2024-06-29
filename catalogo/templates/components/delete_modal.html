@@ -1,0 +1,11 @@
+{% extends 'ui_components/base_modal_without_button.html' %}
+
+
+{% block modal_content %}
+	<h2>¿Estás seguro que deseas eliminar este producto?</h2>
+	<form action="" method="POST" id="delete-form">
+		{% csrf_token %}
+		<button class="btn btn-danger" type="submit" style="margin-top: 1rem">Borrar</button>
+	</form>
+	<button class="btn btn-success" type="button" style="margin-top: 1rem">Cancelar</button>
+{% endblock modal_content %}

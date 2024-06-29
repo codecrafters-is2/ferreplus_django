@@ -68,3 +68,12 @@ def get_category_by_name(category_name: str) -> Optional[ProductCategory]:
     except ObjectDoesNotExist:
         return None
     return category
+
+
+def delete_product_by_code(code: int) -> bool:
+    product = get_product_by_code(code)
+    if product is not None:
+        product.delete()
+        return True
+    else:
+        return False

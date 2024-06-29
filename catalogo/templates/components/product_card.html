@@ -1,11 +1,9 @@
 {% load static %}
+{% load product_extras %}
+{% load users_extras %}
 
 <style>
-    .catalog-product-card {
-        max-width: 400px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+    .catalog-product-card-container {
         box-shadow: -5px 5px 5px rgba(0, 0, 0, 0.3);
         border-radius: 25px;
         backdrop-filter: blur(7.6px);
@@ -14,10 +12,18 @@
         padding: 0 0;
         text-align: center;
         transition: all 100ms ease-in;
-        color:rgba(0, 0, 0, 0.3)
+        color:rgba(0, 0, 0, 0.3);
+        overflow: hidden;
     }
 
-    .catalog-product-card:hover {
+    .catalog-product-card {
+        max-width: 400px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .catalog-product-card-container:hover {
         transform: scale(1.005);
     }
 
@@ -50,25 +56,44 @@
         color: rgb(22, 22, 22);
     }
 
+    .product-admin-options {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 0.1rem 1rem;
+    }
+
     @media (min-width: 1024px) { 
        .catalog-product-card {
-            max-width: 300px;
+            max-width: 400px;
        }
     }
 
 </style>
 
-
-<a href="/" style="text-decoration: none;">
-    <div class="catalog-product-card">
-        <div class="card-head">
-            <div>
-                <img src="{{ image.url }}" />
-            </div>
-            <div class="product-info">
-                <h3>{{ name }}</h2>
-                <p>${{ price }} </p>
+<div class="catalog-product-card-container">
+    <a href="{{ detail_url }}" style="text-decoration: none;">
+        <div class="catalog-product-card">
+            <div class="card-head">
+                <div>
+                    <img src="{{ image.url }}" />
+                </div>
+                <div class="product-info">
+                    <h3>{{ name }}</h3>
+                    <p>${{ price }} </p>
+                </div>
             </div>
         </div>
-    </div>
-</a>
+    </a>
+    {{ user }}
+    {% if user.is_authenticated %}
+        
+            <div class="product-admin-options">
+                <p>admin:</p>
+                {% show_product_delete_button code "small" %}
+            </div>
+       
+    {% endif %}
+</div>
