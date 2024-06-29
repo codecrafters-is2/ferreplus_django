@@ -11,7 +11,7 @@
 {% endblock custom_styles %}
 {% block content %}
 <div style="width: 95%;">
-    <h1 style="margin-bottom:25px; margin-top:25px; font-family: 'Raleway'; ">Análisis de Trueques</h1>
+    <h1 style="margin-bottom:25px; margin-top:25px; font-family: 'Raleway'; ">Reporte de Trueques</h1>
     <div>
         <div class="accordion" id="accordionBarter" style="width:100%;">
             <div class="accordion-item">
@@ -20,14 +20,14 @@
                         Cantidad de trueques finalizados:
                 </button>
                 </h3>
-                <div id="collapse1" class="accordion-collapse collapse show" data-bs-parent="#accordionBarter">
+                <div id="collapse1" class="accordion-collapse collapse" data-bs-parent="#accordionBarter">
                     <div class="accordion-body d-flex flex-wrap" style="padding:3px">
                         <div class="card" style="width: 100%;">
                             <div class="card-body" style="padding: 3px">                     
                                 <form method="post" action="{% url 'barter_chart' %}">
                                     {% csrf_token %}
                                     <label for="year" style="font-size:18px; font-weight: 500">Ingresa un año:</label>
-                                    <input type="number" id="year" name="year" min="2000" max="2024" value="{{ selected_year|default_if_none:'' }}">
+                                    <input type="number" id="year" name="year" min="2020" max="2024" value="{{ selected_year|default_if_none:'' }}">
                                     <button type="submit" class="btn btn-outline-primary">Generar Gráficos</button>
                                 </form>
                                 {% if not chart_1.labels and not chart_1.data %}
@@ -154,13 +154,13 @@
             <div class="accordion-item">
                 <h3 class="accordion-header" id="heading2">
                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse2" style="font-size: 26px">
-                        Información general de los trueques:
+                        Información general de cantidad de trueques:
                 </button>
                 </h3>
                 <div id="collapse2" class="accordion-collapse collapse" data-bs-parent="#accordionBarter">
                     <div class="accordion-body d-flex flex-wrap" style="padding:3px">
                         {% if chart_2.data|length == 0 %}
-                        <p style="color:red; font-weight:bold">No hay información registrada de trueques</p>
+                        <p style="color:red; font-weight:bold">No hay información registrada de trueques en el sistema</p>
                         {% endif %}
                         <div class="card" style="width: 100%;">
                             <div class="card-body" style="display: flex; justify-content:space-evenly">
