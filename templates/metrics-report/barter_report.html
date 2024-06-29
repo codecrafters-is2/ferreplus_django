@@ -32,8 +32,9 @@
                                 </form>
                                 {% if not chart_1.labels and not chart_1.data %}
                                 <p style="color:red; font-weight:bold">ATENCIÓN: Debe ingresar un año para ver la información</p>
-                                {% endif %}
-                                {% if chart_1.labels and chart_1.data %}
+                                {% elif chart_2.data|length == 0 %}
+                                <p style="color:red; font-weight:bold">No hay información de trueques para el año ingresado</p>
+                                {% else %}
                                 <div style="display:flex">
                                     <div class="card" style="width:80%; background:#F9FAFB;">
                                         <div class="card-body" >
@@ -158,8 +159,12 @@
                 </h3>
                 <div id="collapse2" class="accordion-collapse collapse" data-bs-parent="#accordionBarter">
                     <div class="accordion-body d-flex flex-wrap" style="padding:3px">
+                        {% if chart_2.data|length == 0 %}
+                        <p style="color:red; font-weight:bold">No hay información registrada de trueques</p>
+                        {% endif %}
                         <div class="card" style="width: 100%;">
                             <div class="card-body" style="display: flex; justify-content:space-evenly">
+                                {% if chart_2.data|length != 0 %}
                                 <div class="card" style="width: 45%; background:#F9FAFB;">
                                     <div class="card-body">
                                         <h3>Estado actual de los trueques: </h3>
@@ -262,7 +267,8 @@
                                         
                                         </script>
                                     </div>
-                                </div>
+                                </div> 
+                                {% endif %}
                             </div>
                         </div>
                     </div>

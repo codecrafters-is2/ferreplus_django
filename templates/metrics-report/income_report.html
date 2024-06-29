@@ -32,8 +32,9 @@
                             <h3>Ganancias obtenidas por mes y por sucursal: </h3>
                             {% if not barter_income_month.labels and not barter_income_month.data %}
                                 <p style="color:red; font-weight:bold">ATENCIÓN: Debe ingresar un año para ver la información</p>
-                            {% endif %}
-                            {% if barter_income_month.labels and barter_income_month.data %}
+                            {% elif barter_income_branches.data|length == 0 %}
+                                <p style="color:red; font-weight:bold">No hay información de ganancias para el año ingresado</p>
+                            {% else %}
                             <div style="display:flex">
                                 <div class="card" style="width:50%; background:#F9FAFB;">
                                     <div class="card-body" >
@@ -125,15 +126,16 @@
                         Ganancias obtenidas por compras de Paquetes
                 </button>
             </h2>
-            <div id="collapse2" class="accordion-collapse collapse show" data-bs-parent="#accordionIncome">
+            <div id="collapse2" class="accordion-collapse collapse" data-bs-parent="#accordionIncome">
                 <div class="accordion-body d-flex flex-wrap">
                     <div class="card" style="width: 100%;">
                         <div class="card-body">
                             <h3>Ganancias obtenidas por mes y por paquete: </h3>
                             {% if not package_income_month.labels and not package_income_month.data %}
                                 <p style="color:red; font-weight:bold">ATENCIÓN: Debe ingresar un año para ver la información</p>
-                            {% endif %}
-                            {% if package_income_month.labels and package_income_month.data %}
+                            {% elif package_name_income.data|length == 0 %}
+                                <p style="color:red; font-weight:bold">No hay información de ganancias para el año ingresado</p>
+                            {% else %}
                             <div style="display:flex">
                                 <div class="card" style="width:50%; background:#F9FAFB;">
                                     <div class="card-body" >

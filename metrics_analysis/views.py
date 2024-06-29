@@ -38,7 +38,6 @@ def barter_chart_view(request):
         year = request.POST.get("year")
         if year:
             labels_1, values_1 = barter_charts.info_chart_1(year=year)
-
             context["chart_1"] = {
                 "labels": labels_1,
                 "data": values_1,

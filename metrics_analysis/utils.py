@@ -67,6 +67,7 @@ class BarterCharts:
             else:
                 labels.append("No branch")
             data.append(branch_count["count"])
+        
 
         return labels, data
 
