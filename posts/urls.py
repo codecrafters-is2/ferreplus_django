@@ -10,7 +10,8 @@ from .views import (
     DeleteQuestionView,
     DeleteAnswerView,
     PostSearchView,
-    ChangePackageView,PackageListView, UpdatePackageView
+    PackageListView, 
+    UpdatePackageView
 )
 
 
@@ -25,7 +26,6 @@ urlpatterns = [
     path("search/", PostSearchView.as_view(), name="post_search_results"),
     path('delete_question/<int:question_id>/', DeleteQuestionView.as_view(), name='delete_question'),
     path('delete_answer/<int:question_id>/', DeleteAnswerView.as_view(), name='delete_answer'),
-    path('change_package/<int:pk>/', ChangePackageView.as_view(),name="change_package"),
     path('packages/', PackageListView.as_view(),name="package_list"),
     path('packages/update_package/<int:pk>/', UpdatePackageView.as_view(),name="update_package"),
 ]

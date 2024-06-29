@@ -3,6 +3,7 @@ from django.views import View
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.db.models import Q,F
+
 from django.urls import reverse_lazy
 from django.urls import reverse
 from django.shortcuts import redirect,get_object_or_404
@@ -10,8 +11,8 @@ from django.http import Http404,HttpResponseRedirect
 # Local
 from accounts.mixins import ClientRequiredMixin, AdminRequiredMixin
 from .forms import QuestionForm, AnswerForm
-from .models import Post, ImagePost, Question, Package
-from .forms import PostForm, ChangePackageForm, UpdatePackageForm
+from .models import Post, ImagePost, Question, Package, create_package_purchase
+from .forms import PostForm, UpdatePackageForm
 from .services import get_active_posts
 
 #Preguntas de las publicaciones:
@@ -47,19 +48,15 @@ class DeleteAnswerView(ClientRequiredMixin, View):
 
 
 #Paquetes de las publicaciones:
-class ChangePackageView(ClientRequiredMixin,UpdateView):
-    model = Post
-    template_name = "posts/change_package.html"
-    form_class = ChangePackageForm
-    
-    def get_success_url(self):
-        return reverse_lazy('my_post_detail', kwargs={'pk': self.object.pk})
-
 
 class PackageListView(AdminRequiredMixin, ListView):
     model = Package
     template_name = "packages/package_list.html"
     context_object_name = 'packages'
+
+    def get_queryset(self):
+        queryset = super().get_queryset().exclude(name='Ninguno')
+        return queryset
 
 
 class UpdatePackageView(AdminRequiredMixin, UpdateView):
@@ -70,6 +67,7 @@ class UpdatePackageView(AdminRequiredMixin, UpdateView):
 
 
 #Publicaciones:
+
 class PostListView(ClientRequiredMixin,ListView):
     model = Post
     template_name = "posts/list/post_list.html"
@@ -95,7 +93,8 @@ class MyPostListView(ClientRequiredMixin,ListView):
             status__in=[
                 Post.POST_STATUS_AVAILABLE,
                 Post.POST_STATUS_PAUSED,
-                Post.POST_STATUS_RESERVED
+                Post.POST_STATUS_RESERVED,
+                Post.POST_STATUS_DELETED
             ]
         )
         return queryset
@@ -200,27 +199,15 @@ class PostCreateView(ClientRequiredMixin,CreateView): #Creación de la publicaci
         form.instance.original_branch_id = form.instance.branch.id
         # Asigna el autor actualmente autenticado
         form.instance.author = self.request.user  
+        # Asigna el paquete "none"
+        none_package = Package.objects.get(name="none")
+        form.instance.package = none_package
+        # Llama a form_valid del padre para guardar el objeto de la publicación
+        response = super().form_valid(form)
+        # Crea la transacción de compra del paquete
+        create_package_purchase(self.object, none_package)
+        return response
         
-        #context = self.get_context_data()
-        #image_formset = context['image_formset']
-        #if image_formset.is_valid():
-        #    self.object = form.save()
-        #    image_formset.instance = self.object
-        #    image_formset.save()
-        #    uploaded_images = self.request.FILES.getlist('photo')
-        #    for image in uploaded_images:
-                # Crea una nueva instancia de ImagePost
-        #        image_post = ImagePost(post=self.object, image=image)
-                # Guarda la instancia en la base de datos
-        #        image_post.save()
-        return super().form_valid(form)
-        #else:
-        #    return self.form_invalid(form)
-        
-    #def get_form(self, form_class=None):
-    #    form = super().get_form(form_class)
-    #    form.request = self.request  # Agregar el objeto request al formulario
-    #    return form
     
 class PostUpdateView(ClientRequiredMixin,UpdateView): #Edición de la publicación
     model = Post

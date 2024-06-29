@@ -33,6 +33,7 @@ urlpatterns = [
     path("barter/", include("barter.urls")),
     path("turns/", include("turns.urls")),
     path("employee/", include("employeepanel.urls")),
+    path("payments/", include("payments.urls")),
     path("metrics_analysis/", include("metrics_analysis.urls")),
 ]
 
