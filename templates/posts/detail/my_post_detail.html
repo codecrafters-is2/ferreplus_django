@@ -4,10 +4,17 @@
 
 {% block warning_sign_post %}
     {% if post.status == 'deleted' %}
-    <div class="alert alert-danger mt-3">
-        <p class="font-weight-bold">¡Atención!</p>
-        <p>Esta publicación ha sido eliminada por el empleado por el siguiente motivo: <strong>{{ post.deletion_reason }}</strong></p>
-    </div>
+        {% if post.deletion_reason %}
+            <div class="alert alert-danger mt-3">
+                <p class="font-weight-bold">¡Atención!</p>
+                <p>Esta publicación ha sido eliminada por el empleado por el siguiente motivo: <strong>{{ post.deletion_reason }}</strong></p>
+            </div>
+        {% else %}
+        <div class="alert alert-danger mt-3">
+            <p class="font-weight-bold">¡Atención!</p>
+            <p>Publicación <strong>ELIMINADA</strong></p>
+        </div>
+        {% endif %}
     {% else %}
         {% if post.status == 'paused' %}
         <div class="alert alert-danger mt-3">
@@ -28,9 +35,9 @@
     <p><strong>Paquete actual:</strong> {{ post.package }}</p> 
     {% if post.status != 'deleted' %}
         {% if post.package.name == 'none' %}
-            <p><a href="{% url 'change_package' post.pk %}" class="btn btn-info">Aumentar visibilidad</a></p>
+            <p><a href="{% url 'payments:package-selection' post.pk %}" class="btn btn-info">Aumentar visibilidad</a></p>
         {% else %}
-            <p><a href="{% url 'change_package' post.pk %}" class="btn btn-info">Cambiar paquete</a></p>
+            <p><a href="{% url 'payments:package-selection' post.pk %}" class="btn btn-info">Cambiar paquete</a></p>
         {% endif %}
     {% endif %}
 {% endblock additional_fields %}

@@ -18,7 +18,7 @@
         </div>
         <div class="card-body">
             {% if post.status == 'deleted' %}
-                <p class="paused-message"><strong>¡Atención, publicación eliminada! Haga clic sobre la misma para visualizar la razón</strong></p> 
+                <p class="text-danger"><strong>Publicación ELIMINADA</strong></p> 
             {% else %}
                 {% if post.status == 'paused' %}
                     <p class="paused-message"><strong>¡Atención, publicación pausada!</strong></p> 
