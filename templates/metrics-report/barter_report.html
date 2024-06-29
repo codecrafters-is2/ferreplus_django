@@ -10,7 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 {% endblock custom_styles %}
 {% block content %}
-<div style="width: 90%;">
+<div style="width: 95%;">
     <h1 style="margin-bottom:25px; margin-top:25px; font-family: 'Raleway'; ">Análisis de Trueques</h1>
     <div>
         <div class="accordion" id="accordionBarter" style="width:100%;">
@@ -21,9 +21,9 @@
                 </button>
                 </h3>
                 <div id="collapse1" class="accordion-collapse collapse show" data-bs-parent="#accordionBarter">
-                    <div class="accordion-body d-flex flex-wrap">
+                    <div class="accordion-body d-flex flex-wrap" style="padding:3px">
                         <div class="card" style="width: 100%;">
-                            <div class="card-body">                     
+                            <div class="card-body" style="padding: 3px">                     
                                 <form method="post" action="{% url 'barter_chart' %}">
                                     {% csrf_token %}
                                     <label for="year" style="font-size:18px; font-weight: 500">Ingresa un año:</label>
@@ -46,14 +46,14 @@
                                             <h4>Por sucursal: </h4>
                                             <canvas id="doughnutChartBranches"></canvas>
                                         </div>
-                                    </div>  
+                                    </div> 
                                     <div class="card" style="width: 45%; background:#F9FAFB;">
                                         <div class="card-body">
                                             <h4>Por categoría: </h4>
                                             <canvas id="doughnutChart6"></canvas>
                                         </div>
-                                    </div>     
-                                </div>       
+                                    </div>    
+                                </div>        
                                 <script>
                                     var ctx_months = document.getElementById('barChartMonths').getContext('2d');
                                     var barChart = new Chart(ctx_months, {
@@ -157,7 +157,7 @@
                 </button>
                 </h3>
                 <div id="collapse2" class="accordion-collapse collapse" data-bs-parent="#accordionBarter">
-                    <div class="accordion-body d-flex flex-wrap">
+                    <div class="accordion-body d-flex flex-wrap" style="padding:3px">
                         <div class="card" style="width: 100%;">
                             <div class="card-body" style="display: flex; justify-content:space-evenly">
                                 <div class="card" style="width: 45%; background:#F9FAFB;">
