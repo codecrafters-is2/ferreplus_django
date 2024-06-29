@@ -14,6 +14,7 @@ class Package(models.Model):
     PACKAGE_BRONCE = 'bronce'
     PACKAGE_PLATA = 'plata'
     PACKAGE_ORO = 'oro'
+    
     PACKAGE_CHOICES = [
         (PACKAGE_NONE, 'Ninguno'),
         (PACKAGE_BRONCE, 'Bronce'),
@@ -26,6 +27,13 @@ class Package(models.Model):
 
     def __str__(self):
         return self.get_name_display()
+
+def create_package_purchase(post, package):
+        PackagePurchase.objects.create(
+            post=post,
+            package=package,
+            price=package.price
+    )
 
 class Post(models.Model):
     POST_STATUS_AVAILABLE = 'available'
@@ -68,6 +76,7 @@ class Post(models.Model):
     status = models.CharField(max_length=20, choices=POST_STATUS_CHOICES, default=POST_STATUS_AVAILABLE,) 
     package = models.ForeignKey(Package, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Paquete")
     package_start_date = models.DateTimeField(null=True, blank=True)  # Fecha de inicio del paquete
+    deletion_reason = models.TextField(null=True, blank=True, verbose_name="Razón de eliminación")
     
     def has_unanswered_questions(self):
         return self.questions.filter(Q(answer__isnull=True) | Q(answer='')).exists()
@@ -92,9 +101,10 @@ class Post(models.Model):
         self.requesting_barters.filter(~Q(state=Barter.BARTER_STATE_CANCELLED)).update(state=Barter.BARTER_STATE_CANCELLED)
         self.requested_barters.filter(~Q(state=Barter.BARTER_STATE_CANCELLED)).update(state=Barter.BARTER_STATE_CANCELLED)
     
-    def delete_post(self):
+    def delete_post(self, reason=None):
         Barter = apps.get_model('barter', 'Barter')
         self.status = self.POST_STATUS_DELETED
+        self.deletion_reason = reason
         self.save()
         Barter.objects.filter(Q(requesting_post=self) | Q(requested_post=self)).exclude(state=Barter.BARTER_STATE_CANCELLED).update(state=Barter.BARTER_STATE_CANCELLED)
     
@@ -109,11 +119,7 @@ class Post(models.Model):
         # Guardar la fecha de inicio del nuevo paquete
         self.package_start_date = timezone.now()
         # Registrar la transacción de compra
-        PackagePurchase.objects.create(
-            post=self,
-            package=new_package,
-            price=new_package.price  
-        )
+        create_package_purchase(self, new_package)
         # Actualizar el paquete
         self.package = new_package
         self.save() 
@@ -129,7 +135,6 @@ class Question(models.Model):
     def __str__(self):
         return f'Question by {self.user.username} on {self.post.title}'
 
-
 class PackagePurchase(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE,verbose_name="Publicación")
     package = models.ForeignKey(Package, on_delete=models.CASCADE,verbose_name="Paquete")
@@ -138,9 +143,6 @@ class PackagePurchase(models.Model):
 
     def __str__(self):
         return f"{self.post.title} - {self.package.name} - {self.price}"
-
-
-
 
 #Para cuando podamos cargar mas imagenes
 class ImagePost(models.Model):#

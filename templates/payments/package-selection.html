@@ -1,0 +1,53 @@
+{% extends "_base_wildcard_bootstrap.html" %}
+
+{% block content %}
+<div class="container" style="text-align: center;">
+    <h1>Comprar un Paquete</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div>
+            {{ form.as_p }}
+            <label for="card_holder_name">Titular de la Tarjeta:</label>
+            <input type="text" id="card_holder_name" name="card_holder_name" maxlength="100" required="true">
+        </div>
+        <a href="{% url 'my_post_detail' post.pk %}" class="btn btn-light">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-return-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/>
+            </svg>
+            Volver
+        </a>
+        <button class="btn btn-success" type="submit">Pagar</button>
+    </form>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const cardNumberInput = document.querySelector('input[name="card_number"]');
+        const expirationDateInput = document.querySelector('input[name="expiration_date"]');
+
+        // Format card number with dashes
+        cardNumberInput.addEventListener('input', function (e) {
+            let value = e.target.value.replace(/\D/g, '');
+            let formattedValue = '';
+
+            for (let i = 0; i < value.length; i++) {
+                if (i > 0 && i % 4 === 0) {
+                    formattedValue += '-';
+                }
+                formattedValue += value[i];
+            }
+            
+            e.target.value = formattedValue.slice(0, 19); // Limit to 19 characters (16 digits + 3 dashes)
+        });
+
+        // Format expiration date with slash
+        expirationDateInput.addEventListener('input', function (e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 2) {
+                value = value.slice(0, 2) + '/' + value.slice(2, 4);
+            }
+            e.target.value = value.slice(0, 5); // Limit to 5 characters (MM/YY)
+        });
+    });
+</script>
+{% endblock %}

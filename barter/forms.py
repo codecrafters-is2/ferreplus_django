@@ -24,4 +24,6 @@ class BarterForm(forms.ModelForm):
             id__in=Barter.objects.filter(
                 requesting_post=requested_post
             ).values_list('requested_post_id', flat=True)
+        ).exclude(
+            status='deleted'
         )
