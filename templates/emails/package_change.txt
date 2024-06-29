@@ -1,0 +1,10 @@
+Hola {{ user.username }},
+
+Te informamos que se ha efectuado correctamente el pago y el cambio de paquete en tu publicación "{{ post.title }}".
+
+El nuevo paquete asignado es: {{ package.get_name_display }}.
+
+Gracias por usar nuestro servicio.
+
+Saludos,
+El equipo de Ferreplus
