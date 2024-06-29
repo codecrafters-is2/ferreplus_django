@@ -28,6 +28,13 @@ class Package(models.Model):
     def __str__(self):
         return self.get_name_display()
 
+def create_package_purchase(post, package):
+        PackagePurchase.objects.create(
+            post=post,
+            package=package,
+            price=package.price
+    )
+
 class Post(models.Model):
     POST_STATUS_AVAILABLE = 'available'
     POST_STATUS_RESERVED = 'reserved'
@@ -112,11 +119,7 @@ class Post(models.Model):
         # Guardar la fecha de inicio del nuevo paquete
         self.package_start_date = timezone.now()
         # Registrar la transacción de compra
-        PackagePurchase.objects.create(
-            post=self,
-            package=new_package,
-            price=new_package.price  
-        )
+        create_package_purchase(self, new_package)
         # Actualizar el paquete
         self.package = new_package
         self.save() 

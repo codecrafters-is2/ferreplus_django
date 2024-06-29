@@ -6,13 +6,15 @@
         <h1 class="mb-3">Lista de Paquetes</h1>
         <ul class="list-group">
             {% for package in packages %}
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <div>
-                        <strong>{{ package.get_name_display }}</strong>
-                        <p class="mb-0">Precio: ${{ package.price }}</p>
-                    </div>
-                        <a href="{% url 'update_package' package.id %}" class="btn btn-warning">Editar Precio</a>
-                </li>
+                {% if package.get_name_display != "Ninguno" %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>{{ package.get_name_display }}</strong>
+                            <p class="mb-0">Precio: ${{ package.price }}</p>
+                        </div>
+                            <a href="{% url 'update_package' package.id %}" class="btn btn-warning">Editar Precio</a>
+                    </li>
+                {% endif %}
             {% endfor %}
         </ul>
     </div>

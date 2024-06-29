@@ -11,7 +11,7 @@ from django.http import Http404,HttpResponseRedirect
 # Local
 from accounts.mixins import ClientRequiredMixin, AdminRequiredMixin
 from .forms import QuestionForm, AnswerForm
-from .models import Post, ImagePost, Question, Package
+from .models import Post, ImagePost, Question, Package, create_package_purchase
 from .forms import PostForm, UpdatePackageForm
 from .services import get_active_posts
 
@@ -199,28 +199,15 @@ class PostCreateView(ClientRequiredMixin,CreateView): #Creación de la publicaci
         form.instance.original_branch_id = form.instance.branch.id
         # Asigna el autor actualmente autenticado
         form.instance.author = self.request.user  
+        # Asigna el paquete "none"
+        none_package = Package.objects.get(name="none")
+        form.instance.package = none_package
+        # Llama a form_valid del padre para guardar el objeto de la publicación
+        response = super().form_valid(form)
+        # Crea la transacción de compra del paquete
+        create_package_purchase(self.object, none_package)
+        return response
         
-        #context = self.get_context_data()
-        #image_formset = context['image_formset']
-        #if image_formset.is_valid():
-        #    self.object = form.save()
-        #    image_formset.instance = self.object
-        #    image_formset.save()
-        #    uploaded_images = self.request.FILES.getlist('photo')
-        #    for image in uploaded_images:
-                # Crea una nueva instancia de ImagePost
-        #        image_post = ImagePost(post=self.object, image=image)
-                # Guarda la instancia en la base de datos
-        #        image_post.save()
-        form.instance.package = Package.objects.get(name="none")
-        return super().form_valid(form)
-        #else:
-        #    return self.form_invalid(form)
-        
-    #def get_form(self, form_class=None):
-    #    form = super().get_form(form_class)
-    #    form.request = self.request  # Agregar el objeto request al formulario
-    #    return form
     
 class PostUpdateView(ClientRequiredMixin,UpdateView): #Edición de la publicación
     model = Post
