@@ -2,6 +2,7 @@ from django.db.models import Count, Sum
 from django.db.models.functions import  TruncMonth
 from barter.models import Barter
 from branches.models import Branch
+from posts.models import Post
 from posts.models import PackagePurchase, Package
 
 
@@ -19,6 +20,7 @@ MONTHS_NAMES = [
     "noviembre",
     "diciembre",
 ]
+
 
 def cut_address(address):
     index = address.find(" - CP")
@@ -108,6 +110,85 @@ class BarterCharts:
             else:
                 labels.append("No branch")
             data.append(branch_count["count"])
+
+        return labels, data
+    # Barter.objects.filter(state="committed")
+    def info_chart_5(self):
+        """Number of barters per category"""
+        barter_requesting_post_count = list(
+            Barter.objects.values("requested_post")
+        )
+        labels=[]
+        data=[]
+        CATEGORY_NAMES = {
+           "tools": "Herramientas",
+           "construction": "Construcción",
+           "general_hardware_store": "Ferretería general",
+           "electrical": "Electricidad",
+           "plumbing": "Fontanería",
+           "gardens": "Jardin",
+        }
+
+        category_counter = {
+            "tools": 0,
+            "construction": 0,
+            "general_hardware_store": 0,
+            "electrical": 0,
+            "plumbing": 0,
+            "gardens": 0,
+        }
+        for post_count in barter_requesting_post_count:
+            requested_post = post_count["requested_post"]
+            requested_post_obj = Post.objects.get(id=requested_post)
+            requested_post_category = requested_post_obj.category
+            category_counter[requested_post_category]+=1
+
+        for key in category_counter:
+            if (category_counter[key] > 0):
+                labels.append(CATEGORY_NAMES[key])
+                data.append(category_counter[key])
+
+        # data.append(post_count["count"])
+
+        return labels, data
+
+    def info_chart_6(self, year):
+        """Number of commited barters per category in a particular year"""
+        barter_requesting_post_count = list(
+            Barter.objects.filter(finished_date__year=year)
+            .values("requested_post")
+        )
+        labels=[]
+        data=[]
+        CATEGORY_NAMES = {
+           "tools": "Herramientas",
+           "construction": "Construcción",
+           "general_hardware_store": "Ferretería general",
+           "electrical": "Electricidad",
+           "plumbing": "Fontanería",
+           "gardens": "Jardin",
+        }
+
+        category_counter = {
+            "tools": 0,
+            "construction": 0,
+            "general_hardware_store": 0,
+            "electrical": 0,
+            "plumbing": 0,
+            "gardens": 0,
+        }
+        for post_count in barter_requesting_post_count:
+            requested_post = post_count["requested_post"]
+            requested_post_obj = Post.objects.get(id=requested_post)
+            requested_post_category = requested_post_obj.category
+            category_counter[requested_post_category]+=1
+
+        for key in category_counter:
+            if (category_counter[key] > 0):
+                labels.append(CATEGORY_NAMES[key])
+                data.append(category_counter[key])
+
+        # data.append(post_count["count"])
 
         return labels, data
 
