@@ -4,6 +4,13 @@
 
 {% block content %}
 <style>
+
+  .background-banner {
+    width: 100vw;
+    height: 30vh;
+    background-image: linear-gradient(to right top, #d4d4f6, #bacdf4, #9ac7f0, #76c2e7, #4dbcd8);
+  }
+
   .product-detail-container {
     min-width: 100vw;
     min-height: 100vh;
@@ -25,31 +32,56 @@
     width: 400px;
     max-height: 400px;
     height: 400px;
+    box-shadow:
+      12.6px 10.3px 10.8px rgba(0, 0, 0, 0.035),
+      101px 82px 86px rgba(0, 0, 0, 0.07)
+    ;
+  }
+
+  .description-widget {
+    background-color: #adb5bd;
+    border-radius: 12px;
+    padding: 1rem 1rem;
   }
 
   @media (min-width: 768px) {
     .product-widget {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
         flex-direction: row;
         align-items: start;
         gap: 4rem;
+        padding: 2% 0%;
     }
   }  
 
 </style>
+<div>
+  <div class="background-banner">
+    <div class="product-detail-container">
+      <div class="product-widget">
+        <div class="carousel-external-container">
+          {% show_product_carousel product_images %}
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 6rem;">
+          <div style="padding-top: 4%;">
+            <h1>{{ product.name }}</h1>
+            <p>{{ product.brand }}</p>
+          </div>
+          <div>
+            <p>Modelo: {{ product.model }}</p>
+            <p>Categoría: {{ product.category.name }}</p>
+            <p>${{ product.price }}</p>
+            <div class="description-widget">
+              <p>Descripción</p>
+              {{ product.description }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>    
 
-<div class="product-detail-container">
-  <div class="product-widget">
-    <div class="carousel-external-container">
-      {% show_product_carousel product_images %}
-    </div>
-    <div>
-      <h1>{{ product.name }}</h1>
-      <p>{{ product.brand }}</p>
-      <p>{{ product.model }}</p>
-      <p>{{ product.description }}</p>
-      <p>{{ product.category.name }}</p>
-      <p>${{ product.price }}</p>
-    </div>
-  </div>
+        
 </div>
 {% endblock content %}
