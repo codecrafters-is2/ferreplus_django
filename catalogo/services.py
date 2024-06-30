@@ -11,6 +11,10 @@ def get_active_products() -> QuerySet:
     return Product.objects.filter(active=True)
 
 
+def get_hidden_products() -> QuerySet:
+    return Product.objects.filter(active=False)
+
+
 def get_product_by_code(code: int) -> Optional[Product]:
     try:
         product = Product.objects.get(code=code)
@@ -27,8 +31,8 @@ def get_active_products_by_category(category_name: str) -> QuerySet:
     return Product.objects.filter(category=category)
 
 
-def filter_products_by_query_params(query_params: Dict) -> QuerySet:
-    queryset = get_active_products()
+def filter_products_by_query_params(query_params: Dict, active=True) -> QuerySet:
+    queryset = get_active_products() if active else get_hidden_products()
     name_query = query_params.get("name")
     categories_query = query_params.get("categories")
     prices: Dict = query_params.get("prices")

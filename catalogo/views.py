@@ -2,7 +2,7 @@
 from typing import Dict, Optional
 # Django
 from django.views.generic import View, ListView
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from django.http import (
      JsonResponse,
      HttpResponseBadRequest,
@@ -17,7 +17,7 @@ from .services import (
     filter_products_by_query_params,
     get_product_images,
     delete_product_by_code,
-    toggle_product_visibility
+    toggle_product_visibility, get_hidden_products
 )
 from .forms import ProductCreationForm, ProductImageCreationForm
 from accounts.mixins import AdminRequiredMixin
@@ -67,6 +67,9 @@ class ProductSearchView(ListView):
         try:
             converted_value = float(str_value)
         except ValueError:
+            return None
+        except Exception as e:
+            print(e)
             return None
         return converted_value
 
@@ -178,7 +181,6 @@ class ProductVisibilityToggleView(View, AdminRequiredMixin):
             code = kwargs.get("code")
             success = toggle_product_visibility(code)
             if success:
-                print("todo miem")
                 return redirect("product_visibility_change_success")
             else:
                 return HttpResponseNotFound()
@@ -190,3 +192,12 @@ class ProductVisibilityToggleView(View, AdminRequiredMixin):
 class ProductVisibilityChangeSuccessMessageView(View, AdminRequiredMixin):
     def get(self, request, *args, **kwargs):
         return render(request, "messages/product_visibility_change_success.html")
+
+
+class HiddenProductListView(ListView):
+    model = Product
+    context_object_name = "product_list"
+    template_name = "hidden_product_list.html"
+
+    def get_queryset(self):
+        return get_hidden_products()

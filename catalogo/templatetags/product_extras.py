@@ -89,5 +89,8 @@ def show_visibility_toggle_button(product_code: int, size: str) -> Dict:
 
 
 @register.inclusion_tag("components/visibility_modal.html")
-def show_product_visibility_toggle_modal() -> Dict:
-    pass
+def show_product_visibility_toggle_modal(message: str, button_label: str) -> Dict:
+    return {
+        "message": message,
+        "button_label": button_label
+    }

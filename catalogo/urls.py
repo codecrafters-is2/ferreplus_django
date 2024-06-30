@@ -8,7 +8,8 @@ from .views import (
     ProductDeleteView,
     ProductVisibilityToggleView,
     ProductDeleteSuccessMessageView,
-    ProductVisibilityChangeSuccessMessageView
+    ProductVisibilityChangeSuccessMessageView,
+    HiddenProductListView
 )
 
 urlpatterns = [
@@ -19,6 +20,7 @@ urlpatterns = [
     path("product/<int:code>", ProductDetailView.as_view(), name="product_detail"),
     path("product/delete/<int:code>", ProductDeleteView.as_view(), name="product_delete"),
     path("product/visibility/<int:code>", ProductVisibilityToggleView.as_view(), name="product_visibility_toggle"),
+    path("hidden/", HiddenProductListView.as_view(), name="hidden_products_list"),
     # Mensajes
     path("product/deleted/success", ProductDeleteSuccessMessageView.as_view(), name="product_delete_success"),
     path("product/visibility/success", ProductVisibilityChangeSuccessMessageView.as_view(), name="product_visibility_change_success")
