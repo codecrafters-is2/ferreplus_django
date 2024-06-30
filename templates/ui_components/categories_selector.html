@@ -1,15 +1,23 @@
 <head>
     <style>
         .categories-widget {
-            display: grid;
-            grid-template-columns: repeat(1, minmax(0, 1fr));
+            width: 100%;
+            height:100%;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
             text-decoration: none;
             list-style-type: none;
             gap: 1em;
+            padding: none;
+            margin: none;
         }
 
         .category_item {
             width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .category-button {
@@ -34,8 +42,8 @@
         }
 
         @media (min-width: 1024px) {
-            .categories-widget {
-                grid-template-columns: repeat(3, minmax(0, 1fr));
+            .category_item {
+                flex-basis: 30%;
             }
         }
     </style>
@@ -69,19 +77,21 @@
         });
     </script>
 </head>
-
-<ul class="categories-widget">
+<div style="display: flex; flex-direction: column; align-items: center;">
     <input type="hidden" id="categories" name="categories" value=""></input>
-    {% for category in categories %}
-        <li class="category_item">
-            <button
-                id="{{ category.db_name }}"
-                onclick="selectCategoryToggle(this.id)"
-                class="category-button"
-                type="button"
-                >
-                {{ category.name }}
-            </button>     
-        </li>
-    {% endfor %}
-</ul>
+    <ul class="categories-widget">
+        
+        {% for category in categories %}
+            <li class="category_item">
+                <button
+                    id="{{ category.db_name }}"
+                    onclick="selectCategoryToggle(this.id)"
+                    class="category-button"
+                    type="button"
+                    >
+                    {{ category.name }}
+                </button>     
+            </li>
+        {% endfor %}
+    </ul>
+</div>

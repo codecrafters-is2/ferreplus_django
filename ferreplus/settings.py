@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     "turns.apps.TurnsConfig",
     "payments.apps.PaymentsConfig",
     "metrics_analysis.apps.MetricsAnalysisConfig",
+    "catalogo.apps.CatalogoConfig"
 ]
 
 MIDDLEWARE = [

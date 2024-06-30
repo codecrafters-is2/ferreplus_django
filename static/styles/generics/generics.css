@@ -150,4 +150,7 @@ textarea:focus, input:focus{
     .grid-display {
         grid-template-columns: repeat(3, minmax(0, 1fr));
     }
+    .search-ui {
+        padding: 2rem 30%;
+    }   
 }

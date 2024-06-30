@@ -1,0 +1,17 @@
+{% load static %}
+
+<button
+  onclick="
+    const open = (e) => {
+      const modal = document.getElementById('visibility-modal');
+      const form = document.getElementById('visibility-form');
+      form.action = e.currentTarget.dataset.url; // url de cambio de visibilidad
+      modal.style.display = 'block';
+    };
+    open(event);
+    "
+    type="button"
+    data-url="{{ url }}"
+  >
+    <img src="{% static 'img/icons/visibility-icon.png' %}" style="width: 24px;" />
+</button>

@@ -1,0 +1,250 @@
+{% extends "_base_wildcard_bootstrap.html" %}
+{% load static %}
+{% load product_extras %}
+
+{% block content %}
+  <style>
+    .product-creation-container {
+        position: relative;
+        min-width: 100vw;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 2% 2%;
+        transition: all 500ms ease-in;
+        overflow: hidden;
+        gap: 1rem;
+    }
+
+    .product-creation-container a {
+      width: 100%;
+      text-decoration: none;
+    }
+
+    .product-creation-container button {
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+      background: rgba(47, 195, 205, 0.74);
+      border-radius: 16px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(14.1px);
+      -webkit-backdrop-filter: blur(14.1px);
+      border: 1px solid rgba(47, 195, 205, 0.28);
+      padding: 0.5rem 1rem;
+      transition: all 300ms ease;
+      white-space: nowrap;
+      color: #FAFAFA;
+      width: 100%;
+      text-align: center;
+    }
+
+    .product-creation-container button:hover {
+      opacity: 0.8;
+      transform: scale(1.01);
+    }
+
+    .form-wrapper {
+      background: rgba(255, 255, 255, 0.27);
+      border-radius: 16px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(7.6px);
+      -webkit-backdrop-filter: blur(7.6px);
+      border: 1px solid rgba(255, 255, 255, 0.36);
+      padding: 1% 2%;
+      transition: all 500ms ease-in;
+    }
+
+    .creation-form {
+      font-size: 10px;
+      color: rgb(0, 0, 0);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: all 300ms ease-in;
+    }
+
+    .creation-form div {
+        padding: none;
+    }
+
+    .success-menu {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+      background: rgba(255, 255, 255, 0.27);
+      border-radius: 16px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(7.6px);
+      -webkit-backdrop-filter: blur(7.6px);
+      border: 1px solid rgba(255, 255, 255, 0.36);
+      padding: 1% 2%;
+      transition: all 500ms ease-in;
+      color: black;
+      transform: translateX(-100vw);
+      overflow: hidden;
+    }
+
+    .show {
+      display: flex;
+      opacity: 1;
+      transform: translateX(0vw);
+    }
+
+    .hide {
+      opacity: 0;
+      transform: translateX(100vh);
+    }
+
+    .out {
+      display: none;
+    }
+
+    .product-creation-input {
+      -webkit-appearance: none;
+      font-size: 12px;
+    }
+
+    input[type=number]{
+      -moz-appearance: textfield;
+    }
+
+    .images-selector-wraper {
+      display: none;
+      min-width: 20vw;
+      opacity: 0;
+      padding: 2rem 1rem;
+      transform: translateY(100%);
+      transition: all 500ms ease;
+    }
+
+    .images-display {
+      display: flex;
+    }
+
+    .images-show {
+      opacity: 1;
+      transform: translateY(0%);
+    }
+
+    .images-hide {
+      display: none;
+      opacity: 0;
+      transform: translateY(-100%);
+    }
+
+    @media (min-width: 768px) {
+    .success-menu {
+        flex-direction: row;
+    }
+}
+
+  </style>
+  <script>
+    addEventListener("pageshow", (event) => {
+      event.persisted && window.location.reload();
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const productForm = document.getElementById("product-form");
+
+      const formTransition = () => {
+        const formWrapper = document.getElementById("form-wrapper");
+        const successMenu = document.getElementById("success-menu");
+        formWrapper.classList.add("hide");
+        setTimeout(
+          () => {
+            formWrapper.classList.add("out");
+            successMenu.classList.add("show");
+        }
+        , 1000);
+      }
+
+      /*
+        Setea el form de creación y hace el request
+      */
+      productForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const productDataForm = new FormData(e.currentTarget);
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        try {
+          const response = await fetch("/catalog/create/", {
+            method: "POST",
+            headers: {
+              'X-CSRFToken': csrftoken
+            },
+            mode: 'same-origin',
+            body: productDataForm
+          });
+          if (response.ok) {
+            const content = await response.json();
+            const codeState = document.getElementById("product-id");
+            codeState.value = content.product_id; // invento horrible para pasar éste parámetro
+            const productDetailLink = document.getElementById("product-detail-link");
+            productDetailLink.href = `/catalog/product/${content.product_code}`
+            formTransition();
+          } else {
+            alert("Algo malió sal");
+          }
+        } catch (err) {
+          alert(err); 
+        }
+      })
+
+      const toggleImagesButton = document.getElementById("images-toggle");
+      toggleImagesButton.addEventListener("click", () => {
+        // Toggle para el form de agregar imágenes adicionales
+        const imagesFormWrapper = document.getElementById("images-form-wraper");
+        if (imagesFormWrapper.classList.contains("images-display")) {
+          imagesFormWrapper.classList.remove("images-display");
+          imagesFormWrapper.classList.remove("images-show");
+        } else {
+          imagesFormWrapper.classList.add("images-display");
+          setTimeout(() => imagesFormWrapper.classList.add("images-show"), 100);
+        }
+      })
+
+    });
+  </script>
+  
+  <div class="product-creation-container" id="product-creation-container">
+      <div class="form-wrapper" id="form-wrapper">
+        <h2 style="width: 100%; text-align: center; padding: 2% 2%">Agregar nuevo producto</h2>
+        <form class="creation-form" id="product-form" method="POST" action="" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ product_form }}
+            <button type="submit" style="font-size: 16px;">
+              Crear
+            </button>
+        </form>
+      </div>
+
+      <div class="success-menu" id="success-menu">
+        <div style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 1rem">
+          <h2 style="color: black;">¡Producto agregado!</h2>
+          <button id="images-toggle">
+            agregar imágenes
+          </button>
+          <a id="product-detail-link" href="#">
+            <button>continuar</button>
+          </a>
+          <a href="{% url 'product_list' %}">
+            <button>catálogo</button>
+          </a>
+        </div>
+        <div class="images-selector-wraper" id="images-form-wraper">
+          
+          {% show_product_images_add_widget '/catalog/images/add/' %}
+          
+        </div>
+      </div>
+      <div class="status-wrapper">
+        <h2 id="status-indicator"></h2>
+      </div>
+  </div>
+{% endblock content %}

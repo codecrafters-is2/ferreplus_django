@@ -1,0 +1,63 @@
+<style>
+    .prices-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1em;
+        padding: 0 0;
+    }
+
+    .prices-container h3 {
+        width: 100%;
+        text-align: center;
+    }
+
+    .price-selector-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4%;
+    }
+
+    .price-selector-container input {
+        -webkit-appearance: none;
+        border-radius: 8px;
+        padding: 6px 6px;
+    }
+
+    input[type=number]{
+        -moz-appearance: textfield;
+    }
+
+    @media (min-width: 1024px) { 
+        .price-selector-container {
+            flex-direction: row;
+        }
+
+        .prices-container h3 {
+            width: 100%;
+            text-align: left;
+        }
+    }
+</style>
+
+<div class="prices-container">
+    <h3>Rango de precio</h3>
+    <div class="price-selector-container">
+        <div>
+            <label>Precio mínimo</label>
+            <div style="display:flex; flex-direction:row; align-items:center; gap: 4px;">
+                <p>ARS</p>
+                <input name="min_price" type="number" />
+            </div>
+        </div>
+        <div>
+            <label>Precio máximo</label>
+            <div style="display:flex; flex-direction:row; align-items:center; gap: 4px;">
+                <p>ARS</p>
+                <input name="max_price" type="number" />
+            </div>
+        </div>
+    </div>
+</div>
