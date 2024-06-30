@@ -5,6 +5,9 @@ from django.urls import reverse
 from django.db.models import Q
 from django.contrib.auth import get_user_model
 from django.core.validators import MaxLengthValidator
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.conf import settings
 from branches.models import Branch
 
 User = get_user_model()
@@ -123,6 +126,29 @@ class Post(models.Model):
         # Actualizar el paquete
         self.package = new_package
         self.save() 
+        # Enviar correo electrónico al propietario de la publicación
+        self.send_package_change_email(new_package)
+        
+    def send_package_change_email(self, new_package):
+        subject = 'Cambio de paquete en tu publicación'
+        plain_message = render_to_string('emails/package_change.txt', {
+            'post': self,
+            'package': new_package,
+            'user': self.author,
+        })
+        html_message = render_to_string('emails/package_change.html', {
+            'post': self,
+            'package': new_package,
+            'user': self.author,
+        })
+        send_mail(
+            subject,
+            plain_message,
+            settings.DEFAULT_FROM_EMAIL,  # Remitente
+            [self.author.email],   # Destinatario
+            html_message=html_message,
+            fail_silently=False,
+        )
 
 class Question(models.Model): 
     post = models.ForeignKey(Post, related_name='questions', on_delete=models.CASCADE)
