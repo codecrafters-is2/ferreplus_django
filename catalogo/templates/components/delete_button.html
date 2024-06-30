@@ -1,5 +1,13 @@
+<style>
+	.product-del-button {
+		z-index: 50;
+	}
+	.product-del-button:hover {
+		opacity: 0.8;
+	}
+</style>
 <button
-	style="z-index: 50;"
+	class="product-del-button"
 	onclick="
 		const open = (e) => {
 			const modal = document.getElementById('modal');

@@ -74,26 +74,24 @@
 </style>
 
 <div class="catalog-product-card-container">
-    <a href="{{ detail_url }}" style="text-decoration: none;">
-        <div class="catalog-product-card">
-            <div class="card-head">
-                <div>
-                    <img src="{{ image.url }}" />
-                </div>
-                <div class="product-info">
-                    <h3>{{ name }}</h3>
-                    <p>${{ price }} </p>
-                </div>
+  <a href="{{ detail_url }}" style="text-decoration: none;">
+    <div class="catalog-product-card">
+        <div class="card-head">
+            <div>
+                <img src="{{ image.url }}" />
+            </div>
+            <div class="product-info">
+                <h3>{{ name }}</h3>
+                <p>${{ price }} </p>
             </div>
         </div>
-    </a>
-    {{ user }}
-    {% if user.is_authenticated %}
-        
-            <div class="product-admin-options">
-                <p>admin:</p>
-                {% show_product_delete_button code "small" %}
-            </div>
-       
-    {% endif %}
+    </div>
+  </a>
+    
+  {% if user|belongs_to_group:"admi" %}      
+    <div class="product-admin-options">
+        <p>admin:</p>
+        {% show_product_delete_button code "small" %}
+    </div>
+  {% endif %}
 </div>

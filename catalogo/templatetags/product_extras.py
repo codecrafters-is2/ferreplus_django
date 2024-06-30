@@ -10,15 +10,17 @@ from catalogo.forms import ProductImageCreationForm
 register = template.Library()
 
 @register.inclusion_tag("components/product_card.html")
-def show_product_card(product) -> Dict:
+def show_product_card(product, user) -> Dict:
     detail_url = reverse("product_detail", kwargs={"code":product.code})
+    print(user.groups)
     displayable_product = {
         "name": product.name,
         "code": product.code,
         "detail_url": detail_url,
         "description": product.description,
         "image": product.main_image,
-        "price": product.price
+        "price": product.price,
+        "user": user  # Por alguna razón el contexto de usuario no llega al inclusion tag
     }
     return displayable_product
 

@@ -20,6 +20,7 @@ from .services import (
     delete_product_by_code
 )
 from .forms import ProductCreationForm, ProductImageCreationForm
+from accounts.mixins import AdminRequiredMixin
 
 
 class ProductListView(ListView):
@@ -70,7 +71,7 @@ class ProductSearchView(ListView):
         return converted_value
 
 
-class ProductCreateView(View):
+class ProductCreateView(AdminRequiredMixin, View):
     
     template_name = "product_creation.html"
 
@@ -104,7 +105,7 @@ class ProductCreateView(View):
             return HttpResponseServerError()
 
 
-class ProductImageUploadView(View):
+class ProductImageUploadView(View, AdminRequiredMixin):
     
     def post(self, request, *args, **kwargs):
         try:
@@ -151,14 +152,15 @@ class ProductDetailView(View):
             return HttpResponseServerError()
 
 
-class ProductDeleteView(View):
+class ProductDeleteView(View, AdminRequiredMixin):
 
     def post(self, request, *args, **kwargs):
         try:
             code = kwargs.get("code")
             result = delete_product_by_code(code)
             if result:
-                redirect("product_delete_success")
+                print("todo miem")
+                return redirect("product_delete_success")
             else:
                 return HttpResponseNotFound()
         except Exception as e:
@@ -166,6 +168,6 @@ class ProductDeleteView(View):
             return HttpResponseServerError()
 
 
-class ProductDeleteSuccessMessageView(View):
+class ProductDeleteSuccessMessageView(View, AdminRequiredMixin):
     def get(self, request, *args, **kwargs):
         return render(request, "messages/product_delete_success.html")
