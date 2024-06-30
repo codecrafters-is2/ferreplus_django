@@ -5,8 +5,13 @@
 </head>
 <body>
     <p>Hola {{ user.username }},</p>
-    <p>Te informamos que se ha efectuado correctamente el pago y el cambio de paquete en tu publicación "{{ post.title }}".</p>
-    <p>El nuevo paquete asignado es: {{ package.get_name_display }}.</p>
+    <p>Te informamos que se ha efectuado correctamente el pago.</p>
+    <p>Detalle de la compra: </p>
+    <div>
+        <li><p>Cambio de paquete en tu publicación "{{ post.title }}"</p></li>
+        <li><p>Nuevo paquete asignado: {{ package.get_name_display }}.</p></li>
+        <li><p>Total: ${{ package.price }}.</p></li>
+    </div>
     <p>Gracias por usar nuestro servicio.</p>
     <p>Saludos,<br>El equipo de Ferreplus</p>
 </body>

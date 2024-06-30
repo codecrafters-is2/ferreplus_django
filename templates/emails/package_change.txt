@@ -1,8 +1,10 @@
 Hola {{ user.username }},
 
-Te informamos que se ha efectuado correctamente el pago y el cambio de paquete en tu publicación "{{ post.title }}".
-
-El nuevo paquete asignado es: {{ package.get_name_display }}.
+Te informamos que se ha efectuado correctamente el pago.
+Detalle de la compra: 
+    Cambio de paquete en tu publicación "{{ post.title }}"
+    Nuevo paquete asignado: {{ package.get_name_display }}.
+    Total: ${{ package.price }}.
 
 Gracias por usar nuestro servicio.
 
