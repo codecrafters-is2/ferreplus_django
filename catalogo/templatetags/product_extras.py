@@ -9,10 +9,10 @@ from catalogo.forms import ProductImageCreationForm
 
 register = template.Library()
 
+
 @register.inclusion_tag("components/product_card.html")
 def show_product_card(product, user) -> Dict:
     detail_url = reverse("product_detail", kwargs={"code":product.code})
-    print(user.groups)
     displayable_product = {
         "name": product.name,
         "code": product.code,
@@ -48,6 +48,7 @@ def show_product_images_add_widget(submit_url) -> Dict:
         "submit_url": submit_url
     }
 
+
 @register.inclusion_tag("components/product_carousel.html")
 def show_product_carousel(images: List) -> Dict:
     displayable_images = list()
@@ -61,6 +62,7 @@ def show_product_carousel(images: List) -> Dict:
         number += 1
     return {"images": displayable_images}
 
+
 @register.inclusion_tag("components/delete_button.html")
 def show_product_delete_button(product_code: int, size: str) -> Dict:
     delete_url = reverse("product_delete", kwargs={"code": product_code})
@@ -70,6 +72,22 @@ def show_product_delete_button(product_code: int, size: str) -> Dict:
         "size": size
     }
 
+
 @register.inclusion_tag("components/delete_modal.html")
 def show_product_delete_modal() -> Dict:
+    pass
+
+
+@register.inclusion_tag("components/visibility_button.html")
+def show_visibility_toggle_button(product_code: int, size: str) -> Dict:
+    visibility_toggle_url = reverse("product_visibility_toggle", kwargs={"code": product_code})
+    return {
+        "url": visibility_toggle_url,
+        "product_code": product_code,
+        "size": size
+    }
+
+
+@register.inclusion_tag("components/visibility_modal.html")
+def show_product_visibility_toggle_modal() -> Dict:
     pass

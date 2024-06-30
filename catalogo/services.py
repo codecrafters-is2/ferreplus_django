@@ -77,3 +77,12 @@ def delete_product_by_code(code: int) -> bool:
         return True
     else:
         return False
+
+
+def toggle_product_visibility(code: int) -> bool:
+    product = get_product_by_code(code)
+    if product is not None:
+        product.active = not product.active
+        product.save()
+        return True
+    return False

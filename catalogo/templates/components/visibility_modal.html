@@ -1,0 +1,62 @@
+<style>
+    .visibility-modal {
+      display: none;
+      position: fixed; 
+      z-index: 100;
+      left: 0;
+      top: 0;
+      width: 100%; 
+      height: 100%; 
+      overflow: auto; 
+      background-color: rgba(0,0,0,0.4);
+      backdrop-filter: blur(5px);
+    }
+
+    .visibility-modal-content {
+      background-color: #fefefe;
+      margin: 15% auto; 
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 500px;
+      border-radius: 10px;
+      text-align: center;
+    }
+</style>
+<script type="text/javascript">
+  document.addEventListener('DOMContentLoaded', (event) => {
+  	/* Los toggles van a estar en botones que interactúen con el visibility-modal */
+    const modal = document.getElementById("visibility-modal");
+    window.onclick = function(event) {
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    }
+  });
+</script>
+<div class="visibility-modal" id="visibility-modal">
+  <div class="visibility-modal-content">
+    <h2>¿Estás seguro que deseas ocultar este producto?</h2>
+		<form action="" method="POST" id="visibility-form">
+			{% csrf_token %}
+			<button class="btn btn-danger" type="submit" style="width: 100%; margin-top: 1rem">Ocultar producto</button>
+		</form>
+		<button
+			class="btn btn-success"
+			type="button"
+			style="width: 100%; margin-top: 1rem"
+			onclick="
+				const close = (e) => {
+					const modal = document.getElementById('visibility-modal');
+					modal.style.display = 'none';
+				};
+				close(event);
+			"
+			>
+			Cancelar
+		</button>
+  </div>	
+</div>
+
+
+	

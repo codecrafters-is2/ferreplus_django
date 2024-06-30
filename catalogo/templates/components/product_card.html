@@ -91,7 +91,10 @@
   {% if user|belongs_to_group:"admi" %}      
     <div class="product-admin-options">
         <p>admin:</p>
-        {% show_product_delete_button code "small" %}
+        <div style="display: flex; flex-direction: row; align-items: center; gap: 1rem;">
+          {% show_visibility_toggle_button code "small" %}
+          {% show_product_delete_button code "small" %}
+        </div>
     </div>
   {% endif %}
 </div>

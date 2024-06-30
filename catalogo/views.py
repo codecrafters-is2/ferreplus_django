@@ -5,7 +5,6 @@ from django.views.generic import View, ListView
 from django.shortcuts import render, redirect
 from django.http import (
      JsonResponse,
-     HttpResponse,
      HttpResponseBadRequest,
      HttpResponseServerError,
      HttpResponseNotFound
@@ -17,7 +16,8 @@ from .services import (
     get_product_by_code,
     filter_products_by_query_params,
     get_product_images,
-    delete_product_by_code
+    delete_product_by_code,
+    toggle_product_visibility
 )
 from .forms import ProductCreationForm, ProductImageCreationForm
 from accounts.mixins import AdminRequiredMixin
@@ -159,7 +159,6 @@ class ProductDeleteView(View, AdminRequiredMixin):
             code = kwargs.get("code")
             result = delete_product_by_code(code)
             if result:
-                print("todo miem")
                 return redirect("product_delete_success")
             else:
                 return HttpResponseNotFound()
@@ -171,3 +170,23 @@ class ProductDeleteView(View, AdminRequiredMixin):
 class ProductDeleteSuccessMessageView(View, AdminRequiredMixin):
     def get(self, request, *args, **kwargs):
         return render(request, "messages/product_delete_success.html")
+
+
+class ProductVisibilityToggleView(View, AdminRequiredMixin):
+    def post(self, request, *args, **kwargs):
+        try:
+            code = kwargs.get("code")
+            success = toggle_product_visibility(code)
+            if success:
+                print("todo miem")
+                return redirect("product_visibility_change_success")
+            else:
+                return HttpResponseNotFound()
+        except Exception as e:
+            print(e)
+            return HttpResponseServerError()
+
+
+class ProductVisibilityChangeSuccessMessageView(View, AdminRequiredMixin):
+    def get(self, request, *args, **kwargs):
+        return render(request, "messages/product_visibility_change_success.html")
