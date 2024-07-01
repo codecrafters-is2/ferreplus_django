@@ -108,9 +108,9 @@ class BarterCharts:
                 branch_obj = Branch.objects.get(id=branch)
                 branch_name = cut_address(str(branch_obj))
                 labels.append(branch_name)
-            else:
-                labels.append("No branch")
-            data.append(branch_count["count"])
+                data.append(branch_count["count"])
+
+                
 
         return labels, data
     # Barter.objects.filter(state="committed")

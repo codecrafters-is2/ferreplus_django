@@ -11,6 +11,10 @@
 {% block content %}
     <div class="accordion" id="accordionBranches" style="width:50%;">
         <h3 class="title">Informacion de Nuestras Sucursales: </h3>
+        {% if not branches_by_city %}
+        <p style="color:red; font-weight:bold">En este momento no tenemos sucursales activas</p>
+        <p>Puede comunicarse con nosotros a través de nuestro correo o red social:</p>
+        {% endif %}
         {% for city, branches in branches_by_city.items %}
             <div class="accordion-item">
                 <h2 class="accordion-header" id="heading{{ forloop.counter }}">

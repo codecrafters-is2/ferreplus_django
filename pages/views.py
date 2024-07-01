@@ -80,14 +80,17 @@ class ShowContactInfo(ListView):
 
 def show_contact_info(request):
     branches = Branch.objects.all()
-
     branches_by_city = {}
-    for branch in branches:
-        city = branch.city
-        if city in branches_by_city:
-            branches_by_city[city].append(branch)
-        else:
-            branches_by_city[city] = [branch]
+
+    if not branches:
+        branches_by_city = None
+    else:
+        for branch in branches:
+            city = branch.city
+            if city in branches_by_city:
+                branches_by_city[city].append(branch)
+            else:
+                branches_by_city[city] = [branch]
 
     context = {'branches_by_city': branches_by_city}
     return render(request, "contact_info.html", context)
