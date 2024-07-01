@@ -32,12 +32,12 @@
             </button>
             <div class="navbar-navigation">
               <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-4">
-                {% if user|belongs_to_group:"client" %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'product_list' %}">Catálogo</a>
+                </li>
+                {% if not user|belongs_to_group:"admi" and not user|belongs_to_group:"employee" %}
                   <li class="nav-item">
-                    <a class="nav-link" href="#">Nosotros</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="{% url  'contact' %}">Contacto</a>
+                    <a class="nav-link" href="{% url 'contact' %}">Contacto</a>
                   </li>
                 {% endif %}
                 <li class="nav-item">
@@ -87,7 +87,7 @@
         </div>
       </div>
     </nav>
-    <div class="d-flex flex-col justify-content-center align-items-center" style="min-width: 100vw; min-height: 100vh;">
+    <div class="d-flex flex-column align-items-center" style="min-width: 100vw; min-height: 100vh; justify-content: start;">
       {% block content %}
       {% comment %}
         Bloque para hacer override en subtemplates y escribir el contenido

@@ -1,0 +1,10 @@
+{% extends "_product_list_search_layout.html" %}
+{% load product_extras %}
+
+{% block results %}
+  {% for product in product_list %}
+    <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+      {% show_product_card product user %}
+    </div>
+  {% endfor %}
+{% endblock results %}

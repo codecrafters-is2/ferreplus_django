@@ -35,6 +35,7 @@ urlpatterns = [
     path("employee/", include("employeepanel.urls")),
     path("payments/", include("payments.urls")),
     path("metrics_analysis/", include("metrics_analysis.urls")),
+    path("catalog/", include("catalogo.urls"))
 ]
 
 if settings.DEBUG: #Solo proyecto en desarrollo, falta para producción
