@@ -14,6 +14,7 @@ register = template.Library()
 def show_product_card(product, user) -> Dict:
     detail_url = reverse("product_detail", kwargs={"code":product.code})
     displayable_product = {
+        "pk": product.pk,
         "name": product.name,
         "code": product.code,
         "detail_url": detail_url,
@@ -93,4 +94,12 @@ def show_product_visibility_toggle_modal(message: str, button_label: str) -> Dic
     return {
         "message": message,
         "button_label": button_label
+    }
+
+
+@register.inclusion_tag("components/edit_button.html")
+def show_product_edit_button(pk: int) -> Dict:
+    edit_url = reverse("product_edit", kwargs={"pk": pk})
+    return {
+        "edit_url": edit_url
     }

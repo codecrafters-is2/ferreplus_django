@@ -1,0 +1,61 @@
+{% extends "_base_wildcard_bootstrap.html" %}
+{% load static %}
+{% load product_extras %}
+
+{% block content %}
+<style>
+  .product-edit-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+  }
+
+  .product-edit-container button {
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+      background: rgba(47, 195, 205, 0.74);
+      border-radius: 16px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(14.1px);
+      -webkit-backdrop-filter: blur(14.1px);
+      border: 1px solid rgba(47, 195, 205, 0.28);
+      padding: 0.5rem 1rem;
+      transition: all 300ms ease;
+      white-space: nowrap;
+      color: #FAFAFA;
+      width: 100%;
+      text-align: center;
+    }
+
+    .form-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      background: rgba(255, 255, 255, 0.27);
+      border-radius: 16px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(7.6px);
+      -webkit-backdrop-filter: blur(7.6px);
+      border: 1px solid rgba(255, 255, 255, 0.36);
+      padding: 1% 2%;
+      transition: all 500ms ease-in;
+    }
+</style>
+<div class="product-edit-container">
+  <div class="form-wrapper">
+    <h2 style="width: 100%; text-align: center;">Editar producto</h2>
+    <form method="post">{% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" value="Update">Editar</button>
+    </form>
+  </div>
+</div>
+{% endblock content %}

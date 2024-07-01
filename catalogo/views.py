@@ -1,8 +1,9 @@
 # Python
 from typing import Dict, Optional
 # Django
-from django.views.generic import View, ListView
+from django.views.generic import View, ListView, UpdateView
 from django.shortcuts import render, redirect, reverse
+from django.urls import reverse_lazy
 from django.http import (
      JsonResponse,
      HttpResponseBadRequest,
@@ -201,3 +202,12 @@ class HiddenProductListView(ListView):
 
     def get_queryset(self):
         return get_hidden_products()
+
+
+class ProductUpdateView(UpdateView):
+    model = Product
+    fields = ["name", "brand", "description", "model", "category", "stock", "price"]
+    template_name = "product_edit.html"
+
+    def get_success_url(self):
+        return reverse_lazy('product_detail', kwargs={'code': self.object.code})
