@@ -3,7 +3,7 @@ from django.views.generic import ListView, CreateView, TemplateView
 from django.views.generic.edit import UpdateView, DeleteView
 from django.urls import reverse_lazy
 from branches.models import Branch
-from .forms import BranchForm
+from .forms import BranchForm, ContactForm
 from accounts.mixins import AdminRequiredMixin
 from django.views import View
 from accounts.forms import EmployeeUserCreationForm
@@ -11,6 +11,7 @@ from accounts.models import EmployeeUser
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404
+from .models import Contact
 
 
 class AdminPanelView(AdminRequiredMixin, TemplateView):
@@ -76,3 +77,22 @@ class EmployeeSuccessView(AdminRequiredMixin, View):
         return render(request, "account/employee_success.html", {"employee": employee})
 
 
+def update_company_email(request):
+    company_email, created = Contact.objects.get_or_create(
+        pk=0
+    )  # Ensure only one instance exists
+    if request.method == "POST":
+        form = ContactForm(request.POST, instance=company_email)
+        if form.is_valid():
+            form.save()
+            return redirect(
+                "update_company_email_success"
+            )  # Redirect to a success page
+    else:
+        form = ContactForm(instance=company_email)
+
+    return render(request, "update_company_email.html", {"form": form})
+
+
+def update_company_email_success(request):
+    return render(request, "update_company_email_success.html")

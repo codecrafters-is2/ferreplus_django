@@ -6,7 +6,10 @@ from .views import (
     BranchDeleteView,
     AdminPanelView,
     EmployeeSignupView,
-    EmployeeSuccessView
+    EmployeeSuccessView,
+    update_company_email,
+    update_company_email_success
+    
 )
 
 urlpatterns = [
@@ -20,5 +23,7 @@ urlpatterns = [
         "success/<int:employee_id>/",
         EmployeeSuccessView.as_view(),
         name="employee_success",
-    )
+    ),
+    path('update-company-email/', update_company_email, name='update_company_email'),
+    path('update-company-email/success/', update_company_email_success, name='update_company_email_success')
 ]

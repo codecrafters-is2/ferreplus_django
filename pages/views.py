@@ -7,6 +7,7 @@ from django.shortcuts import reverse, get_object_or_404
 from django.views import View
 from branches.models import Branch
 from accounts.models import EmployeeUser
+from adminpanel.models import Contact
 
 
 class GoBack(View):
@@ -92,5 +93,7 @@ def show_contact_info(request):
             else:
                 branches_by_city[city] = [branch]
 
-    context = {'branches_by_city': branches_by_city}
+    contact_obj, created = Contact.objects.get_or_create(pk=0)
+    context = {"branches_by_city": branches_by_city, "company_email": contact_obj.email}
+
     return render(request, "contact_info.html", context)

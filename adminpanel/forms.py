@@ -1,8 +1,9 @@
 from django import forms
 from branches.models import Branch
+from .models import Contact
 
 class BranchForm(forms.ModelForm):
-    
+
     class Meta:
         model = Branch
         fields = ["city", "address", "postal_code", "phone"]
@@ -17,7 +18,7 @@ class BranchForm(forms.ModelForm):
         super(BranchForm, self).__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
             field.required = True
-    
+
     def clean(self):
         cleaned_data = super().clean()
         city = cleaned_data.get("city")
@@ -25,5 +26,12 @@ class BranchForm(forms.ModelForm):
         postal_code = cleaned_data.get("postal_code")
         if Branch.objects.filter(city=city, address=address, postal_code=postal_code).exists():
             raise forms.ValidationError("Ya existe una sucursal en esa ubicación.")
-        
+
         return cleaned_data
+
+
+class ContactForm(forms.ModelForm):
+
+    class Meta:
+        model = Contact
+        fields = ["email"]
