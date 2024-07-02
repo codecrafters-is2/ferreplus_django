@@ -189,7 +189,13 @@
             productDetailLink.href = `/catalog/product/${content.product_code}`
             formTransition();
           } else {
-            alert("Algo malió sal");
+            if(response.status == 400);
+            const content = await response.json();
+            const errors = JSON.parse(content.errors); // Luego acomodo para mostrar esto
+            const messageModal = document.getElementById("product-message-modal");
+            const messageH2 = document.getElementById('product-creation-status-message');
+            messageH2.textContent = "El código de producto ya existe";
+            messageModal.style.display = "block";
           }
         } catch (err) {
           alert(err); 
@@ -246,5 +252,6 @@
       <div class="status-wrapper">
         <h2 id="status-indicator"></h2>
       </div>
+      {% show_product_creation_status_modal %}
   </div>
 {% endblock content %}
