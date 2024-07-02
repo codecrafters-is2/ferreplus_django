@@ -103,9 +103,13 @@ class ProductCreateView(AdminRequiredMixin, View):
                 })
                 response.status_code = 200
             else:
-                return HttpResponseBadRequest()
+                response = JsonResponse({
+                    "errors": form.errors.as_json()
+                })
+                response.status_code = 400
             return response
         except Exception as e:
+            print(e)
             return HttpResponseServerError()
 
 
