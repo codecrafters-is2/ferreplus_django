@@ -4,6 +4,12 @@
 
 <style>
     .catalog-product-card-container {
+        max-width: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
         box-shadow: -5px 5px 5px rgba(0, 0, 0, 0.3);
         border-radius: 25px;
         backdrop-filter: blur(7.6px);
@@ -17,7 +23,7 @@
     }
 
     .catalog-product-card {
-        max-width: 400px;
+        width: 100%;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -30,11 +36,20 @@
     .catalog-product-card h3 {
         font-size: large;
         font-weight: 300;
+        width: 100%; 
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding: 0rem 0.8rem;
+    }
+
+    .card-head {
+        width: 100%;
     }
 
     .card-img-container {
         width: 100%;
-        max-height: 400px;
+        aspect-ratio: 1/1;
         position: relative;
         display: flex;
         flex-direction: column;
@@ -47,6 +62,7 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
+        object-position: center;  
     }
 
     .product-info {
@@ -68,16 +84,31 @@
         background: rgba(4, 249, 225, 0.40);
     }
 
+    @media (min-width: 700px) { 
+       .catalog-product-card-container {
+            max-width: 100%;
+            width: 100%;
+       }
+    }
+
     @media (min-width: 1024px) { 
-       .catalog-product-card {
+       .catalog-product-card-container {
+            max-width: 100%;
+            width: 100%;
+       }
+    }
+
+    @media (min-width: 1550px) { 
+       .catalog-product-card-container {
             max-width: 400px;
+            width: 400px; 
        }
     }
 
 </style>
 
 <div class="catalog-product-card-container">
-  <a href="{{ detail_url }}" style="text-decoration: none;">
+  <a href="{{ detail_url }}" style="text-decoration: none; width: 100%;">
     <div class="catalog-product-card">
         <div class="card-head">
             <div class="card-img-container">
