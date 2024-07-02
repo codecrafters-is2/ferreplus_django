@@ -1,5 +1,9 @@
 {% load static %}
 
+<!--
+  NOTA: este elemento requiere que el componente "Padre" que lo compone
+-->
+
 <style>
   .images-widget-container {
     width: 100%;
@@ -48,6 +52,7 @@
   window.addEventListener('DOMContentLoaded', () => {
     const imageInput = document.getElementById("id_image");
     const imagePreviewDisplay = document.getElementById("current-image-preview");
+    const initialImage = imagePreviewDisplay.src;
 
     imageInput.addEventListener("change", () => {
       const [imgFile] = imageInput.files;
@@ -75,12 +80,17 @@
         });
 
         if (response.ok) {
-          alert("Imagen subida");
           imagesUploadForm.reset();
+          imagePreviewDisplay.src = initialImage;
+          /* Me traigo de nuevo el id del producto porque limpié el form */
           const idField = document.getElementById("product-id");
           idField.value = imageFormData.get("product");
+          const messageModal = document.getElementById("product-message-modal");
+          const messageH2 = document.getElementById('product-creation-status-message');
+          messageH2.textContent = "Imagen subida con éxito";
+          messageModal.style.display = "block";
         } else {
-          alert("Algo malio sal");
+          alert("Error al subir la imagen, chequear que el formato sea correcto (.jpg o .png), no se aceptan svgs");
         }
       }
       catch (err) {
